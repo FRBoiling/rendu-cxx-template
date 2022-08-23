@@ -1,3 +1,7 @@
+#**********************************
+#  Created by boil on 2022/8/14.
+#**********************************
+
 # 设置默认配置目录
 if(NOT CONF_DIR)
   set(CONF_DIR ${CMAKE_INSTALL_PREFIX}/etc CACHE PATH "Configuration directory")

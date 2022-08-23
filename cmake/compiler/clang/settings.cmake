@@ -1,6 +1,6 @@
 include(CheckCXXSourceCompiles)
 
-# Set build-directive (used in core to tell which buildtype we used)
+# 设置build-directive(在core中用来告诉我们使用了哪种build类型)
 target_compile_definitions(rendu-compile-option-interface
   INTERFACE
     -D_BUILD_DIRECTIVE="$<CONFIG>")
@@ -8,14 +8,13 @@ target_compile_definitions(rendu-compile-option-interface
 set(CLANG_EXPECTED_VERSION 7.0.0)
 
 if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS CLANG_EXPECTED_VERSION)
-  message(FATAL_ERROR "Clang: RenduCore requires version ${CLANG_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
+  message(FATAL_ERROR "Clang: This project requires version ${CLANG_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
 else()
   message(STATUS "Clang: Minimum version required is ${CLANG_EXPECTED_VERSION}, found ${CMAKE_CXX_COMPILER_VERSION} - ok!")
 endif()
 
-# This tests for a bug in clang-7 that causes linkage to fail for 64-bit from_chars (in some configurations)
-# If the clang requirement is bumped to >= clang-8, you can remove this check, as well as
-# the associated ifdef block in src/common/utilities/StringConvert.h
+#测试clang-7中导致64位from_chars链接失败的bug(在某些配置中)
+#如果clang需求被更新到>=clang-8，可以移除这个检查，以及src/common/utilities/StringConvert.h中相关的ifdef块
 include(CheckCXXSourceCompiles)
 
 check_cxx_source_compiles("
@@ -133,17 +132,17 @@ if(BUILD_TIME_ANALYSIS)
   message(STATUS "Clang: Enabled build time analysis (-ftime-trace)")
 endif()
 
-# -Wno-narrowing needed to suppress a warning in g3d
-# -Wno-deprecated-register is needed to suppress 185 gsoap warnings on Unix systems.
-# -Wno-deprecated-copy needed to suppress a warning in g3d
+# -wno-narrow，需要在g3d中抑制警告。
+# -wno-deprecdeprece-register，在Unix系统上，需要# 来抑制185个gsoap警告。
+# -Wno-deprecated-copy，需要在g3d中抑制警告
 target_compile_options(rendu-compile-option-interface
   INTERFACE
     -Wno-narrowing
     -Wno-deprecated-register)
 
 if(BUILD_SHARED_LIBS)
-  # -fPIC is needed to allow static linking in shared libs.
-  # -fvisibility=hidden sets the default visibility to hidden to prevent exporting of all symbols.
+  # -fPIC，需要允许在共享库中进行静态链接。
+  # -fvisibility=hidden，将默认可见性设置为hidden，以防止导出所有的符号。
   target_compile_options(rendu-compile-option-interface
     INTERFACE
       -fPIC)
@@ -152,14 +151,13 @@ if(BUILD_SHARED_LIBS)
     INTERFACE
       -fvisibility=hidden)
 
-  # --no-undefined to throw errors when there are undefined symbols
-  # (caused through missing RENDU_*_API macros).
+  # --no-undefined 当有未定义符号时抛出错误
+  # (由于缺少RENDU_*_API宏导致)。
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --no-undefined")
-
   message(STATUS "Clang: Disallow undefined symbols")
 endif()
 
-# speedup PCH builds by forcing template instantiations during PCH generation
+# 通过在PCH生成期间强制模板实例化来加速PCH构建
 set(CMAKE_REQUIRED_FLAGS "-fpch-instantiate-templates")
 check_cxx_source_compiles("int main() { return 0; }" CLANG_HAS_PCH_INSTANTIATE_TEMPLATES)
 unset(CMAKE_REQUIRED_FLAGS)
