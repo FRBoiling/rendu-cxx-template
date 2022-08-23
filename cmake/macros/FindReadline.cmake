@@ -1,36 +1,19 @@
-# This file is part of the RenduCore Project. See AUTHORS file for Copyright information
-#
-# This program is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the
-# Free Software Foundation; either version 2 of the License, or (at your
-# option) any later version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-# more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program. If not, see <http://www.gnu.org/licenses/>.
-
 #[=======================================================================[.rst:
 FindReadline
 -----------
 
 Find The GNU Readline Library.
 
-Imported Targets
+导入的目标
 ^^^^^^^^^^^^^^^^
-
-This module defines the following :prop_tgt:`IMPORTED` targets:
+这个模块定义了以下内容: prop_tgt:`IMPORTED` targets:
 
 ``Readline::Readline``
   The Readline library, if found.
 
-Result Variables
+结果变量
 ^^^^^^^^^^^^^^^^
-
-This module will set the following variables in your project:
+这个模块将在你的项目中设置以下变量:
 
 ``READLINE_FOUND``
   System has The GNU Readline Library.
@@ -39,10 +22,9 @@ This module will set the following variables in your project:
 ``READLINE_LIBRARY``
   The Readline library.
 
-Hints
-^^^^^
-
-Set ``READLINE_ROOT_DIR`` to the root directory of Readline installation.
+提示
+^^^^^^^^^^^^^^^^
+设置READLINE_ROOT_DIR为Readline安装的根目录。
 #]=======================================================================]
 
 set(_READLINE_ROOT_HINTS

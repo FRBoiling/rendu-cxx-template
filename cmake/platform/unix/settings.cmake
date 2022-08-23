@@ -1,10 +1,10 @@
-# set default configuration directory
+# 设置默认配置目录
 if(NOT CONF_DIR)
   set(CONF_DIR ${CMAKE_INSTALL_PREFIX}/etc CACHE PATH "Configuration directory")
   message(STATUS "UNIX: Using default configuration directory")
 endif()
 
-# configure uninstaller
+# 配置卸载程序
 configure_file(
   "${CMAKE_SOURCE_DIR}/cmake/platform/cmake_uninstall.in.cmake"
   "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
@@ -12,7 +12,7 @@ configure_file(
 )
 message(STATUS "UNIX: Configuring uninstall target")
 
-# create uninstaller target (allows for using "make uninstall")
+# 创建卸载目标(允许使用“make uninstall”)
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
 )
@@ -35,7 +35,7 @@ if(APPLE)
   find_program(HOMEBREW_EXECUTABLE brew)
 
   if (HOMEBREW_EXECUTABLE)
-    # setup homebrew paths
+    # 设置homebrew路径
     message(STATUS "Homebrew found at ${HOMEBREW_EXECUTABLE}")
     execute_process(COMMAND ${HOMEBREW_EXECUTABLE} config OUTPUT_VARIABLE HOMEBREW_STATUS_STR)
     string(REGEX MATCH "HOMEBREW_PREFIX: ([^\n]*)" HOMEBREW_STATUS_STR ${HOMEBREW_STATUS_STR})

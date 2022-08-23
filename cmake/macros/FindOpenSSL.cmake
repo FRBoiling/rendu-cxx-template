@@ -10,8 +10,8 @@ Find the OpenSSL encryption library.
 
 可选组件
 ^^^^^^^^^^^^^^^^^^^
-这个模块支持两个可选组件:' ' Crypto ' '和' ' SSL ' '。这两个
-组件已经关联了导入的目标，如下所述。
+这个模块支持两个可选组件:``Crypto``和``SSL``。
+这两个组件已经关联了导入的目标，如下所述。
 
 导入的目标
 ^^^^^^^^^^^^^^^^
@@ -177,21 +177,19 @@ find_path(OPENSSL_INCLUDE_DIR
 
 if(WIN32 AND NOT CYGWIN)
   if(MSVC)
-    # /MD and /MDd are the standard values - if someone wants to use
-    # others, the libnames have to change here too
-    # use also ssl and ssleay32 in debug as fallback for openssl < 0.9.8b
-    # enable OPENSSL_MSVC_STATIC_RT to get the libs build /MT (Multithreaded no-DLL)
-    # In Visual C++ naming convention each of these four kinds of Windows libraries has it's standard suffix:
+    # /MD和/MDd是标准值-如果有人想使用其他的，libname也必须改变
+    # 这里使用ssl和ssleay32在调试中作为openssl < 0.9.8b的回调
+    # 启用OPENSSL_MSVC_STATIC_RT来获得libs构建/MT(多线程无dll)在Visual c++命名规范中，这四种Windows库都有它的标准后缀:
     #   * MD for dynamic-release
     #   * MDd for dynamic-debug
     #   * MT for static-release
     #   * MTd for static-debug
 
-    # Implementation details:
-    # We are using the libraries located in the VC subdir instead of the parent directory even though :
-    # libeay32MD.lib is identical to ../libeay32.lib, and
-    # ssleay32MD.lib is identical to ../ssleay32.lib
-    # enable OPENSSL_USE_STATIC_LIBS to use the static libs located in lib/VC/static
+    # 实现细节:
+    # 我们使用位于VC子目录下的库，而不是父目录，即使:
+    # libeay32MD.Lib与../libeay32.lib相同。
+    # ssleay32MD.Lib与../ssleay32.lib相同
+    # 启用OPENSSL_USE_STATIC_LIBS来使用位于lib/VC/static中的静态库
 
     if (OPENSSL_MSVC_STATIC_RT)
       set(_OPENSSL_MSVC_RT_MODE "MT")
@@ -199,7 +197,7 @@ if(WIN32 AND NOT CYGWIN)
       set(_OPENSSL_MSVC_RT_MODE "MD")
     endif ()
 
-    # Since OpenSSL 1.1, lib names are like libcrypto32MTd.lib and libssl32MTd.lib
+    # 从OpenSSL 1.1开始，lib名称类似于libcrypto32MTd.lib 和 libssl32MTd.lib
     if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
         set(_OPENSSL_MSVC_ARCH_SUFFIX "64")
     else()
@@ -227,18 +225,16 @@ if(WIN32 AND NOT CYGWIN)
     endif ()
 
     find_library(LIB_EAY_DEBUG
-      NAMES
-        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
-        # Looking the "libcrypto_static.lib" with a higher priority than "libcrypto.lib" which is the
-        # import library of "libcrypto.dll".
+      NAMES      
+        # 当使用默认选项构建OpenSSL时，静态库名称以“_static”作为后缀。
+        # 查看"libcrypto_static.lib"的优先级高于"libcrypto.dll"的导入库"libcrypto.lib"。
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libcrypto${_OPENSSL_STATIC_SUFFIX}d
         libeay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libeay32${_OPENSSL_STATIC_SUFFIX}d
         crypto${_OPENSSL_STATIC_SUFFIX}d
-        # When OpenSSL is built with the "-static" option, only the static build is produced,
-        # and it is not suffixed with "_static".
+        # 当使用“-static”选项构建OpenSSL时，只生成静态构建，并且不添加“_static”后缀。
         libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libcrypto${_OPENSSL_MSVC_RT_MODE}d
         libcryptod
@@ -253,17 +249,15 @@ if(WIN32 AND NOT CYGWIN)
 
     find_library(LIB_EAY_RELEASE
       NAMES
-        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
-        # Looking the "libcrypto_static.lib" with a higher priority than "libcrypto.lib" which is the
-        # import library of "libcrypto.dll".
+        # 当使用默认选项构建OpenSSL时，静态库名称以“_static”作为后缀。
+        # 查看"libcrypto_static.lib"的优先级高于"libcrypto.dll"的导入库"libcrypto.lib
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libcrypto${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libcrypto${_OPENSSL_STATIC_SUFFIX}
         libeay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libeay32${_OPENSSL_STATIC_SUFFIX}
         crypto${_OPENSSL_STATIC_SUFFIX}
-        # When OpenSSL is built with the "-static" option, only the static build is produced,
-        # and it is not suffixed with "_static".
+        # 当使用“-static”选项构建OpenSSL时，只生成静态构建，并且不添加“_static”后缀。
         libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libcrypto${_OPENSSL_MSVC_RT_MODE}
         libcrypto
@@ -278,17 +272,15 @@ if(WIN32 AND NOT CYGWIN)
 
     find_library(SSL_EAY_DEBUG
       NAMES
-        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
-        # Looking the "libssl_static.lib" with a higher priority than "libssl.lib" which is the
-        # import library of "libssl.dll".
+        # 当使用默认选项构建OpenSSL时，静态库名称以“_static”作为后缀。
+        # 查看"libssl_static.lib"的优先级高于"libssl.dll"的导入库"libssl.lib
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libssl${_OPENSSL_STATIC_SUFFIX}d
         ssleay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         ssleay32${_OPENSSL_STATIC_SUFFIX}d
         ssl${_OPENSSL_STATIC_SUFFIX}d
-        # When OpenSSL is built with the "-static" option, only the static build is produced,
-        # and it is not suffixed with "_static".
+        # 当使用“-static”选项构建OpenSSL时，只生成静态构建，并且不添加“_static”后缀。
         libssl${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libssl${_OPENSSL_MSVC_RT_MODE}d
         libssld
@@ -303,17 +295,15 @@ if(WIN32 AND NOT CYGWIN)
 
     find_library(SSL_EAY_RELEASE
       NAMES
-        # When OpenSSL is built with default options, the static library name is suffixed with "_static".
-        # Looking the "libssl_static.lib" with a higher priority than "libssl.lib" which is the
-        # import library of "libssl.dll".
+        # 当使用默认选项构建OpenSSL时，静态库名称以“_static”作为后缀。
+        # 查看"libssl_static.lib"的优先级高于"libssl.dll"的导入库"libssl.lib
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libssl${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libssl${_OPENSSL_STATIC_SUFFIX}
         ssleay32${_OPENSSL_STATIC_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         ssleay32${_OPENSSL_STATIC_SUFFIX}
         ssl${_OPENSSL_STATIC_SUFFIX}
-        # When OpenSSL is built with the "-static" option, only the static build is produced,
-        # and it is not suffixed with "_static".
+        # 当使用“-static”选项构建OpenSSL时，只生成静态构建，并且不添加“_static”后缀。
         libssl${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libssl${_OPENSSL_MSVC_RT_MODE}
         libssl
@@ -369,7 +359,7 @@ if(WIN32 AND NOT CYGWIN)
     unset(LIB_EAY_NAMES)
     unset(SSL_EAY_NAMES)
   else()
-    # Not sure what to pick for -say- intel, let's use the toplevel ones and hope someone report issues:
+    # 不知道如何选择-比如- intel，让我们使用顶级的，希望有人报告问题:
     find_library(LIB_EAY
       NAMES
         libcrypto
@@ -506,12 +496,10 @@ if(OPENSSL_INCLUDE_DIR AND EXISTS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h")
        REGEX "^#[\t ]*define[\t ]+OPENSSL_VERSION_NUMBER[\t ]+0x([0-9a-fA-F])+.*")
 
   if(openssl_version_str)
-    # The version number is encoded as 0xMNNFFPPS: major minor fix patch status
-    # The status gives if this is a developer or prerelease and is ignored here.
-    # Major, minor, and fix directly translate into the version numbers shown in
-    # the string. The patch field translates to the single character suffix that
-    # indicates the bug fix state, which 00 -> nothing, 01 -> a, 02 -> b and so
-    # on.
+    # 版本号编码为0xMNNFFPPS: 主要次要修复补丁状态
+    # 这个状态给出了这是一个开发人员还是一个预发布版本，在这里被忽略。
+    # Major, minor和fix直接转换为字符串中显示的版本号。
+    # patch字段转换为表示bug修复状态的单个字符后缀，即00 -> nothing、01 -> a、02 -> b等等
 
     string(REGEX REPLACE "^.*OPENSSL_VERSION_NUMBER[\t ]+0x([0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F]).*$"
            "\\1;\\2;\\3;\\4;\\5" OPENSSL_VERSION_LIST "${openssl_version_str}")
@@ -524,19 +512,16 @@ if(OPENSSL_INCLUDE_DIR AND EXISTS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h")
 
     if(NOT OPENSSL_VERSION_PATCH STREQUAL "00")
       from_hex("${OPENSSL_VERSION_PATCH}" _tmp)
-      # 96 is the ASCII code of 'a' minus 1
+      #96是‘a’减1的ASCII码
       math(EXPR OPENSSL_VERSION_PATCH_ASCII "${_tmp} + 96")
       unset(_tmp)
-      # Once anyone knows how OpenSSL would call the patch versions beyond 'z'
-      # this should be updated to handle that, too. This has not happened yet
-      # so it is simply ignored here for now.
+      # 一旦任何人知道了OpenSSL如何调用'z'以外的补丁版本，也应该更新来处理。还没有发生，所以它只是暂时被忽略。
       string(ASCII "${OPENSSL_VERSION_PATCH_ASCII}" OPENSSL_VERSION_PATCH_STRING)
     endif ()
 
     set(OPENSSL_VERSION "${OPENSSL_VERSION_MAJOR}.${OPENSSL_VERSION_MINOR}.${OPENSSL_VERSION_FIX}${OPENSSL_VERSION_PATCH_STRING}")
   else ()
-    # Since OpenSSL 3.0.0, the new version format is MAJOR.MINOR.PATCH and
-    # a new OPENSSL_VERSION_STR macro contains exactly that
+    # 因为OpenSSL 3.0.0，新的版本格式是MAJOR.MINOR.PATCH，新的OPENSSL_VERSION_STR宏就包含了这个
     file(STRINGS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h" OPENSSL_VERSION_STR
          REGEX "^#[\t ]*define[\t ]+OPENSSL_VERSION_STR[\t ]+\"([0-9])+\\.([0-9])+\\.([0-9])+\".*")
     string(REGEX REPLACE "^.*OPENSSL_VERSION_STR[\t ]+\"([0-9]+\\.[0-9]+\\.[0-9]+)\".*$"
@@ -686,7 +671,7 @@ if(OPENSSL_FOUND)
   endif()
 endif()
 
-# Restore the original find library ordering
+# 恢复原来的查找库顺序
 if(OPENSSL_USE_STATIC_LIBS)
   set(CMAKE_FIND_LIBRARY_SUFFIXES ${_openssl_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES})
 endif()

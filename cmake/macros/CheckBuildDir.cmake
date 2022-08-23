@@ -3,7 +3,7 @@
 #**********************************
 
 #
-# Force out-of-source build
+# 强制非源代码构建
 #
 string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" BUILDING_IN_SOURCE)
 

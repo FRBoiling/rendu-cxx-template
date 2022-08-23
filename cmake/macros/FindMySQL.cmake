@@ -8,17 +8,15 @@ FindMySQL
 
 Find MySQL.
 
-Imported Targets
+导入的目标
 ^^^^^^^^^^^^^^^^
-该模块定义如下：
-  prop_tgt：`IMPORTED`目标：
-
+这个模块定义了以下内容: prop_tgt:`IMPORTED` targets:
   ``MySQL::MySQL``
     MySQL client library, if found.
 
-Result Variables
+结果变量
 ^^^^^^^^^^^^^^^^
-本模块将在您的项目中设置以下变量：
+这个模块将在你的项目中设置以下变量:
 ``MYSQL_FOUND``
   系统具有MySQL。
 ``MYSQL_INCLUDE_DIR``

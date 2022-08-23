@@ -2,8 +2,7 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-#将所有源文件收集到给定变量中，用于包含子目录中的所有源。忽略可变参数中列出的完全限定目录。
-#
+# 将所有源文件收集到给定变量中，用于包含子目录中的所有源。忽略可变参数中列出的完全限定目录。
 # Use it like:
 # CollectSourceFiles(
 #   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -36,8 +35,7 @@ function(CollectSourceFiles current_dir variable)
   endif()
 endfunction()
 
-#收集所有子目录到给定的变量，用于包含所有子目录。忽略可变参数中列出的完全限定目录。
-#
+# 收集所有子目录到给定的变量，用于包含所有子目录。忽略可变参数中列出的完全限定目录。
 # Use it like:
 # CollectIncludeDirectories(
 #   ${CMAKE_CURRENT_SOURCE_DIR}
