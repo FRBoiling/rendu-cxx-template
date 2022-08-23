@@ -1,3 +1,7 @@
+#**********************************
+#  Created by boil on 2022/8/14.
+#**********************************
+
 include(CheckCXXSourceCompiles)
 
 # 设置build-directive(在core中用来告诉我们使用了哪种build类型)
@@ -12,23 +16,6 @@ if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS CLANG_EXPECTED_VERSION)
 else()
   message(STATUS "Clang: Minimum version required is ${CLANG_EXPECTED_VERSION}, found ${CMAKE_CXX_COMPILER_VERSION} - ok!")
 endif()
-
-#测试clang-7中导致64位from_chars链接失败的bug(在某些配置中)
-#如果clang需求被更新到>=clang-8，可以移除这个检查，以及src/common/utilities/StringConvert.h中相关的ifdef块
-include(CheckCXXSourceCompiles)
-
-check_cxx_source_compiles("
-#include <charconv>
-#include <cstdint>
-
-int main()
-{
-    uint64_t n;
-    char const c[] = \"0\";
-    std::from_chars(c, c+1, n);
-    return static_cast<int>(n);
-}
-" CLANG_HAVE_PROPER_CHARCONV)
 
 if (NOT CLANG_HAVE_PROPER_CHARCONV)
   message(STATUS "Clang: Detected from_chars bug for 64-bit integers, workaround enabled")
