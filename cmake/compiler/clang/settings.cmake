@@ -18,7 +18,7 @@ else()
 endif()
 
 if (NOT CLANG_HAVE_PROPER_CHARCONV)
-  message(STATUS "Clang: Detected from_chars bug for 64-bit integers, workaround enabled")
+  message(STATUS "Clang: 检测到64位整数的from_chars错误，启用了解决方案 ")
   target_compile_definitions(rendu-compile-option-interface
   INTERFACE
     -DRENDU_NEED_CHARCONV_WORKAROUND)
@@ -36,7 +36,7 @@ if(WITH_WARNINGS)
       -Wno-mismatched-tags
       -Woverloaded-virtual)
 
-  message(STATUS "Clang: All warnings enabled")
+  message(STATUS "Clang: 启用 所有警告 ")
 endif()
 
 if(WITH_COREDEBUG)
@@ -62,7 +62,7 @@ if(ASAN)
       -fsanitize-recover=address
       -fsanitize-address-use-after-scope)
 
-  message(STATUS "Clang: Enabled Address Sanitizer ASan")
+  message(STATUS "Clang: 启用 Address Sanitizer ASan")
 endif()
 
 if(MSAN)
@@ -80,7 +80,7 @@ if(MSAN)
       -fsanitize=memory
       -fsanitize-memory-track-origins)
 
-  message(STATUS "Clang: Enabled Memory Sanitizer MSan")
+  message(STATUS "Clang: 启用 Memory Sanitizer MSan")
 endif()
 
 if(UBSAN)
@@ -94,7 +94,7 @@ if(UBSAN)
       -fno-omit-frame-pointer
       -fsanitize=undefined)
 
-  message(STATUS "Clang: Enabled Undefined Behavior Sanitizer UBSan")
+  message(STATUS "Clang: 启用 Undefined Behavior Sanitizer UBSan")
 endif()
 
 if(TSAN)
@@ -108,7 +108,7 @@ if(TSAN)
       -fno-omit-frame-pointer
       -fsanitize=thread)
 
-  message(STATUS "Clang: Enabled Thread Sanitizer TSan")
+  message(STATUS "Clang: 启用 Thread Sanitizer TSan")
 endif()
 
 if(BUILD_TIME_ANALYSIS)
@@ -116,7 +116,7 @@ if(BUILD_TIME_ANALYSIS)
     INTERFACE
       -ftime-trace)
 
-  message(STATUS "Clang: Enabled build time analysis (-ftime-trace)")
+  message(STATUS "Clang: 启用构建时间分析(-ftime-trace) ")
 endif()
 
 # -wno-narrow，需要在g3d中抑制警告。
@@ -141,7 +141,7 @@ if(BUILD_SHARED_LIBS)
   # --no-undefined 当有未定义符号时抛出错误
   # (由于缺少RENDU_*_API宏导致)。
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --no-undefined")
-  message(STATUS "Clang: Disallow undefined symbols")
+  message(STATUS "Clang: 不允许未定义的符号 ")
 endif()
 
 # 通过在PCH生成期间强制模板实例化来加速PCH构建

@@ -69,7 +69,7 @@ if(ASAN)
       -fsanitize-recover=address
       -fsanitize-address-use-after-scope)
 
-  message(STATUS "GCC: Enabled Address Sanitizer")
+  message(STATUS "GCC: 启用 Address Sanitizer")
 endif()
 
 if(BUILD_SHARED_LIBS)

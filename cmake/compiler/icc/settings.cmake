@@ -21,7 +21,7 @@ if(WITH_WARNINGS)
     INTERFACE
       -w1)
 
-  message(STATUS "ICC: All warnings enabled")
+  message(STATUS "ICC: 启用 所有警告 ")
 endif()
 
 if(WITH_COREDEBUG)
