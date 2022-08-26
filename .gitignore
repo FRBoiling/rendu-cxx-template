@@ -123,6 +123,7 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+*.DS_store
 
 # User ================================
 # 用户自定义的其他忽略文件

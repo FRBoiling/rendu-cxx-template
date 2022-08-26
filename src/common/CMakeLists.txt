@@ -21,8 +21,14 @@ endif(USE_COREPCH)
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_definitions(-DTRINITY_API_EXPORT_COMMON)
+add_definitions(-DRENDU_API_EXPORT_COMMON)
 
 add_library(${TARGET_NAME}
   ${PRIVATE_SOURCES}
 )
+
+CollectIncludeDirectories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PUBLIC_INCLUDES
+    # Exclude
+    ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers)

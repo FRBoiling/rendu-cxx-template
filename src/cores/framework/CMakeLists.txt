@@ -11,7 +11,7 @@ endif()
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_definitions(-DTRINITY_API_EXPORT_SHARED)
+add_definitions(-DRENDU_API_EXPORT_SHARED)
 
 add_library(${LIB_NAME}
   ${PRIVATE_SOURCES}
@@ -31,9 +31,9 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
   PRIVATE
-    trinity-core-interface
+    rendu-core-interface
   PUBLIC
-    database
+
     #TODO:添加reps库
     )
 
