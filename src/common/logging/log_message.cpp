@@ -1,6 +1,6 @@
-/**********************************
-**  Created by boil on 2022/8/14.
-***********************************/
+/*
+* Created by boil on 2022/8/20.
+*/
 
 #include "log_message.h"
 #include "string_format.h"

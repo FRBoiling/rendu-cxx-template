@@ -1,6 +1,6 @@
-/**********************************
-**  Created by boil on 2022/8/14.
-***********************************/
+/*
+* Created by boil on 2022/8/20.
+*/
 
 #include "random.h"
 #include <sfmt_rand.h>

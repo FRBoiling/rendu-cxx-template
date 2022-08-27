@@ -1,6 +1,6 @@
-/**********************************
-**  Created by boil on 2022/8/14.
-***********************************/
+/*
+* Created by boil on 2022/8/20.
+*/
 
 #ifndef RENDU_STRING_FORMAT_H_
 #define RENDU_STRING_FORMAT_H_

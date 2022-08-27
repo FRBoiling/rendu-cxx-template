@@ -1,11 +1,11 @@
 /*
 * Created by boil on 2022/8/27.
 */
-#ifndef RRENDU_COMPONENT_H_
-#define RRENDU_COMPONENT_H_
+#ifndef RENDU_COMPONENT_H_
+#define RENDU_COMPONENT_H_
 
 class component {
 
 };
 
-#endif //RRENDU_COMPONENT_H_
+#endif //RENDU_COMPONENT_H_

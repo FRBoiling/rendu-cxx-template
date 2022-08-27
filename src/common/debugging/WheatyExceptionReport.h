@@ -1,3 +1,6 @@
+/*
+* Created by boil on 2022/8/20.
+*/
 #ifndef _WHEATYEXCEPTIONREPORT_
 #define _WHEATYEXCEPTIONREPORT_
 #ifdef _WIN32
