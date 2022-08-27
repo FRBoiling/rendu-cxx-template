@@ -2,8 +2,8 @@
 * Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RenduCore_Banner_h__
-#define RenduCore_Banner_h__
+#ifndef RENDU_BANNER_H_
+#define RENDU_BANNER_H_
 
 #include "define.h"
 
@@ -13,4 +13,4 @@ namespace rendu {
   }
 }
 
-#endif // RenduCore_Banner_h__
+#endif // RENDU_BANNER_H_

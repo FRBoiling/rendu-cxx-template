@@ -2,7 +2,7 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#include "SFMTRand.h"
+#include "sfmt_rand.h"
 #include <algorithm>
 #include <array>
 #include <functional>

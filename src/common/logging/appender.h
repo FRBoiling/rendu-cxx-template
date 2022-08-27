@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef APPENDER_H
-#define APPENDER_H
+#ifndef RENDU_APPENDER_H_
+#define RENDU_APPENDER_H_
 
 #include "define.h"
 #include "log_common.h"
@@ -45,4 +45,4 @@ public:
     explicit InvalidAppenderArgsException(std::string const& message) : std::length_error(message) { }
 };
 
-#endif
+#endif //RENDU_APPENDER_H_

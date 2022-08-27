@@ -1,6 +1,6 @@
-/**********************************
-**  Created by boil on 2022/8/14.
-***********************************/
+/*
+* Created by boil on 2022/8/27.
+*/
 
 #include "program.h"
 /// Launch the rendu core program

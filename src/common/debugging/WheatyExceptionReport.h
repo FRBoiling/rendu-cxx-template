@@ -1,8 +1,8 @@
 #ifndef _WHEATYEXCEPTIONREPORT_
 #define _WHEATYEXCEPTIONREPORT_
+#ifdef _WIN32
 
 #define _NO_CVCONST_H
-
 #include <windows.h>
 #include <winnt.h>
 #include <winternl.h>
@@ -199,4 +199,6 @@ class WheatyExceptionReport
 };
 
 extern WheatyExceptionReport g_WheatyExceptionReport;       //  global instance of class
+#endif
+
 #endif                                                      // _WHEATYEXCEPTIONREPORT_

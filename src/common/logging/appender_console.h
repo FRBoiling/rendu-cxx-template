@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef APPENDERCONSOLE_H
-#define APPENDERCONSOLE_H
+#ifndef RENDU_APPENDER_CONSOLE_H_
+#define RENDU_APPENDER_CONSOLE_H_
 
 #include "appender.h"
 
@@ -46,4 +46,4 @@ class RD_COMMON_API AppenderConsole : public Appender
         ColorTypes _colors[NUM_ENABLED_LOG_LEVELS];
 };
 
-#endif
+#endif  //RENDU_APPENDER_CONSOLE_H_

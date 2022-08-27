@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RENDU_DEFINE_H
-#define RENDU_DEFINE_H
+#ifndef RENDU_DEFINE_H_
+#define RENDU_DEFINE_H_
 
 #include "compiler_defs.h"
 
@@ -142,4 +142,4 @@ enum DBCFormer
     FT_LONG = 'l'                                           // uint64
 };
 
-#endif //RENDU_DEFINE_H
+#endif //RENDU_DEFINE_H_

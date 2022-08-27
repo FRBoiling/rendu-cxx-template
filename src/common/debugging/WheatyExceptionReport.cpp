@@ -3,11 +3,12 @@
 // MSDN Magazine, 2002
 // FILE: WheatyExceptionReport.CPP
 //==========================================
+#ifdef _WIN32
+
 #include "WheatyExceptionReport.h"
 #include "errors.h"
 #include "git_revision.h"
 #include <algorithm>
-
 #ifdef __clang__
 // clang-cl doesn't have these hardcoded types available, correct ehdata_forceinclude.h that relies on it
 #define _ThrowInfo ThrowInfo
@@ -1692,3 +1693,4 @@ std::string SymbolDetail::ToString()
     }
     return formatted;
 }
+#endif

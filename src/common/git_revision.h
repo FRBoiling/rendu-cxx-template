@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef __GITREVISION_H__
-#define __GITREVISION_H__
+#ifndef RENDU_GIT_REVISION_H_
+#define RENDU_GIT_REVISION_H_
 
 #include "define.h"
 
@@ -27,4 +27,4 @@ namespace GitRevision
     RD_COMMON_API char const* GetProductVersionStr();
 }
 
-#endif
+#endif //RENDU_GIT_REVISION_H_

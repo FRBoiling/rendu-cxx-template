@@ -2,27 +2,32 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RENDUCORE_ERRORS_H
-#define RENDUCORE_ERRORS_H
+#ifndef RENDU_ERRORS_H_
+#define RENDU_ERRORS_H_
 
 #include "define.h"
 #include <string>
 
-namespace rendu
-{
-    [[noreturn]] RD_COMMON_API void Assert(char const* file, int line, char const* function, std::string debugInfo, char const* message);
-    [[noreturn]] RD_COMMON_API void Assert(char const* file, int line, char const* function, std::string debugInfo, char const* message, char const* format, ...) ATTR_PRINTF(6, 7);
+namespace rendu {
+  [[noreturn]] RD_COMMON_API void
+  Assert(char const *file, int line, char const *function, std::string debugInfo, char const *message);
 
-    [[noreturn]] RD_COMMON_API void Fatal(char const* file, int line, char const* function, char const* message, ...) ATTR_PRINTF(4, 5);
+  [[noreturn]] RD_COMMON_API void
+  Assert(char const *file, int line, char const *function, std::string debugInfo, char const *message,
+         char const *format, ...) ATTR_PRINTF(6, 7);
 
-    [[noreturn]] RD_COMMON_API void Error(char const* file, int line, char const* function, char const* message);
+  [[noreturn]] RD_COMMON_API void
+  Fatal(char const *file, int line, char const *function, char const *message, ...) ATTR_PRINTF(4, 5);
 
-    [[noreturn]] RD_COMMON_API void Abort(char const* file, int line, char const* function);
-    [[noreturn]] RD_COMMON_API void Abort(char const* file, int line, char const* function, char const* message, ...);
+  [[noreturn]] RD_COMMON_API void Error(char const *file, int line, char const *function, char const *message);
 
-    RD_COMMON_API void Warning(char const* file, int line, char const* function, char const* message);
+  [[noreturn]] RD_COMMON_API void Abort(char const *file, int line, char const *function);
 
-    [[noreturn]] RD_COMMON_API void AbortHandler(int sigval);
+  [[noreturn]] RD_COMMON_API void Abort(char const *file, int line, char const *function, char const *message, ...);
+
+  RD_COMMON_API void Warning(char const *file, int line, char const *function, char const *message);
+
+  [[noreturn]] RD_COMMON_API void AbortHandler(int sigval);
 
 } // namespace rendu
 
@@ -61,13 +66,12 @@ RD_COMMON_API std::string GetDebugInfo();
 #define ABORT WPAbort
 #define ABORT_MSG WPAbort_MSG
 
-template <typename T>
-inline T* ASSERT_NOTNULL_IMPL(T* pointer, char const* expr)
-{
-    ASSERT(pointer, "%s", expr);
-    return pointer;
+template<typename T>
+inline T *ASSERT_NOTNULL_IMPL(T *pointer, char const *expr) {
+      ASSERT(pointer, "%s", expr);
+  return pointer;
 }
 
 #define ASSERT_NOTNULL(pointer) ASSERT_NOTNULL_IMPL(pointer, #pointer)
 
-#endif
+#endif //RENDU_ERRORS_H_

@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef LogCommon_h__
-#define LogCommon_h__
+#ifndef RENDU_LOG_COMMON_H_
+#define RENDU_LOG_COMMON_H_
 
 #include "define.h"
 
@@ -43,4 +43,4 @@ enum AppenderFlags : uint8
     APPENDER_FLAGS_MAKE_FILE_BACKUP              = 0x10  // only used by FileAppender
 };
 
-#endif // LogCommon_h__
+#endif // RENDU_LOG_COMMON_H_

@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef APPENDERFILE_H
-#define APPENDERFILE_H
+#ifndef RENDU_APPENDER_FILE_H_
+#define RENDU_APPENDER_FILE_H_
 
 #include "appender.h"
 #include <atomic>
@@ -30,4 +30,4 @@ class RD_COMMON_API AppenderFile : public Appender
         std::atomic<uint64> _fileSize;
 };
 
-#endif
+#endif //RENDU_APPENDER_FILE_H_

@@ -4,6 +4,8 @@
 
 #include "util.h"
 #include "common.h"
+#include "containers.h"
+#include "ip_address.h"
 #include "string_convert.h"
 #include "string_format.h"
 #include <algorithm>
@@ -14,6 +16,7 @@
 #include <sstream>
 #include <string>
 #include <utf8.h>
+#include <boost/core/demangle.hpp>
 
 #if RENDU_COMPILER == RENDU_COMPILER_GNU
   #include <sys/socket.h>

@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#include "common.h"
 #include "define.h"
+#include "common.h"
 #include "errors.h"
 #include "git_revision.h"
 #include "log.h"

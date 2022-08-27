@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef SFMTRand_h__
-#define SFMTRand_h__
+#ifndef RENDU_SFMT_RAND_H_
+#define RENDU_SFMT_RAND_H_
 
 #include "define.h"
 #include <SFMT.h>
@@ -28,4 +28,4 @@ private:
     sfmt_t _state;
 };
 
-#endif // SFMTRand_h__
+#endif // RENDU_SFMT_RAND_H_

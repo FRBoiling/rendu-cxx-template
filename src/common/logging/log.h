@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RENDUCORE_LOG_H
-#define RENDUCORE_LOG_H
+#ifndef RENDU_LOG_H_
+#define RENDU_LOG_H_
 
 #include "define.h"
 #include "strand.h"
@@ -175,4 +175,4 @@ void check_args(std::string const&, ...);
 #define RD_LOG_FATAL(filterType__, ...) \
     RD_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_FATAL, __VA_ARGS__)
 
-#endif
+#endif //RENDU_LOG_H_
