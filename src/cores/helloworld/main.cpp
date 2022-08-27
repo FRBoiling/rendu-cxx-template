@@ -5,5 +5,8 @@
 #include "program.h"
 /// Launch the rendu core program
 extern int main(int argc, char** argv) {
-  RUN(argc,argv)
+  Program::GetInstance()->Initialize(argc, argv);
+  
+
+  Program::GetInstance()->Run();
 }

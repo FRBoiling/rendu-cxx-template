@@ -3,33 +3,48 @@
 */
 #include "program.h"
 
-Program *Program::instance = new Program();
+Program *Program::instance_ = new Program();
 
 Program *Program::GetInstance() {
-  return instance;
+  return instance_;
 }
 
 int Program::Initialize(int argc, char** argv){
-  printf("Initialize...");
+  printf("Initialize...\n");
 
-  printf("Initialize success!");
+  printf("Initialize success!\n");
+  state_ = ProgramState::INITIALIZED;
+}
+
+bool Program::IsRunning() {
+  return state_ > ProgramState::IDLE;
+}
+
+void Program::Exit() {
+  state_  = ProgramState::IDLE;
 }
 
 int Program::Run(){
-
   Start();
+  while (IsRunning()){
+
+  }
+
+  printf("Exit success!\n");
 }
 
 int Program::Start(){
-  printf("Start...");
+  printf("Start...\n");
 
-  printf("Start success!");
+  printf("Start success!\n");
+  state_ = ProgramState::RUNNING;
 }
 
 int Program::Stop(){
-  printf("Stop...");
+  printf("Stop...\n");
+  state_ = ProgramState::STOPPING;
 
-  printf("Stop success!");
+  printf("Stop success!\n");
 }
 
 int Program::Update(){

@@ -7,21 +7,30 @@
 #include "util.h"
 #include "component.h"
 
+enum class ProgramState{
+  INITIALIZED,    //已经初始化
+  IDLE,           //闲置
+  RUNNING,        //正在运行
+  STOPPING        //正在停止
+};
+
 class Program {
 private:
   explicit Program() = default;
 
-  static Program *instance;
+  static Program *instance_;
 public:
   static Program *GetInstance();
+  ProgramState state_;
 
   int Initialize(int argc, char **argv);
 
   int Run();
-
+  void Exit();
   int AddComponent(component* component);
 
 private:
+  bool IsRunning();
 
   int Start();
 
@@ -29,9 +38,5 @@ private:
 
   int Update();
 };
-
-#define RUN(argc, argv) \
-Program::GetInstance()->Initialize(argc, argv); \
-Program::GetInstance()->Run();
 
 #endif //RENDU_PROGRAM_H__
