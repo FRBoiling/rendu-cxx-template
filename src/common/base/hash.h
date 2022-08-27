@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RenduCore_Hash_h__
-#define RenduCore_Hash_h__
+#ifndef RENDU_HASH_H_
+#define RENDU_HASH_H_
 
 #include <functional>
 #include <utility>
@@ -35,4 +35,4 @@ namespace std
     };
 }
 
-#endif // RenduCore_Hash_h__
+#endif // RENDU_HASH_H_

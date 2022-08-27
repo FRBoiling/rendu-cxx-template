@@ -49,7 +49,9 @@ if(APPLE)
   endif()
 endif()
 
-message(STATUS "UNIX: 编译器检测到: ${CMAKE_C_COMPILER}")
+message(STATUS "UNIX: C编译器检测到: ${CMAKE_C_COMPILER}")
+message(STATUS "UNIX: C++编译器检测到: ${CMAKE_CXX_COMPILER}")
+
 if(CMAKE_C_COMPILER MATCHES "gcc" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
   include(${CMAKE_SOURCE_DIR}/cmake/compiler/gcc/settings.cmake)
 elseif(CMAKE_C_COMPILER MATCHES "icc")

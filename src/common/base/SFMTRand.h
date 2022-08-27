@@ -1,0 +1,31 @@
+/**********************************
+**  Created by boil on 2022/8/14.
+***********************************/
+
+#ifndef SFMTRand_h__
+#define SFMTRand_h__
+
+#include "define.h"
+#include <SFMT.h>
+#include <new>
+
+/*
+ * C++ Wrapper for SFMT
+ */
+class SFMTRand {
+public:
+    SFMTRand();
+    uint32 RandomUInt32(); // Output random bits
+    void* operator new(size_t size, std::nothrow_t const&);
+    void operator delete(void* ptr, std::nothrow_t const&);
+    void* operator new(size_t size);
+    void operator delete(void* ptr);
+    void* operator new[](size_t size, std::nothrow_t const&);
+    void operator delete[](void* ptr, std::nothrow_t const&);
+    void* operator new[](size_t size);
+    void operator delete[](void* ptr);
+private:
+    sfmt_t _state;
+};
+
+#endif // SFMTRand_h__

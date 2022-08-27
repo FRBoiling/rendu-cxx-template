@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef Types_h__
-#define Types_h__
+#ifndef RENDU_TYPES_H_
+#define RENDU_TYPES_H_
 
 #include "advstd.h"
 
@@ -58,4 +58,4 @@ namespace rendu
     constexpr bool dependant_false_v = dependant_false<T>::value;
 }
 
-#endif // Types_h__
+#endif // RENDU_TYPES_H_

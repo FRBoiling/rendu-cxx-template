@@ -3,7 +3,7 @@
 ***********************************/
 
 #include "random.h"
-#include "SFMTRand.h"
+#include <SFMTRand.h>
 #include "errors.h"
 #include <memory>
 #include <random>

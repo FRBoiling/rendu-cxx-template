@@ -2,10 +2,10 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RENDUCORE_STRING_FORMAT_H
-#define RENDUCORE_STRING_FORMAT_H
+#ifndef RENDU_STRING_FORMAT_H_
+#define RENDU_STRING_FORMAT_H_
 
-#include "fmt/printf.h"
+#include <fmt/printf.h>
 
 namespace rendu
 {
@@ -37,4 +37,4 @@ namespace rendu
     }
 }
 
-#endif
+#endif //RENDU_STRING_FORMAT_H_

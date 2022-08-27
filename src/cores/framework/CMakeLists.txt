@@ -37,22 +37,22 @@ target_link_libraries(${LIB_NAME}
     #TODO:添加reps库
     )
 
-# set_target_properties(${LIB_NAME}
-#     PROPERTIES
-#       FOLDER
-#         "server")
+ set_target_properties(${LIB_NAME}
+     PROPERTIES
+       FOLDER
+         "rendu")
 
-# if(BUILD_SHARED_LIBS)
-#   if(UNIX)
-#     install(TARGETS shared
-#       LIBRARY
-#         DESTINATION lib)
-#   elseif(WIN32)
-#     install(TARGETS shared
-#       RUNTIME
-#         DESTINATION "${CMAKE_INSTALL_PREFIX}")
-#   endif()
-# endif()
+ if(BUILD_SHARED_LIBS)
+   if(UNIX)
+     install(TARGETS shared
+       LIBRARY
+         DESTINATION lib)
+   elseif(WIN32)
+     install(TARGETS shared
+       RUNTIME
+         DESTINATION "${CMAKE_INSTALL_PREFIX}")
+   endif()
+ endif()
 
 # Generate precompiled header
 if(USE_COREPCH)

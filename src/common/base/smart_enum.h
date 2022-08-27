@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RENDU_SMARTENUM_H
-#define RENDU_SMARTENUM_H
+#ifndef RENDU_SMART_ENUM_H_
+#define RENDU_SMART_ENUM_H_
 
 #include "iterator_pair.h"
 #include <iterator>

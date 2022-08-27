@@ -2,10 +2,10 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef Random_h__
-#define Random_h__
+#ifndef RENDU_RANDOM_H_
+#define RENDU_RANDOM_H_
 
-#include "Duration.h"
+#include "duration.h"
 #include "define.h"
 #include <limits>
 
@@ -63,4 +63,4 @@ public:
     static RandomEngine& Instance();
 };
 
-#endif // Random_h__
+#endif // RENDU_RANDOM_H_

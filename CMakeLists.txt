@@ -12,8 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Define the Project Name and Description
 # Set projectname (must be done AFTER setting configurationtypes)
-project(r${PROJECT_NAME} LANGUAGES CXX DESCRIPTION "moderncpp-project is a starter project for Modern C++")
-# project(rendu-core)
+#project(${PROJECT_NAME} LANGUAGES CXX DESCRIPTION "moderncpp-project is a starter project for Modern C++")
+project(${PROJECT_NAME})
 
 # CMake policies (can not be handled elsewhere)
 cmake_policy(SET CMP0005 NEW)

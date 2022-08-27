@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RenduCore_Regex_h__
-#define RenduCore_Regex_h__
+#ifndef RENDU_REGEX_H_
+#define RENDU_REGEX_H_
 
 #ifndef RD_HAS_BROKEN_WSTRING_REGEX
 #include <regex>
@@ -23,4 +23,4 @@ namespace rendu
     using :: RD_REGEX_NAMESPACE :: regex_search;
 }
 
-#endif // RenduCore_Regex_h__
+#endif // RENDU_REGEX_H_

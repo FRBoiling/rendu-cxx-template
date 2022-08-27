@@ -6,6 +6,7 @@
 #define RENDUCORE_LOG_H
 
 #include "define.h"
+#include "strand.h"
 #include "log_common.h"
 #include "string_format.h"
 #include <memory>

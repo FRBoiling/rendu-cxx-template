@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef RENDU_STRINGCONVERT_H
-#define RENDU_STRINGCONVERT_H
+#ifndef RENDU_STRING_CONVERT_H_
+#define RENDU_STRING_CONVERT_H_
 
 #include "define.h"
 #include "errors.h"
@@ -259,4 +259,4 @@ namespace rendu
     }
 }
 
-#endif
+#endif //RENDU_STRING_CONVERT_H_

@@ -61,7 +61,7 @@ target_include_directories(helloworld
 set_target_properties(helloworld
     PROPERTIES
     FOLDER
-    "helloworld")
+    "rendu")
 
 # Add all dynamic projects as dependency to the helloworld
 if(HELLOWORLD_DYNAMIC_SCRIPT_MODULES_DEPENDENCIES)
