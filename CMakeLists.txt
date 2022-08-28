@@ -1,7 +1,7 @@
 #**********************************
 #  Created by boil on 2022/8/14.
 #**********************************
-set(PROJECT_NAME rendu-core)
+set(PROJECT_NAME rendu)
 cmake_minimum_required(VERSION 3.15.0 FATAL_ERROR)
 # add this options before PROJECT keyword
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)

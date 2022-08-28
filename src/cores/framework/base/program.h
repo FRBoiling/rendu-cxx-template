@@ -4,32 +4,32 @@
 
 #ifndef RENDU_PROGRAM_H__
 #define RENDU_PROGRAM_H__
+
+#include <map>
 #include "util.h"
 #include "component.h"
+#include "system.h"
 
-enum class ProgramState{
-  INITIALIZED,    //已经初始化
+enum class ProgramState {
   IDLE,           //闲置
+  INITIALIZED,    //已经初始化
   RUNNING,        //正在运行
   STOPPING        //正在停止
 };
 
-class Program {
-private:
-  explicit Program() = default;
-
-  static Program *instance_;
+class Program : public System<Program> {
 public:
-  static Program *GetInstance();
-  ProgramState state_;
-
   int Initialize(int argc, char **argv);
 
   int Run();
+
   void Exit();
-  int AddComponent(component* component);
+
+  void AddSystem(ISystem &system);
 
 private:
+  ProgramState _state;
+
   bool IsRunning();
 
   int Start();

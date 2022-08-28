@@ -3,25 +3,20 @@
 */
 #include "program.h"
 
-Program *Program::instance_ = new Program();
-
-Program *Program::GetInstance() {
-  return instance_;
-}
-
 int Program::Initialize(int argc, char** argv){
   printf("Initialize...\n");
 
   printf("Initialize success!\n");
-  state_ = ProgramState::INITIALIZED;
+  _state = ProgramState::INITIALIZED;
+  printf("ProgramState is %d\n", _state);
 }
 
 bool Program::IsRunning() {
-  return state_ > ProgramState::IDLE;
+  return _state > ProgramState::IDLE;
 }
 
 void Program::Exit() {
-  state_  = ProgramState::IDLE;
+  _state  = ProgramState::IDLE;
 }
 
 int Program::Run(){
@@ -37,12 +32,12 @@ int Program::Start(){
   printf("Start...\n");
 
   printf("Start success!\n");
-  state_ = ProgramState::RUNNING;
+  _state = ProgramState::RUNNING;
 }
 
 int Program::Stop(){
   printf("Stop...\n");
-  state_ = ProgramState::STOPPING;
+  _state = ProgramState::STOPPING;
 
   printf("Stop success!\n");
 }
@@ -51,9 +46,10 @@ int Program::Update(){
 
 }
 
-int Program::AddComponent(component *component) {
-
+void Program::AddSystem(ISystem &system) {
+  printf("system %s",system.ToString().c_str());
 }
+
 
 
 

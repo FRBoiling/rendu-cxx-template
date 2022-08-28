@@ -31,7 +31,8 @@ target_include_directories(${LIB_NAME}
 
 target_link_libraries(${LIB_NAME}
   PRIVATE
-    rendu-core-interface
+    rendu-interface
+    common
   PUBLIC
 
     #TODO:添加reps库

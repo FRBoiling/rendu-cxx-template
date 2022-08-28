@@ -42,7 +42,7 @@ target_include_directories(${TARGET_NAME}
 
 target_link_libraries(${TARGET_NAME}
     PRIVATE
-      rendu-core-interface
+      rendu-interface
     PUBLIC
       boost
       fmt
