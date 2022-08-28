@@ -6,7 +6,6 @@
 #define RENDU_PROGRAM_H__
 
 #include <map>
-#include "util.h"
 #include "component.h"
 #include "system.h"
 
@@ -29,7 +28,7 @@ public:
 
 private:
   ProgramState _state;
-
+  std::map<size_t,ISystem*> _systems;
   bool IsRunning();
 
   int Start();

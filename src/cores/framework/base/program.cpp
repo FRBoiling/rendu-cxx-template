@@ -3,7 +3,7 @@
 */
 #include "program.h"
 
-int Program::Initialize(int argc, char** argv){
+int Program::Initialize(int argc, char **argv) {
   printf("Initialize...\n");
 
   printf("Initialize success!\n");
@@ -16,38 +16,44 @@ bool Program::IsRunning() {
 }
 
 void Program::Exit() {
-  _state  = ProgramState::IDLE;
+  _state = ProgramState::IDLE;
 }
 
-int Program::Run(){
+int Program::Run() {
   Start();
-  while (IsRunning()){
+  while (IsRunning()) {
 
   }
 
   printf("Exit success!\n");
 }
 
-int Program::Start(){
+int Program::Start() {
   printf("Start...\n");
 
   printf("Start success!\n");
   _state = ProgramState::RUNNING;
 }
 
-int Program::Stop(){
+int Program::Stop() {
   printf("Stop...\n");
   _state = ProgramState::STOPPING;
 
   printf("Stop success!\n");
 }
 
-int Program::Update(){
+int Program::Update() {
 
 }
 
 void Program::AddSystem(ISystem &system) {
-  printf("system %s",system.ToString().c_str());
+  auto hash_code = system.GetType().hash_code();
+  if (_systems.contains(hash_code)) {
+    printf("AddSystem fail ! The %s already exist.\n", system.ToString().c_str());
+    return;
+  }
+  _systems[hash_code] = &system;
+  printf("AddSystem %s success !\n", system.ToString().c_str());
 }
 
 

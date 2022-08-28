@@ -2,13 +2,12 @@
 * Created by boil on 2022/8/28.
 */
 
-#ifndef RENDU_EVENT_SYSTEM_H_
-#define RENDU_EVENT_SYSTEM_H_
+#ifndef RENDU_CONFIG_SYSTEM_H_
+#define RENDU_CONFIG_SYSTEM_H_
 
 #include "system.h"
 
-class EventSystem : public System<EventSystem>, public ISystem {
-
+class ConfigSystem : public System<ConfigSystem>, public ISystem {
 public:
   void Register() override;
 
@@ -18,4 +17,4 @@ public:
 };
 
 
-#endif //RENDU_EVENT_SYSTEM_H_
+#endif //RENDU_CONFIG_SYSTEM_H_
