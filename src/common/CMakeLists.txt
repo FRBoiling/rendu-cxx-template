@@ -48,6 +48,8 @@ target_link_libraries(${TARGET_NAME}
       fmt
       utf8cpp
       sfmt
+      readline
+    #TODO:添加reps库
     )
 
 add_dependencies(${TARGET_NAME} revision_data.h)
