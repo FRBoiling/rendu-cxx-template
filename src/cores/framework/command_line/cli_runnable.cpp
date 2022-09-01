@@ -4,6 +4,7 @@
 
 #include "cli_runnable.h"
 #include "util.h"
+#include "program.h"
 
 #if RENDU_PLATFORM != RENDU_PLATFORM_WINDOWS
 #include <readline/readline.h>
@@ -37,13 +38,13 @@ namespace rendu::Impl::Readline
     char** cli_completion(char const* text, int /*start*/, int /*end*/)
     {
         ::rl_attempted_completion_over = 1;
-        vec = rendu::ChatCommands::GetAutoCompletionsFor(CliHandler(nullptr,nullptr), text);
+//        vec = rendu::ChatCommands::GetAutoCompletionsFor(CliHandler(nullptr,nullptr), text);
         return ::rl_completion_matches(text, &cli_unpack_vector);
     }
 
     int cli_hook_func()
     {
-        if (World::IsStopped())
+        if (Program::IsStopped())
             ::rl_done = 1;
         return 0;
     }
@@ -99,8 +100,8 @@ void CliThread()
     ::rl_event_hook = &rendu::Impl::Readline::cli_hook_func;
 #endif
 
-    if (sConfigMgr->GetBoolDefault("BeepAtStart", true))
-        printf("\a");                                       // \a = Alert
+//    if (sConfigMgr->GetBoolDefault("BeepAtStart", true))
+//        printf("\a");                                       // \a = Alert
 
 #if RENDU_PLATFORM == RENDU_PLATFORM_WINDOWS
     if (sConfigMgr->GetBoolDefault("FlashAtStart", true))
@@ -115,7 +116,7 @@ void CliThread()
     }
 #endif
     ///- As long as the World is running (no World::m_stopEvent), get the command line and handle it
-    while (!World::IsStopped())
+    while (!Program::IsStopped())
     {
         fflush(stdout);
 
@@ -146,14 +147,14 @@ void CliThread()
             }
 
             fflush(stdout);
-            sWorld->QueueCliCommand(new CliCommandHolder(nullptr, command.c_str(), &utf8print, &commandFinished));
+//            sWorld->QueueCliCommand(new CliCommandHolder(nullptr, command.c_str(), &utf8print, &commandFinished));
 #if RENDU_PLATFORM != RENDU_PLATFORM_WINDOWS
             add_history(command.c_str());
 #endif
         }
         else if (feof(stdin))
         {
-            World::StopNow(SHUTDOWN_EXIT_CODE);
+            Program::Stop();
         }
     }
 }

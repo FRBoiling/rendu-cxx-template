@@ -13,28 +13,26 @@ enum class ProgramState {
   IDLE,           //闲置
   INITIALIZED,    //已经初始化
   RUNNING,        //正在运行
-  STOPPING        //正在停止
+  STOPPING,       //正在停止
+  STOPPED         //已经停止
 };
 
 class Program : public System<Program> {
 public:
-  int Initialize(int argc, char **argv);
-
-  int Run();
-
-  void Exit();
-
-  void AddSystem(ISystem &system);
-
+  static int Initialize(int argc, char **argv);
+  static int Run();
+  static bool IsStopped();
+  static void AddSystem(ISystem &system);
+  static int Stop();
 private:
+
   ProgramState _state;
   std::map<size_t,ISystem*> _systems;
-  bool IsRunning();
 
   int Start();
 
-  int Stop();
 
+  void Exit();
   int Update();
 };
 

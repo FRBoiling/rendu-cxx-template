@@ -10,12 +10,11 @@
 /// Launch the rendu core program
 extern int main(int argc, char** argv) {
 
-  Program::GetInstance().Initialize(argc, argv);
-  Program::GetInstance().AddSystem(LogSystem::GetInstance());
-  Program::GetInstance().AddSystem(ConfigSystem::GetInstance());
-  Program::GetInstance().AddSystem(EventSystem::GetInstance());
-
-  Program::GetInstance().Run();
+  Program::Initialize(argc, argv);
+  Program::AddSystem(LogSystem::GetInstance());
+  Program::AddSystem(ConfigSystem::GetInstance());
+  Program::AddSystem(EventSystem::GetInstance());
+  Program::Run();
 
   return 0;
 }

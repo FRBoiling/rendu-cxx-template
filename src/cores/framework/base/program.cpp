@@ -7,12 +7,12 @@ int Program::Initialize(int argc, char **argv) {
   printf("Initialize...\n");
 
   printf("Initialize success!\n");
-  _state = ProgramState::INITIALIZED;
-  printf("ProgramState is %d\n", _state);
+  GetInstance()._state = ProgramState::INITIALIZED;
+  printf("ProgramState is %d\n", GetInstance()._state);
 }
 
-bool Program::IsRunning() {
-  return _state > ProgramState::IDLE;
+bool Program::IsStopped() {
+  return GetInstance()._state == ProgramState::STOPPED;
 }
 
 void Program::Exit() {
@@ -20,11 +20,9 @@ void Program::Exit() {
 }
 
 int Program::Run() {
-  Start();
-  while (IsRunning()) {
-
+  GetInstance().Start();
+  while (!IsStopped()) {
   }
-
   printf("Exit success!\n");
 }
 
@@ -37,9 +35,10 @@ int Program::Start() {
 
 int Program::Stop() {
   printf("Stop...\n");
-  _state = ProgramState::STOPPING;
+  GetInstance()._state = ProgramState::STOPPING;
 
   printf("Stop success!\n");
+  GetInstance()._state = ProgramState::STOPPED;
 }
 
 int Program::Update() {
@@ -48,11 +47,11 @@ int Program::Update() {
 
 void Program::AddSystem(ISystem &system) {
   auto hash_code = system.GetType().hash_code();
-  if (_systems.contains(hash_code)) {
+  if (GetInstance()._systems.contains(hash_code)) {
     printf("AddSystem fail ! The %s already exist.\n", system.ToString().c_str());
     return;
   }
-  _systems[hash_code] = &system;
+  GetInstance()._systems[hash_code] = &system;
   printf("AddSystem %s success !\n", system.ToString().c_str());
 }
 
