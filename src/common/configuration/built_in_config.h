@@ -10,7 +10,7 @@
 
 /// Provides helper functions to access built-in values
 /// which can be overwritten in config
-namespace BuiltInConfig
+namespace rendu
 {
     /// Returns the CMake command when any is specified in the config,
     /// returns the built-in path otherwise
@@ -25,6 +25,6 @@ namespace BuiltInConfig
     /// in the config, returns the built-in one otherwise
     RD_COMMON_API std::string GetMySQLExecutable();
 
-} // namespace BuiltInConfig
+} // namespace rendu
 
 #endif // RENDU_BUILT_IN_CONFIG_H_

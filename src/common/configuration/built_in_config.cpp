@@ -14,25 +14,25 @@ static std::string GetStringWithDefaultValueFromFunction(
     return value.empty() ? getter() : value;
 }
 
-std::string BuiltInConfig::GetCMakeCommand()
+std::string rendu::GetCMakeCommand()
 {
     return GetStringWithDefaultValueFromFunction(
         "CMakeCommand", GitRevision::GetCMakeCommand);
 }
 
-std::string BuiltInConfig::GetBuildDirectory()
+std::string rendu::GetBuildDirectory()
 {
     return GetStringWithDefaultValueFromFunction(
         "BuildDirectory", GitRevision::GetBuildDirectory);
 }
 
-std::string BuiltInConfig::GetSourceDirectory()
+std::string rendu::GetSourceDirectory()
 {
     return GetStringWithDefaultValueFromFunction(
         "SourceDirectory", GitRevision::GetSourceDirectory);
 }
 
-std::string BuiltInConfig::GetMySQLExecutable()
+std::string rendu::GetMySQLExecutable()
 {
     return GetStringWithDefaultValueFromFunction(
         "MySQLExecutable", GitRevision::GetMySQLExecutable);
