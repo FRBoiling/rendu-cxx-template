@@ -10,47 +10,35 @@ if (APPLE)
   set(strtod_l_headers ${strtod_l_headers} xlocale.h)
 endif ()
 
-if(WIN32)
+if (WIN32)
   check_symbol_exists(_strtod_l "${strtod_l_headers}" HAVE_STRTOD_L)
-else()
+else ()
   check_symbol_exists(strtod_l "${strtod_l_headers}" HAVE_STRTOD_L)
-endif()
+endif ()
 
-set(FMT_HEADERS 
-  include/fmt/chrono.h
-  include/fmt/color.h
-  include/fmt/compile.h
-  include/fmt/core.h
-  include/fmt/format.h
-  include/fmt/format-inl.h
-  include/fmt/locale.h
-  include/fmt/os.h
-  include/fmt/ostream.h
-  include/fmt/posix.h
-  include/fmt/printf.h
-  include/fmt/ranges.h)
+CollectSourceFiles(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    FMT_SOURCES
+    # Exclude
+)
 
-set(FMT_SOURCES
-  src/format.cc
-  src/os.cc)
-
-add_library(fmt STATIC ${FMT_SOURCES} ${FMT_HEADERS})
+add_library(fmt STATIC ${FMT_SOURCES})
 
 if (HAVE_STRTOD_L)
-  target_compile_definitions(fmt 
-    PUBLIC 
+  target_compile_definitions(fmt
+      PUBLIC
       FMT_LOCALE)
-endif()
+endif ()
 
 target_include_directories(fmt
-  PUBLIC
+    PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(fmt
-  PRIVATE
+    PRIVATE
     rendu-dependency-interface)
 
 set_target_properties(fmt
-  PROPERTIES
+    PROPERTIES
     FOLDER
-      "deps")
+    "deps")
