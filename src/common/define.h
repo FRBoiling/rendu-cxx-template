@@ -87,29 +87,35 @@
 #  define RD_COMMON_API RD_API_IMPORT
 #endif
 
-#ifdef RENDU_API_EXPORT_PROTO
-#  define RD_PROTO_API RD_API_EXPORT
-#else
-#  define RD_PROTO_API RD_API_IMPORT
-#endif
-
-#ifdef RENDU_API_EXPORT_DATABASE
-#  define RD_DATABASE_API RD_API_EXPORT
-#else
-#  define RD_DATABASE_API RD_API_IMPORT
-#endif
-
+//**************Shared*************************
 #ifdef RENDU_API_EXPORT_SHARED
 #  define RD_SHARED_API RD_API_EXPORT
 #else
 #  define RD_SHARED_API RD_API_IMPORT
 #endif
 
+//**************framework***********************
 #ifdef RENDU_API_EXPORT_FRAMEWORK
 #  define RD_GAME_API RD_API_EXPORT
 #else
 #  define RD_GAME_API RD_API_IMPORT
 #endif
+
+//*******************##proto********************
+#ifdef RENDU_API_EXPORT_PROTO
+#  define RD_PROTO_API RD_API_EXPORT
+#else
+#  define RD_PROTO_API RD_API_IMPORT
+#endif
+
+//******************database*********************
+#ifdef RENDU_API_EXPORT_DATABASE
+#  define RD_DATABASE_API RD_API_EXPORT
+#else
+#  define RD_DATABASE_API RD_API_IMPORT
+#endif
+
+//****************** TODO:BOIL 添加其他API
 
 #define UI64FMTD "%" PRIu64
 #define UI64LIT(N) UINT64_C(N)
