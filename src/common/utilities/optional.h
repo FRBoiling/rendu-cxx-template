@@ -8,7 +8,7 @@
 #include <optional>
 
 //! Optional helper class to wrap optional values within.
-template <class T>
+template<class T>
 using Optional = std::optional<T>;
 
 #endif // RENDU_OPTIONAL_H_

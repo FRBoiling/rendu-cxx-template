@@ -6,10 +6,8 @@
 
 #include "define.h"
 
-namespace rendu {
-  namespace Banner {
+namespace rendu::banner {
     RD_COMMON_API void Show(char const *applicationName, void(*log)(char const *text), void(*logExtraInfo)());
   }
-}
 
 #endif // RENDU_BANNER_H_

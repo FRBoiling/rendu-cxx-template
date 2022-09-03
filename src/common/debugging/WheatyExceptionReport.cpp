@@ -263,13 +263,13 @@ BOOL WheatyExceptionReport::_GetWindowsVersion(TCHAR* szVersion, DWORD cntMax)
         // Windows NT product family.
         case VER_PLATFORM_WIN32_NT:
         {
-        #if WINVER < 0x0500
+#if WINVER < 0x0500
             BYTE suiteMask = osvi.wReserved[0];
             BYTE productType = osvi.wReserved[1];
-        #else
+#else
             WORD suiteMask = osvi.wSuiteMask;
             BYTE productType = osvi.wProductType;
-        #endif                                          // WINVER < 0x0500
+#endif                                          // WINVER < 0x0500
 
             // Test for the specific product family.
             if (osvi.dwMajorVersion == 10)
@@ -840,7 +840,7 @@ PEXCEPTION_POINTERS pExceptionInfo)
 //======================================================================
 LPCTSTR WheatyExceptionReport::GetExceptionString(DWORD dwCode)
 {
-    #define EXCEPTION(x) case EXCEPTION_##x: return _T(#x);
+#define EXCEPTION(x) case EXCEPTION_##x: return _T(#x);
 
     switch (dwCode)
     {
@@ -967,7 +967,7 @@ bool bWriteVariables, HANDLE pThreadHandle)                                     
     STACKFRAME64 sf;
     memset(&sf, 0, sizeof(sf));
 
-    #ifdef _M_IX86
+#ifdef _M_IX86
     // Initialize the STACKFRAME structure for the first call.  This is only
     // necessary for Intel CPUs, and isn't mentioned in the documentation.
     sf.AddrPC.Offset       = pContext->Eip;
@@ -978,7 +978,7 @@ bool bWriteVariables, HANDLE pThreadHandle)                                     
     sf.AddrFrame.Mode      = AddrModeFlat;
 
     dwMachineType = IMAGE_FILE_MACHINE_I386;
-    #endif
+#endif
 
 #ifdef _M_X64
     sf.AddrPC.Offset    = pContext->Rip;
@@ -1568,11 +1568,11 @@ size_t countOverride)
                 }
                 else
                 {
-    #if _WIN64
+#if _WIN64
                     pszCurrBuffer += sprintf(pszCurrBuffer, "0x%I64X", (DWORD64)pAddress);
-    #else
+#else
                     pszCurrBuffer += sprintf(pszCurrBuffer, "0x%X", (DWORD)pAddress);
-    #endif
+#endif
                 }
                 break;
         }

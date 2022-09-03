@@ -38,20 +38,20 @@ CollectIncludeDirectories(
 target_include_directories(${LIB_NAME}
     PUBLIC
     # Provide the binary dir for all child targets
-      ${CMAKE_BINARY_DIR}
-      ${PUBLIC_INCLUDES}
+    ${CMAKE_BINARY_DIR}
+    ${PUBLIC_INCLUDES}
     PRIVATE
-      ${CMAKE_CURRENT_BINARY_DIR})
+    ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(${LIB_NAME}
     PRIVATE
-      rendu-interface
+    rendu-interface
     PUBLIC
-      boost
-      fmt
-      utf8cpp
-      sfmt
-      readline
+    boost
+    fmt
+    utf8cpp
+    sfmt
+    readline
     #TODO:添加reps库
     )
 

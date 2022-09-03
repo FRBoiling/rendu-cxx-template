@@ -8,32 +8,27 @@
 
 template<typename Fn>
 static std::string GetStringWithDefaultValueFromFunction(
-    std::string const& key, Fn getter)
-{
-    std::string const value = sConfigMgr->GetStringDefault(key, "");
-    return value.empty() ? getter() : value;
+    std::string const &key, Fn getter) {
+  std::string const value = sConfigMgr->GetStringDefault(key, "");
+  return value.empty() ? getter() : value;
 }
 
-std::string rendu::GetCMakeCommand()
-{
-    return GetStringWithDefaultValueFromFunction(
-        "CMakeCommand", GitRevision::GetCMakeCommand);
+std::string rendu::GetCMakeCommand() {
+  return GetStringWithDefaultValueFromFunction(
+      "CMakeCommand", GitRevision::GetCMakeCommand);
 }
 
-std::string rendu::GetBuildDirectory()
-{
-    return GetStringWithDefaultValueFromFunction(
-        "BuildDirectory", GitRevision::GetBuildDirectory);
+std::string rendu::GetBuildDirectory() {
+  return GetStringWithDefaultValueFromFunction(
+      "BuildDirectory", GitRevision::GetBuildDirectory);
 }
 
-std::string rendu::GetSourceDirectory()
-{
-    return GetStringWithDefaultValueFromFunction(
-        "SourceDirectory", GitRevision::GetSourceDirectory);
+std::string rendu::GetSourceDirectory() {
+  return GetStringWithDefaultValueFromFunction(
+      "SourceDirectory", GitRevision::GetSourceDirectory);
 }
 
-std::string rendu::GetMySQLExecutable()
-{
-    return GetStringWithDefaultValueFromFunction(
-        "MySQLExecutable", GitRevision::GetMySQLExecutable);
+std::string rendu::GetMySQLExecutable() {
+  return GetStringWithDefaultValueFromFunction(
+      "MySQLExecutable", GitRevision::GetMySQLExecutable);
 }

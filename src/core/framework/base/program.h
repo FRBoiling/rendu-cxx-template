@@ -2,8 +2,8 @@
 * Created by boil on 2022/8/27.
 */
 
-#ifndef RENDU_PROGRAM_H__
-#define RENDU_PROGRAM_H__
+#ifndef RENDU_PROGRAM_H_
+#define RENDU_PROGRAM_H_
 
 #include <map>
 #include "component.h"
@@ -36,4 +36,4 @@ private:
   int Update();
 };
 
-#endif //RENDU_PROGRAM_H__
+#endif //RENDU_PROGRAM_H_

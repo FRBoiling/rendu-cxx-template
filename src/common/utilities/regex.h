@@ -9,18 +9,19 @@
 #include <regex>
 #define RD_REGEX_NAMESPACE std
 #else
+
 #include <boost/regex.hpp>
+
 #define RD_REGEX_NAMESPACE boost
 #endif
 
 // regex compatibility layer, required for clang building with libstdc++-4.9
-namespace rendu
-{
-    using regex = RD_REGEX_NAMESPACE :: regex;
-    using wregex = RD_REGEX_NAMESPACE :: wregex;
+namespace rendu {
+  using regex = RD_REGEX_NAMESPACE::regex;
+  using wregex = RD_REGEX_NAMESPACE::wregex;
 
-    using :: RD_REGEX_NAMESPACE :: regex_match;
-    using :: RD_REGEX_NAMESPACE :: regex_search;
+  using ::RD_REGEX_NAMESPACE::regex_match;
+  using ::RD_REGEX_NAMESPACE::regex_search;
 }
 
 #endif // RENDU_REGEX_H_

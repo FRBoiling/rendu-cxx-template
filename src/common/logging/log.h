@@ -14,104 +14,122 @@
 #include <vector>
 
 class Appender;
+
 class Logger;
+
 struct LogMessage;
 
-namespace rendu
-{
-    namespace asio
-    {
-        class IoContext;
-    }
+namespace rendu {
+  namespace asio {
+    class IoContext;
+  }
 }
 
 #define LOGGER_ROOT "root"
 
-typedef Appender*(*AppenderCreatorFn)(uint8 id, std::string const& name, LogLevel level, AppenderFlags flags, std::vector<std::string_view> const& extraArgs);
+typedef Appender *(*AppenderCreatorFn)(uint8 id, std::string const &name, LogLevel level, AppenderFlags flags,
+                                       std::vector<std::string_view> const &extraArgs);
 
-template <class AppenderImpl>
-Appender* CreateAppender(uint8 id, std::string const& name, LogLevel level, AppenderFlags flags, std::vector<std::string_view> const& extraArgs)
-{
-    return new AppenderImpl(id, name, level, flags, extraArgs);
+template<class AppenderImpl>
+Appender *CreateAppender(uint8 id, std::string const &name, LogLevel level, AppenderFlags flags,
+                         std::vector<std::string_view> const &extraArgs) {
+  return new AppenderImpl(id, name, level, flags, extraArgs);
 }
 
-class RD_COMMON_API Log
-{
-    private:
-        Log();
-        ~Log();
-        Log(Log const&) = delete;
-        Log(Log&&) = delete;
-        Log& operator=(Log const&) = delete;
-        Log& operator=(Log&&) = delete;
+class RD_COMMON_API Log {
+private:
+  Log();
 
-    public:
-        static Log* instance();
+  ~Log();
 
-        void Initialize(rendu::asio::IoContext* ioContext);
-        void SetSynchronous();  // Not threadsafe - should only be called from main() after all threads are joined
-        void LoadFromConfig();
-        void Close();
-        bool ShouldLog(std::string_view type, LogLevel level) const;
-        bool SetLogLevel(std::string const& name, int32 level, bool isLogger = true);
+  Log(Log const &) = delete;
 
-        template<typename Format, typename... Args>
-        inline void outMessage(std::string_view filter, LogLevel const level, Format&& fmt, Args&&... args)
-        {
-            outMessage(filter, level, rendu::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-        }
+  Log(Log &&) = delete;
 
-        template<typename Format, typename... Args>
-        void outCommand(uint32 account, Format&& fmt, Args&&... args)
-        {
-            if (!ShouldLog("commands.gm", LOG_LEVEL_INFO))
-                return;
+  Log &operator=(Log const &) = delete;
 
-            outCommand(rendu::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
-        }
+  Log &operator=(Log &&) = delete;
 
-        void outCharDump(char const* str, uint32 account_id, uint64 guid, char const* name);
+public:
+  static Log *instance();
 
-        void SetRealmId(uint32 id);
+  void Initialize(rendu::asio::IoContext *ioContext);
 
-        template<class AppenderImpl>
-        void RegisterAppender()
-        {
-            RegisterAppender(AppenderImpl::type, &CreateAppender<AppenderImpl>);
-        }
+  void SetSynchronous();  // Not threadsafe - should only be called from main() after all threads are joined
+  void LoadFromConfig();
 
-        std::string const& GetLogsDir() const { return m_logsDir; }
-        std::string const& GetLogsTimestamp() const { return m_logsTimestamp; }
+  void Close();
 
-        void CreateAppenderFromConfigLine(std::string const& name, std::string const& options);
-        void CreateLoggerFromConfigLine(std::string const& name, std::string const& options);
+  bool ShouldLog(std::string_view type, LogLevel level) const;
 
-    private:
-        static std::string GetTimestampStr();
-        void write(std::unique_ptr<LogMessage>&& msg) const;
+  bool SetLogLevel(std::string const &name, int32 level, bool isLogger = true);
 
-        Logger const* GetLoggerByType(std::string_view type) const;
-        Appender* GetAppenderByName(std::string_view name);
-        uint8 NextAppenderId();
-        void CreateAppenderFromConfig(std::string const& name);
-        void CreateLoggerFromConfig(std::string const& name);
-        void ReadAppendersFromConfig();
-        void ReadLoggersFromConfig();
-        void RegisterAppender(uint8 index, AppenderCreatorFn appenderCreateFn);
-        void outMessage(std::string_view filter, LogLevel level, std::string&& message);
-        void outCommand(std::string&& message, std::string&& param1);
+  template<typename Format, typename... Args>
+  inline void outMessage(std::string_view filter, LogLevel const level, Format &&fmt, Args &&... args) {
+    outMessage(filter, level, rendu::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+  }
 
-        std::unordered_map<uint8, AppenderCreatorFn> appenderFactory;
-        std::unordered_map<uint8, std::unique_ptr<Appender>> appenders;
-        std::unordered_map<std::string_view, std::unique_ptr<Logger>> loggers;
-        uint8 AppenderId;
-        LogLevel lowestLogLevel;
+  template<typename Format, typename... Args>
+  void outCommand(uint32 account, Format &&fmt, Args &&... args) {
+    if (!ShouldLog("commands.gm", LOG_LEVEL_INFO))
+      return;
 
-        std::string m_logsDir;
-        std::string m_logsTimestamp;
+    outCommand(rendu::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
+  }
 
-        rendu::asio::IoContext* _ioContext;
-        rendu::asio::Strand* _strand;
+  void outCharDump(char const *str, uint32 account_id, uint64 guid, char const *name);
+
+  void SetRealmId(uint32 id);
+
+  template<class AppenderImpl>
+  void RegisterAppender() {
+    RegisterAppender(AppenderImpl::type, &CreateAppender<AppenderImpl>);
+  }
+
+  std::string const &GetLogsDir() const { return m_logsDir; }
+
+  std::string const &GetLogsTimestamp() const { return m_logsTimestamp; }
+
+  void CreateAppenderFromConfigLine(std::string const &name, std::string const &options);
+
+  void CreateLoggerFromConfigLine(std::string const &name, std::string const &options);
+
+private:
+  static std::string GetTimestampStr();
+
+  void write(std::unique_ptr<LogMessage> &&msg) const;
+
+  Logger const *GetLoggerByType(std::string_view type) const;
+
+  Appender *GetAppenderByName(std::string_view name);
+
+  uint8 NextAppenderId();
+
+  void CreateAppenderFromConfig(std::string const &name);
+
+  void CreateLoggerFromConfig(std::string const &name);
+
+  void ReadAppendersFromConfig();
+
+  void ReadLoggersFromConfig();
+
+  void RegisterAppender(uint8 index, AppenderCreatorFn appenderCreateFn);
+
+  void outMessage(std::string_view filter, LogLevel level, std::string &&message);
+
+  void outCommand(std::string &&message, std::string &&param1);
+
+  std::unordered_map<uint8, AppenderCreatorFn> appenderFactory;
+  std::unordered_map<uint8, std::unique_ptr<Appender>> appenders;
+  std::unordered_map<std::string_view, std::unique_ptr<Logger>> loggers;
+  uint8 AppenderId;
+  LogLevel lowestLogLevel;
+
+  std::string m_logsDir;
+  std::string m_logsTimestamp;
+
+  rendu::asio::IoContext *_ioContext;
+  rendu::asio::Strand *_strand;
 };
 
 #define sLog Log::instance()
@@ -132,8 +150,10 @@ class RD_COMMON_API Log
 #ifdef PERFORMANCE_PROFILING
 #define RD_LOG_MESSAGE_BODY(filterType__, level__, ...) ((void)0)
 #elif RENDU_PLATFORM != RENDU_PLATFORM_WINDOWS
-void check_args(char const*, ...) ATTR_PRINTF(1, 2);
-void check_args(std::string const&, ...);
+
+void check_args(char const *, ...) ATTR_PRINTF(1, 2);
+
+void check_args(std::string const &, ...);
 
 // This will catch format errors on build time
 #define RD_LOG_MESSAGE_BODY(filterType__, level__, ...)                 \
