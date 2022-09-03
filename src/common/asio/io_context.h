@@ -9,7 +9,7 @@
 
 namespace rendu
 {
-    namespace Asio
+    namespace asio
     {
         class IoContext
         {

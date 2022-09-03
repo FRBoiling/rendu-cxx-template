@@ -285,7 +285,7 @@ bool IsIPAddress(char const* ipaddress)
         return false;
 
     boost::system::error_code error;
-    rendu::Net::make_address(ipaddress, error);
+    rendu::net::make_address(ipaddress, error);
     return !error;
 }
 

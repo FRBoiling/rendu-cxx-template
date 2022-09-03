@@ -19,7 +19,7 @@ struct LogMessage;
 
 namespace rendu
 {
-    namespace Asio
+    namespace asio
     {
         class IoContext;
     }
@@ -48,7 +48,7 @@ class RD_COMMON_API Log
     public:
         static Log* instance();
 
-        void Initialize(rendu::Asio::IoContext* ioContext);
+        void Initialize(rendu::asio::IoContext* ioContext);
         void SetSynchronous();  // Not threadsafe - should only be called from main() after all threads are joined
         void LoadFromConfig();
         void Close();
@@ -110,8 +110,8 @@ class RD_COMMON_API Log
         std::string m_logsDir;
         std::string m_logsTimestamp;
 
-        rendu::Asio::IoContext* _ioContext;
-        rendu::Asio::Strand* _strand;
+        rendu::asio::IoContext* _ioContext;
+        rendu::asio::Strand* _strand;
 };
 
 #define sLog Log::instance()

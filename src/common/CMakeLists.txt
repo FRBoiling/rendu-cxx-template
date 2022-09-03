@@ -1,7 +1,10 @@
 #**********************************
 #  Created by boil on 2022/8/14.
 #**********************************
-set(TARGET_NAME common)
+
+set(LIB_NAME common)
+set(FOLDER_NAME cores)
+
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE_SOURCES
@@ -15,14 +18,14 @@ list(APPEND PRIVATE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/debugging/errors.h)
 
 if (USE_COREPCH)
-  set(PRIVATE_PCH_HEADER precompiled_headers/common_pch.h)
+  set(PRIVATE_PCH_HEADER precompiled_headers/${LIB_NAME}_pch.h)
 endif (USE_COREPCH)
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_definitions(-DRENDU_API_EXPORT_COMMON)
 
-add_library(${TARGET_NAME}
+add_library(${LIB_NAME}
     ${PRIVATE_SOURCES}
     )
 
@@ -32,7 +35,7 @@ CollectIncludeDirectories(
     # Exclude
     ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers)
 
-target_include_directories(${TARGET_NAME}
+target_include_directories(${LIB_NAME}
     PUBLIC
     # Provide the binary dir for all child targets
       ${CMAKE_BINARY_DIR}
@@ -40,7 +43,7 @@ target_include_directories(${TARGET_NAME}
     PRIVATE
       ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${TARGET_NAME}
+target_link_libraries(${LIB_NAME}
     PRIVATE
       rendu-interface
     PUBLIC
@@ -52,20 +55,20 @@ target_link_libraries(${TARGET_NAME}
     #TODO:添加reps库
     )
 
-add_dependencies(${TARGET_NAME} revision_data.h)
+add_dependencies(${LIB_NAME} revision_data.h)
 
-set_target_properties(${TARGET_NAME}
+set_target_properties(${LIB_NAME}
     PROPERTIES
     FOLDER
-    "rendu")
+    ${FOLDER_NAME})
 
 if (BUILD_SHARED_LIBS)
   if (UNIX)
-    install(TARGETS ${TARGET_NAME}
+    install(TARGETS ${LIB_NAME}
         LIBRARY
         DESTINATION lib)
   elseif (WIN32)
-    install(TARGETS ${TARGET_NAME}
+    install(TARGETS ${LIB_NAME}
         RUNTIME
         DESTINATION "${CMAKE_INSTALL_PREFIX}")
   endif ()
@@ -73,5 +76,5 @@ endif ()
 
 # Generate precompiled header
 if (USE_COREPCH)
-  add_cxx_pch(${TARGET_NAME} ${PRIVATE_PCH_HEADER})
+  add_cxx_pch(${LIB_NAME} ${PRIVATE_PCH_HEADER})
 endif ()

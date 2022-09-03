@@ -2,6 +2,9 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
+set(LIB_NAME fmt)
+set(FOLDER_NAME deps)
+
 include(CheckSymbolExists)
 
 set(strtod_l_headers stdlib.h)
@@ -22,23 +25,23 @@ CollectSourceFiles(
     # Exclude
 )
 
-add_library(fmt STATIC ${FMT_SOURCES})
+add_library(${LIB_NAME} STATIC ${FMT_SOURCES})
 
 if (HAVE_STRTOD_L)
-  target_compile_definitions(fmt
+  target_compile_definitions(${LIB_NAME}
       PUBLIC
       FMT_LOCALE)
 endif ()
 
-target_include_directories(fmt
+target_include_directories(${LIB_NAME}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(fmt
+target_link_libraries(${LIB_NAME}
     PRIVATE
     rendu-dependency-interface)
 
-set_target_properties(fmt
+set_target_properties(${LIB_NAME}
     PROPERTIES
     FOLDER
-    "deps")
+    ${FOLDER_NAME})

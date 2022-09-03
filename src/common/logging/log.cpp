@@ -225,7 +225,7 @@ void Log::write(std::unique_ptr<LogMessage>&& msg) const
     if (_ioContext)
     {
         std::shared_ptr<LogOperation> logOperation = std::make_shared<LogOperation>(logger, std::move(msg));
-        rendu::Asio::post(*_ioContext, rendu::Asio::bind_executor(*_strand, [logOperation]() { logOperation->call(); }));
+        rendu::asio::post(*_ioContext, rendu::asio::bind_executor(*_strand, [logOperation]() { logOperation->call(); }));
     }
     else
         logger->write(msg.get());
@@ -361,12 +361,12 @@ Log* Log::instance()
     return &instance;
 }
 
-void Log::Initialize(rendu::Asio::IoContext* ioContext)
+void Log::Initialize(rendu::asio::IoContext* ioContext)
 {
     if (ioContext)
     {
         _ioContext = ioContext;
-        _strand = new rendu::Asio::Strand(*ioContext);
+        _strand = new rendu::asio::Strand(*ioContext);
     }
 
     LoadFromConfig();

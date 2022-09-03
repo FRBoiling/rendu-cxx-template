@@ -5,5 +5,5 @@
 add_library(valgrind INTERFACE)
 
 target_include_directories(valgrind
-  INTERFACE
+    INTERFACE
     "${VALGRIND_INCLUDE_DIR}")

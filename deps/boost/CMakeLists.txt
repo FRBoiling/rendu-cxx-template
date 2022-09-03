@@ -1,41 +1,41 @@
 #**********************************
 #  Created by boil on 2022/8/14.
 #**********************************
-
-if(WIN32)
+set(LIB_NAME boost)
+if (WIN32)
   set(BOOST_DEBUG ON)
-  if(DEFINED ENV{BOOST_ROOT})
+  if (DEFINED ENV{BOOST_ROOT})
     set(BOOST_ROOT $ENV{BOOST_ROOT})
     list(APPEND BOOST_LIBRARYDIR
-      ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.2 )
-  endif()
+        ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.2)
+  endif ()
 
-  set(Boost_USE_STATIC_LIBS        ON)
-  set(Boost_USE_MULTITHREADED      ON)
-  set(Boost_USE_STATIC_RUNTIME     OFF)
-endif()
+  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_MULTITHREADED ON)
+  set(Boost_USE_STATIC_RUNTIME OFF)
+endif ()
 
 if (CMAKE_VERSION VERSION_LESS "3.16.0")
   # boost's own cmake file adds extra compile definitions that cotire fails to pick up
   set(Boost_NO_BOOST_CMAKE ON)
-endif()
+endif ()
 
-include (CheckCXXSourceCompiles)
+include(CheckCXXSourceCompiles)
 
 if (WIN32)
   # On windows the requirements are higher according to the wiki.
   set(BOOST_REQUIRED_VERSION 1.73)
-else()
+else ()
   set(BOOST_REQUIRED_VERSION 1.71)
-endif()
+endif ()
 
 find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem program_options iostreams regex)
 
-if(NOT Boost_FOUND)
-  if(NOT DEFINED ENV{BOOST_ROOT} AND NOT DEFINED Boost_DIR AND NOT DEFINED BOOST_ROOT AND NOT DEFINED BOOSTROOT)
+if (NOT Boost_FOUND)
+  if (NOT DEFINED ENV{BOOST_ROOT} AND NOT DEFINED Boost_DIR AND NOT DEFINED BOOST_ROOT AND NOT DEFINED BOOSTROOT)
     message(FATAL_ERROR "No BOOST_ROOT environment variable could be found! Please make sure it is set and the points to your Boost installation.")
-  endif()
-endif()
+  endif ()
+endif ()
 
 # Find if Boost was compiled in C++03 mode because it requires -DBOOST_NO_CXX11_SCOPED_ENUMS
 
@@ -46,23 +46,23 @@ check_cxx_source_compiles("
   #include <boost/filesystem/path.hpp>
   #include <boost/filesystem/operations.hpp>
   int main() { boost::filesystem::copy_file(boost::filesystem::path(), boost::filesystem::path()); }"
-boost_filesystem_copy_links_without_NO_SCOPED_ENUM)
+    boost_filesystem_copy_links_without_NO_SCOPED_ENUM)
 unset(CMAKE_REQUIRED_INCLUDES)
 unset(CMAKE_REQUIRED_LIBRARIES)
 unset(CMAKE_REQUIRED_FLAGS)
 
-add_library(boost INTERFACE)
+add_library(${LIB_NAME} INTERFACE)
 
-target_link_libraries(boost
-  INTERFACE
+target_link_libraries(${LIB_NAME}
+    INTERFACE
     ${Boost_LIBRARIES})
 
-target_include_directories(boost
-  INTERFACE
+target_include_directories(${LIB_NAME}
+    INTERFACE
     ${Boost_INCLUDE_DIRS})
 
-target_compile_definitions(boost
-  INTERFACE
+target_compile_definitions(${LIB_NAME}
+    INTERFACE
     -DBOOST_ALL_NO_LIB
     -DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
     -DBOOST_ASIO_NO_DEPRECATED
@@ -70,13 +70,13 @@ target_compile_definitions(boost
     -DBOOST_SYSTEM_USE_UTF8)
 
 if (NOT boost_filesystem_copy_links_without_NO_SCOPED_ENUM)
-  target_compile_definitions(boost
-    INTERFACE
+  target_compile_definitions(${LIB_NAME}
+      INTERFACE
       -DBOOST_NO_CXX11_SCOPED_ENUMS)
-endif()
+endif ()
 
-target_compile_definitions(boost
-  INTERFACE
+target_compile_definitions(${LIB_NAME}
+    INTERFACE
     -DRD_HAS_BROKEN_WSTRING_REGEX)
 
 if (WITH_BOOST_STACKTRACE AND NOT WIN32)
@@ -84,19 +84,19 @@ if (WITH_BOOST_STACKTRACE AND NOT WIN32)
 
   if (BOOST_STACKTRACE_BACKTRACE_INCLUDE_FILE)
     CHECK_INCLUDE_FILE(${BOOST_STACKTRACE_BACKTRACE_INCLUDE_FILE} HAS_BACKTRACE)
-  else()
+  else ()
     CHECK_INCLUDE_FILE("backtrace.h" HAS_BACKTRACE)
-  endif()
+  endif ()
 
   if (NOT HAS_BACKTRACE)
     message(FATAL_ERROR "Required header 'backtrace.h' not found. If building with a compiler other than GCC, please specify the full path in the CMake option BOOST_STACKTRACE_BACKTRACE_INCLUDE_FILE.")
-  endif()
+  endif ()
 
-  target_compile_definitions(boost
-    INTERFACE
+  target_compile_definitions(${LIB_NAME}
+      INTERFACE
       -DBOOST_STACKTRACE_USE_BACKTRACE)
 
-  target_link_libraries(boost
-    INTERFACE
+  target_link_libraries(${LIB_NAME}
+      INTERFACE
       backtrace)
-endif()
+endif ()

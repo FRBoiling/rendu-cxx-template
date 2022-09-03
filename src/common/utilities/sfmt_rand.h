@@ -6,11 +6,11 @@
 #define RENDU_SFMT_RAND_H_
 
 #include "define.h"
-#include "SFMT.h"
+#include <SFMT.h>
 #include <new>
 
 /*
- * C++ Wrapper for SFMT
+ * C++ Wrapper for sfmt
  */
 class SFMTRand {
 public:

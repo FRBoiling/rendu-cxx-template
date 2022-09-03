@@ -1,7 +1,9 @@
 #**********************************
 #  Created by boil on 2022/8/14.
 #**********************************
+
 set(PROJECT_NAME rendu)
+
 cmake_minimum_required(VERSION 3.15.0 FATAL_ERROR)
 # add this options before PROJECT keyword
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
@@ -31,12 +33,12 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/macros")
 
 # build in Release-mode by default if not explicitly set
-if(CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
+if (CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
   set(CMAKE_DEFAULT_BUILD_TYPE "RelWithDebInfo" CACHE INTERNAL "")
-endif()
-if(NOT CMAKE_BUILD_TYPE)
+endif ()
+if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo")
-endif()
+endif ()
 
 include(CheckCXXSourceRuns)
 include(CheckIncludeFiles)
@@ -46,10 +48,10 @@ include(ConfigureScripts)
 include(cmake/options.cmake)
 
 # turn off PCH totally if enabled (hidden setting, mainly for devs)
-if(NOPCH)
+if (NOPCH)
   set(USE_COREPCH 0)
   set(USE_SCRIPTPCH 0)
-endif()
+endif ()
 
 include(ConfigureBaseTargets)
 include(CheckPlatform)
@@ -74,13 +76,13 @@ add_subdirectory(deps)
 # add core sources
 add_subdirectory(src)
 
-if(BUILD_TESTING)
+if (BUILD_TESTING)
   include(CTest)
-  list(APPEND CMAKE_MODULE_PATH  "${Catch2_SOURCE_DIR}/contrib")
+  list(APPEND CMAKE_MODULE_PATH "${Catch2_SOURCE_DIR}/contrib")
   include(Catch)
   add_subdirectory(tests)
   # Catch cmakefile messes with our settings we explicitly leave up to the user restore user preference
   if (NOT WITH_SOURCE_TREE STREQUAL "hierarchical-folders")
     set_property(GLOBAL PROPERTY USE_FOLDERS OFF)
-  endif()
-endif()
+  endif ()
+endif ()
