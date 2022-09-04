@@ -6,8 +6,9 @@
 #define RENDU_CONFIG_SYSTEM_H_
 
 #include "system.h"
+#include "singleton.h"
 
-class ConfigSystem : public System<ConfigSystem>, public ISystem {
+class ConfigSystem : public Singleton<ConfigSystem>, public ISystem {
 public:
   void Register() override;
 

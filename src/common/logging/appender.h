@@ -20,15 +20,16 @@ public:
 
   virtual ~Appender();
 
-  uint8 getId() const;
+public:
+  [[nodiscard]] uint8 getId() const;
 
-  std::string const &getName() const;
+  [[nodiscard]] std::string const &getName() const;
 
-  virtual AppenderType getType() const = 0;
+  [[nodiscard]] virtual AppenderType getType() const = 0;
 
-  LogLevel getLogLevel() const;
+  [[nodiscard]] LogLevel getLogLevel() const;
 
-  AppenderFlags getFlags() const;
+  [[nodiscard]] AppenderFlags getFlags() const;
 
   void setLogLevel(LogLevel);
 

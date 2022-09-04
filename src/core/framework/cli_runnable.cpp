@@ -44,7 +44,7 @@ namespace rendu::Impl::Readline
 
     int cli_hook_func()
     {
-        if (Program::IsStopped())
+        if (sProgram.IsStopped())
             ::rl_done = 1;
         return 0;
     }
@@ -116,7 +116,7 @@ void CliThread()
     }
 #endif
     ///- As long as the World is running (no World::m_stopEvent), get the command line and handle it
-    while (!Program::IsStopped())
+    while (!sProgram.IsStopped())
     {
         fflush(stdout);
 
@@ -154,7 +154,7 @@ void CliThread()
         }
         else if (feof(stdin))
         {
-            Program::Stop();
+            sProgram.Exit();
         }
     }
 }

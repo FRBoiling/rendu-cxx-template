@@ -9,15 +9,14 @@
 #include <boost/asio/strand.hpp>
 
 namespace rendu::asio {
-  /**
-    Hack to make it possible to forward declare strand (which is a inner class)
-  */
-  class Strand : public boost::asio::io_context::strand {
-  public:
-    Strand(IoContext &ioContext) : boost::asio::io_context::strand(ioContext) {}
-  };
+    /**
+      Hack to make it possible to forward declare strand (which is a inner class)
+    */
+    class Strand : public boost::asio::io_context::strand {
+    public:
+      explicit Strand(IoContext &ioContext) : boost::asio::io_context::strand(ioContext) {}
+    };
 
-  using boost::asio::bind_executor;
-}
-
+    using boost::asio::bind_executor;
+  }
 #endif // RENDU_STRAND_H_

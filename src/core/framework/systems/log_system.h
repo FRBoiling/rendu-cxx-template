@@ -6,8 +6,9 @@
 #define RENDU_LOG_SYSTEM_H_
 
 #include "system.h"
+#include "singleton.h"
 
-class LogSystem : public System<LogSystem>, public ISystem {
+class LogSystem : public Singleton<LogSystem>, public ISystem {
 public:
   void Register() override;
 

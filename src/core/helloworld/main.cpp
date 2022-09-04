@@ -8,13 +8,17 @@
 #include "event_system.h"
 
 /// Launch the rendu core program
-extern int main(int argc, char** argv) {
+extern int main(int argc, char **argv) {
+  if (sOptions.Initialize(argc, argv) == 0) {
+    return 0;
+  }
 
-  Program::Initialize(argc, argv);
-  Program::AddSystem(LogSystem::GetInstance());
-  Program::AddSystem(ConfigSystem::GetInstance());
-  Program::AddSystem(EventSystem::GetInstance());
-  Program::Run();
+  sOptions.ShowInfo();
 
+  sProgram.Initialize();
+  sProgram.AddSystem(LogSystem::GetInstance());
+  sProgram.AddSystem(ConfigSystem::GetInstance());
+  sProgram.AddSystem(EventSystem::GetInstance());
+  sProgram.Run();
   return 0;
 }

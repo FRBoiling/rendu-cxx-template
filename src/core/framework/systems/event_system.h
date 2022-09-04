@@ -6,8 +6,9 @@
 #define RENDU_EVENT_SYSTEM_H_
 
 #include "system.h"
+#include "singleton.h"
 
-class EventSystem : public System<EventSystem>, public ISystem {
+class EventSystem : public Singleton<EventSystem>, public ISystem {
 
 public:
   void Register() override;

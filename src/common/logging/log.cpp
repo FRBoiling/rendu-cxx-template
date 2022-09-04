@@ -319,7 +319,7 @@ bool Log::ShouldLog(std::string_view type, LogLevel level) const {
   return logLevel != LOG_LEVEL_DISABLED && logLevel <= level;
 }
 
-Log *Log::instance() {
+Log *Log::GetInstance() {
   static Log instance;
   return &instance;
 }

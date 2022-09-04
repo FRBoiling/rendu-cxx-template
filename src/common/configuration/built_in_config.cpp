@@ -7,28 +7,27 @@
 #include "git_revision.h"
 
 template<typename Fn>
-static std::string GetStringWithDefaultValueFromFunction(
-    std::string const &key, Fn getter) {
+static std::string GetStringWithDefaultValueFromFunction(std::string const &key, Fn getter) {
   std::string const value = sConfigMgr->GetStringDefault(key, "");
   return value.empty() ? getter() : value;
 }
 
-std::string rendu::GetCMakeCommand() {
+std::string rendu::config::GetCMakeCommand() {
   return GetStringWithDefaultValueFromFunction(
       "CMakeCommand", GitRevision::GetCMakeCommand);
 }
 
-std::string rendu::GetBuildDirectory() {
+std::string rendu::config::GetBuildDirectory() {
   return GetStringWithDefaultValueFromFunction(
       "BuildDirectory", GitRevision::GetBuildDirectory);
 }
 
-std::string rendu::GetSourceDirectory() {
+std::string rendu::config::GetSourceDirectory() {
   return GetStringWithDefaultValueFromFunction(
       "SourceDirectory", GitRevision::GetSourceDirectory);
 }
 
-std::string rendu::GetMySQLExecutable() {
+std::string rendu::config::GetMySQLExecutable() {
   return GetStringWithDefaultValueFromFunction(
       "MySQLExecutable", GitRevision::GetMySQLExecutable);
 }

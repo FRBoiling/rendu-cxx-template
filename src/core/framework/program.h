@@ -8,6 +8,8 @@
 #include <map>
 #include "component.h"
 #include "system.h"
+#include "options.h"
+#include "singleton.h"
 
 enum class ProgramState {
   IDLE,           //闲置
@@ -17,23 +19,30 @@ enum class ProgramState {
   STOPPED         //已经停止
 };
 
-class Program : public System<Program> {
+class Program : public Singleton<Program> {
 public:
-  static int Initialize(int argc, char **argv);
-  static int Run();
-  static bool IsStopped();
-  static void AddSystem(ISystem &system);
-  static int Stop();
+  int Initialize();
+
+  void Run();
+
+  bool IsStopped();
+
+  bool Exit();
+
+  void AddSystem(ISystem &system);
+
 private:
-
   ProgramState _state;
-  std::map<size_t,ISystem*> _systems;
+  std::map<size_t, ISystem *> _systems;
 
-  int Start();
+  bool Start();
 
+  bool Stop();
 
-  void Exit();
-  int Update();
+  void Update();
+
+  void LateUpdate();
 };
 
+#define sProgram Program::GetInstance()
 #endif //RENDU_PROGRAM_H_

@@ -19,11 +19,9 @@ class Logger;
 
 struct LogMessage;
 
-namespace rendu {
-  namespace asio {
+namespace rendu::asio{
     class IoContext;
   }
-}
 
 #define LOGGER_ROOT "root"
 
@@ -51,7 +49,7 @@ private:
   Log &operator=(Log &&) = delete;
 
 public:
-  static Log *instance();
+  static Log *GetInstance();
 
   void Initialize(rendu::asio::IoContext *ioContext);
 
@@ -132,7 +130,7 @@ private:
   rendu::asio::Strand *_strand;
 };
 
-#define sLog Log::instance()
+#define sLog Log::GetInstance()
 
 #define LOG_EXCEPTION_FREE(filterType__, level__, ...) \
     { \

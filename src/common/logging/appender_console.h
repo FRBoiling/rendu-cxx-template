@@ -36,7 +36,7 @@ public:
 
   void InitColors(std::string const &name, std::string_view init_str);
 
-  AppenderType getType() const override { return type; }
+  [[nodiscard]] AppenderType getType() const override { return type; }
 
 private:
   void SetColor(bool stdout_stream, ColorTypes color);

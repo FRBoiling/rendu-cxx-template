@@ -3,55 +3,66 @@
 */
 #include "program.h"
 
-int Program::Initialize(int argc, char **argv) {
+int Program::Initialize() {
   printf("Initialize...\n");
 
   printf("Initialize success!\n");
-  GetInstance()._state = ProgramState::INITIALIZED;
+  _state = ProgramState::INITIALIZED;
   printf("ProgramState is %d\n", GetInstance()._state);
 }
 
 bool Program::IsStopped() {
-  return GetInstance()._state == ProgramState::STOPPED;
+  return _state == ProgramState::STOPPED;
 }
 
-void Program::Exit() {
-  _state = ProgramState::IDLE;
+bool Program::Exit() {
+  _state = ProgramState::STOPPING;
+  printf("Exit ....!\n");
 }
 
-int Program::Run() {
-  GetInstance().Start();
+void Program::Run() {
+  Start();
   while (!IsStopped()) {
+    Update();
+    LateUpdate();
   }
+  Stop();
   printf("Exit success!\n");
 }
 
-int Program::Start() {
-  printf("Start...\n");
-
-  printf("Start success!\n");
-  _state = ProgramState::RUNNING;
+bool Program::Start() {
+  if (_state == ProgramState::INITIALIZED) {
+    printf("Start...\n");
+    //TODO:BOIL
+    printf("Start success!\n");
+    _state = ProgramState::RUNNING;
+  }
 }
 
-int Program::Stop() {
-  printf("Stop...\n");
-  GetInstance()._state = ProgramState::STOPPING;
-
-  printf("Stop success!\n");
-  GetInstance()._state = ProgramState::STOPPED;
+bool Program::Stop() {
+  if (_state == ProgramState::STOPPED) {
+    _state = ProgramState::STOPPING;
+    printf("Stop...\n");
+    //TODO:BOIL
+    printf("Stop success!\n");
+  }
 }
 
-int Program::Update() {
+void Program::Update() {
 
+}
+
+void Program::LateUpdate() {
+  //TODO:BOIL
 }
 
 void Program::AddSystem(ISystem &system) {
   auto hash_code = system.GetType().hash_code();
-  if (GetInstance()._systems.contains(hash_code)) {
+  if (_systems.contains(hash_code)) {
     printf("AddSystem fail ! The %s already exist.\n", system.ToString().c_str());
     return;
   }
-  GetInstance()._systems[hash_code] = &system;
+  _systems[hash_code] = &system;
   printf("AddSystem %s success !\n", system.ToString().c_str());
 }
 

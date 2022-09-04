@@ -96,9 +96,9 @@
 
 //**************framework***********************
 #ifdef RENDU_API_EXPORT_FRAMEWORK
-#  define RD_GAME_API RD_API_EXPORT
+#  define RD_FRAMEWORK_API RD_API_EXPORT
 #else
-#  define RD_GAME_API RD_API_IMPORT
+#  define RD_FRAMEWORK_API RD_API_IMPORT
 #endif
 
 //*******************##proto********************
