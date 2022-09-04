@@ -38,8 +38,8 @@ target_include_directories(${LIB_NAME}
 target_link_libraries(${LIB_NAME}
     PRIVATE
     rendu-interface
-    PUBLIC
     common
+    PUBLIC
     protobuf
     rapidjson
     #TODO:添加reps库

@@ -6,10 +6,10 @@
 #include "errors.h"
 #include "log.h"
 #include "string_format.h"
-#include <google/protobuf/message.h>
-#include <rapidjson/reader.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
+#include "google/protobuf/message.h"
+#include "rapidjson/reader.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 #include <stack>
 
 class Serializer {
@@ -62,8 +62,8 @@ void Serializer::WriteMessage(google::protobuf::Message const &value) {
   _writer.EndObject();
 }
 
-void
-Serializer::WriteMessageField(google::protobuf::Message const &value, google::protobuf::FieldDescriptor const *field) {
+void Serializer::WriteMessageField(google::protobuf::Message const &value,
+                                   google::protobuf::FieldDescriptor const *field) {
   _writer.Key(field->name().c_str());
   if (field->is_repeated()) {
     _writer.StartArray();
@@ -427,7 +427,7 @@ bool JSON::Deserialize(std::string const &json, google::protobuf::Message *messa
   Deserializer deserializer;
   if (!deserializer.ReadMessage(json, message)) {
     for (std::size_t i = 0; i < deserializer.GetErrors().size(); ++i)
-      RD_LOG_ERROR("json", "%s", deserializer.GetErrors()[i].c_str());
+      RD_LOG_ERROR("serializer", "%s", deserializer.GetErrors()[i].c_str());
     return false;
   }
 

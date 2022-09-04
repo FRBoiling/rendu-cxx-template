@@ -34,7 +34,6 @@ target_include_directories(${LIB_NAME}-interface
 
 target_link_libraries(${LIB_NAME}-interface
     INTERFACE
-    shared
     )
 
 add_library(${LIB_NAME}
@@ -48,6 +47,8 @@ target_link_libraries(${LIB_NAME}
     PRIVATE
     rendu-interface
     PUBLIC
+    common
+    shared
     ${LIB_NAME}-interface)
 
 set_target_properties(${LIB_NAME}

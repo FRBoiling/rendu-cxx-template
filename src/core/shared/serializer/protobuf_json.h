@@ -2,8 +2,8 @@
 **  Created by boil on 2022/8/14.
 ***********************************/
 
-#ifndef ProtobufJSON_h__
-#define ProtobufJSON_h__
+#ifndef RENDU_PROTOBUF_JSON_H_
+#define RENDU_PROTOBUF_JSON_H_
 
 #include "define.h"
 #include <string>
@@ -18,4 +18,4 @@ namespace JSON {
   RD_SHARED_API bool Deserialize(std::string const &json, google::protobuf::Message *message);
 }
 
-#endif // ProtobufJSON_h__
+#endif // RENDU_PROTOBUF_JSON_H_
