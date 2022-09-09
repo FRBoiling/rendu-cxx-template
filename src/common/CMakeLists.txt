@@ -53,6 +53,7 @@ target_link_libraries(${LIB_NAME}
     sfmt
     readline
     spdlog
+    magic_enum
     #TODO:添加reps库
     )
 

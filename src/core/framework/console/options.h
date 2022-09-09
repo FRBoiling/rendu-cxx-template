@@ -7,12 +7,11 @@
 
 #include <boost/program_options/variables_map.hpp>
 #include "singleton.h"
-#include "app_enum.h"
+#include "program.h"
 
 class Options : public Singleton<Options> {
-public:
-  void ShowInfo();
 
+public:
   int Initialize(int argc, char **argv);
 
 public:
@@ -24,7 +23,6 @@ public:
   //develop mode, 0正式 1开发 2压测
   int m_run_mode;
 };
-
 
 #define sOptions Options::GetInstance()
 

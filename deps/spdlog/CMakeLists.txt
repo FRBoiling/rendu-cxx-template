@@ -13,21 +13,11 @@ spdlog_extract_version()
 project(spdlog VERSION ${SPDLOG_VERSION} LANGUAGES CXX)
 message(STATUS "Build spdlog: ${SPDLOG_VERSION}")
 
-include(GNUInstallDirs)
-
 # ---------------------------------------------------------------------------------------
 # Set default build to release
 # ---------------------------------------------------------------------------------------
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
-endif()
-
-# ---------------------------------------------------------------------------------------
-# Compiler config
-# ---------------------------------------------------------------------------------------
-if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 11)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
 # make sure __cplusplus is defined when using msvc and enable parallel build

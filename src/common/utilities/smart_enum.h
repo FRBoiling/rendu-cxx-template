@@ -7,57 +7,52 @@
 
 #include "iterator_pair.h"
 #include <iterator>
-
-struct EnumText {
-  EnumText(char const *c, char const *t, char const *d) : Constant(c), Title(t), Description(d) {}
-
-  // Enum constant of the value
-  char const *const Constant;
-  // Human-readable title of the value
-  char const *const Title;
-  // Human-readable description of the value
-  char const *const Description;
-};
-
-namespace rendu::Impl::EnumUtilsImpl {
-  template<typename Enum>
-  struct EnumUtils {
-    static size_t Count();
-
-    static EnumText ToString(Enum value);
-
-    static Enum FromIndex(size_t index);
-
-    static size_t ToIndex(Enum index);
-  };
-}
+#include <magic_enum.hpp>
+#include <magic_enum_fuse.hpp>
+using namespace magic_enum;
+using namespace magic_enum::bitwise_operators;
 
 class EnumUtils {
 public:
   template<typename Enum>
-  static size_t Count() { return rendu::Impl::EnumUtilsImpl::EnumUtils<Enum>::Count(); }
+  static size_t Count() {
+    return enum_count<Enum>();
+  }
 
   template<typename Enum>
-  static EnumText ToString(Enum value) { return rendu::Impl::EnumUtilsImpl::EnumUtils<Enum>::ToString(value); }
+  static std::string ToString(Enum value) {
+    return enum_flags_name(value);
+  }
 
   template<typename Enum>
-  static Enum FromIndex(size_t index) { return rendu::Impl::EnumUtilsImpl::EnumUtils<Enum>::FromIndex(index); }
+  static Enum FromIndex(size_t index) {
+    return static_cast<Enum>(index);
+  }
 
   template<typename Enum>
-  static uint32 ToIndex(Enum value) { return rendu::Impl::EnumUtilsImpl::EnumUtils<Enum>::ToIndex(value); }
+  static auto ToIndex(Enum value) {
+    return enum_index(value);
+  }
+
+
+  template<typename Enum>
+  static Enum FromInter(int value) {
+    return ; }
+
 
   template<typename Enum>
   static bool IsValid(Enum value) {
     try {
-      rendu::Impl::EnumUtilsImpl::EnumUtils<Enum>::ToIndex(value);
-      return true;
+      return magic_enum::enum_contains(value);;
     } catch (...) {
       return false;
     }
   }
 
   template<typename Enum>
-  static bool IsValid(std::underlying_type_t<Enum> value) { return IsValid(static_cast<Enum>(value)); }
+  static bool IsValid(std::underlying_type_t<Enum> value) {
+    return IsValid(static_cast<Enum>(value));
+  }
 
   template<typename Enum>
   class Iterator {
@@ -141,14 +136,7 @@ public:
   template<typename Enum>
   static rendu::IteratorPair<Iterator<Enum>> Iterate() { return {Begin<Enum>(), End<Enum>()}; }
 
-  template<typename Enum>
-  static char const *ToConstant(Enum value) { return ToString(value).Constant; }
 
-  template<typename Enum>
-  static char const *ToTitle(Enum value) { return ToString(value).Title; }
-
-  template<typename Enum>
-  static char const *ToDescription(Enum value) { return ToString(value).Description; }
 };
 
 #endif

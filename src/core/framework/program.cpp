@@ -3,12 +3,14 @@
 */
 #include "program.h"
 #include "log.h"
-int Program::Initialize() {
-  RD_LOG_INFO("Initialize...");
+#include "smart_enum.h"
 
-  RD_LOG_INFO("Initialize success!");
+int Program::Initialize() {
+  RD_LOG_INFO("initialize...");
+
+  RD_LOG_INFO("initialize success!");
   _state = ProgramState::INITIALIZED;
-   RD_LOG_INFO("ProgramState is {}", _state);
+  RD_LOG_INFO("ProgramState is {}", EnumUtils::ToString(_state));
 }
 
 bool Program::IsStopped() {
@@ -17,7 +19,7 @@ bool Program::IsStopped() {
 
 bool Program::Exit() {
   _state = ProgramState::STOPPING;
-  RD_LOG_INFO("Exit ....!");
+  RD_LOG_INFO("exit ....!");
 }
 
 void Program::Run() {
@@ -27,14 +29,14 @@ void Program::Run() {
     LateUpdate();
   }
   Stop();
-  RD_LOG_INFO("Exit success!");
+  RD_LOG_INFO("exit success!");
 }
 
 bool Program::Start() {
   if (_state == ProgramState::INITIALIZED) {
-    RD_LOG_INFO("Start...");
+    RD_LOG_INFO("start...");
     //TODO:BOIL
-    RD_LOG_INFO("Start success!");
+    RD_LOG_INFO("start success!");
     _state = ProgramState::RUNNING;
   }
 }
@@ -42,9 +44,9 @@ bool Program::Start() {
 bool Program::Stop() {
   if (_state == ProgramState::STOPPED) {
     _state = ProgramState::STOPPING;
-    RD_LOG_INFO("Stop...\n");
+    RD_LOG_INFO("stop...\n");
     //TODO:BOIL
-    RD_LOG_INFO("Stop success!\n");
+    RD_LOG_INFO("stop success!\n");
   }
 }
 
@@ -59,11 +61,15 @@ void Program::LateUpdate() {
 void Program::AddSystem(ISystem &system) {
   auto hash_code = system.GetType().hash_code();
   if (_systems.contains(hash_code)) {
-    RD_LOG_INFO("AddSystem fail ! The {} already exist.", system.ToString());
+        RD_LOG_DEBUG("AddSystem fail ! The {} already exist.", system.ToString());
     return;
   }
   _systems[hash_code] = &system;
-  RD_LOG_INFO("AddSystem {} success !", system.ToString());
+      RD_LOG_DEBUG("AddSystem {} success !", system.ToString());
+}
+
+void Program::ShowOptions() {
+
 }
 
 

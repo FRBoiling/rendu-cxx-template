@@ -10,6 +10,7 @@
 #include "log_message.h"
 #include "string_convert.h"
 #include "util.h"
+#include "smart_enum.h"
 #include <algorithm>
 #include <cstring>
 #include <memory>

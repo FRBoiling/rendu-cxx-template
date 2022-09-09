@@ -6,15 +6,18 @@
 #include "log_system.h"
 #include "config_system.h"
 #include "event_system.h"
+#include "smart_enum.h"
+
+enum class Color{
+  RED,
+  BLUE,
+};
 
 /// Launch the rendu core program
 extern int main(int argc, char **argv) {
   if (sOptions.Initialize(argc, argv) == 0) {
     return 0;
   }
-
-  sOptions.ShowInfo();
-
   sProgram.Initialize();
   sProgram.AddSystem(LogSystem::GetInstance());
   sProgram.AddSystem(ConfigSystem::GetInstance());

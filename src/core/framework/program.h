@@ -11,12 +11,17 @@
 #include "options.h"
 #include "singleton.h"
 
-enum ProgramState {
-  IDLE,           //闲置
+
+enum class ProgramState {
+  IDLE = 0,           //闲置
   INITIALIZED,    //已经初始化
   RUNNING,        //正在运行
   STOPPING,       //正在停止
   STOPPED         //已经停止
+};
+
+enum class ProgramType {
+  All = 0,
 };
 
 class Program : public Singleton<Program> {
@@ -42,6 +47,8 @@ private:
   void Update();
 
   void LateUpdate();
+
+  void ShowOptions();
 };
 
 #define sProgram Program::GetInstance()

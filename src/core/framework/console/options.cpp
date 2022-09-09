@@ -7,11 +7,10 @@
 #include <iostream>
 #include <iomanip>
 #include <ostream>
-#include "app_enum.h"
 #include <boost/program_options.hpp>
+#include <smart_enum.h>
 
 namespace rd_bp = boost::program_options;
-
 
 void ParserLogInfo(boost::program_options::variables_map &vm) {
   for (auto &[name, value]: vm) {
@@ -29,14 +28,20 @@ void ParserLogInfo(boost::program_options::variables_map &vm) {
   }
 }
 
-void Options::ShowInfo() {
-  RD_LOG_INFO("- 程序类型： {}", m_program_type);
-  RD_LOG_INFO("- 区： {}", m_zone_id);
-  RD_LOG_INFO("- 服： {}", m_server_id);
-  RD_LOG_INFO("- 进程编号： {}", m_process_num);
-  RD_LOG_INFO("- 配置文件目录： {}", m_run_mode);
-  RD_LOG_INFO("- 运行模式： {}", m_run_mode);
-}
+template<>
+struct fmt::formatter<Options> : formatter<std::string> {
+  auto format(Options options, format_context &ctx) -> decltype(ctx.out()) {
+    return format_to(ctx.out(),
+                     "options info: \n - 程序类型：{}\n - 区： {}\n - 服： {}\n - 进程编号：{}\n - 配置文件目录：{}\n - 运行模式： {}",
+                     EnumUtils::ToString( static_cast<ProgramType>(options.m_program_type)) ,
+                     options.m_zone_id,
+                     options.m_server_id,
+                     options.m_process_num,
+                     options.m_config_path,
+                     options.m_run_mode
+    );
+  }
+};
 
 void ParserArguments(boost::program_options::variables_map &vm) {
   sOptions.m_program_type = vm["program"].as<int>();
@@ -45,6 +50,8 @@ void ParserArguments(boost::program_options::variables_map &vm) {
   sOptions.m_process_num = vm["number"].as<int>();
   sOptions.m_config_path = vm["config"].as<std::string>();
   sOptions.m_run_mode = vm["mode"].as<int>();
+
+  RD_LOG_INFO(sOptions);
 }
 
 int Options::Initialize(int argc, char **argv) {
@@ -58,7 +65,7 @@ int Options::Initialize(int argc, char **argv) {
       ("server,s", rd_bp::value<int>(&m_server_id)->default_value(1), "服")
       ("number,n", rd_bp::value<int>(&m_process_num)->default_value(1), "进程编号")
 
-      ("config,c", rd_bp::value<std::string>(&m_config_path)->default_value("config"), "配置文件目录")
+      ("config,c", rd_bp::value<std::string>(&m_config_path)->default_value("../config"), "配置文件目录")
       ("mode,m", rd_bp::value<int>(&m_run_mode)->default_value(0), "运行模式, 0正式 1开发 2压测");
 
 #ifdef _WIN32
@@ -80,7 +87,7 @@ int Options::Initialize(int argc, char **argv) {
       std::cout << all << std::endl;
       return 0;
     } else if (vm.count("version")) {
-      std::cout << GitRevision::GetFullVersion() << "\n";
+      std::cout << GitRevision::GetFullVersion() << std::endl;
       return 0;
     } else {
 //      ParserLogInfo(vm);
@@ -93,6 +100,7 @@ int Options::Initialize(int argc, char **argv) {
   }
   return 1;
 }
+
 
 
 
