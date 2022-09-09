@@ -2,7 +2,7 @@
 * Created by boil on 2022/8/27.
 */
 #include "program.h"
-
+#include "log.h"
 int Program::Initialize() {
   printf("Initialize...\n");
 
@@ -32,9 +32,9 @@ void Program::Run() {
 
 bool Program::Start() {
   if (_state == ProgramState::INITIALIZED) {
-    printf("Start...\n");
+    RD_LOG_INFO("Start...\n");
     //TODO:BOIL
-    printf("Start success!\n");
+    RD_LOG_INFO("Start success!\n");
     _state = ProgramState::RUNNING;
   }
 }

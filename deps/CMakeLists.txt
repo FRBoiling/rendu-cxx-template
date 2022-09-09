@@ -3,6 +3,7 @@
 #**********************************
 
 add_subdirectory(boost)
+add_subdirectory(spdlog)
 add_subdirectory(fmt)
 add_subdirectory(jemalloc)
 add_subdirectory(protobuf)

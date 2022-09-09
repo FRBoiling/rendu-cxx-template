@@ -52,6 +52,7 @@ target_link_libraries(${LIB_NAME}
     utf8cpp
     sfmt
     readline
+    spdlog
     #TODO:添加reps库
     )
 

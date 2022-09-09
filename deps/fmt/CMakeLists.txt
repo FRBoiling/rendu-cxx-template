@@ -21,11 +21,11 @@ endif ()
 
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    FMT_SOURCES
+    SOURCES
     # Exclude
 )
 
-add_library(${LIB_NAME} STATIC ${FMT_SOURCES})
+add_library(${LIB_NAME} STATIC ${SOURCES})
 
 if (HAVE_STRTOD_L)
   target_compile_definitions(${LIB_NAME}

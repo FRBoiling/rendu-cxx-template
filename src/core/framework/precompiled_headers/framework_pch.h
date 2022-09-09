@@ -4,3 +4,4 @@
 
 #include "app_enum.h"
 #include "system.h"
+#include "log.h"
