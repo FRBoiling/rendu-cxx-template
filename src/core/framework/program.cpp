@@ -4,11 +4,11 @@
 #include "program.h"
 #include "log.h"
 int Program::Initialize() {
-  printf("Initialize...\n");
+  RD_LOG_INFO("Initialize...");
 
-  printf("Initialize success!\n");
+  RD_LOG_INFO("Initialize success!");
   _state = ProgramState::INITIALIZED;
-  printf("ProgramState is %d\n", GetInstance()._state);
+   RD_LOG_INFO("ProgramState is {}", _state);
 }
 
 bool Program::IsStopped() {
@@ -17,7 +17,7 @@ bool Program::IsStopped() {
 
 bool Program::Exit() {
   _state = ProgramState::STOPPING;
-  printf("Exit ....!\n");
+  RD_LOG_INFO("Exit ....!");
 }
 
 void Program::Run() {
@@ -27,14 +27,14 @@ void Program::Run() {
     LateUpdate();
   }
   Stop();
-  printf("Exit success!\n");
+  RD_LOG_INFO("Exit success!");
 }
 
 bool Program::Start() {
   if (_state == ProgramState::INITIALIZED) {
-    RD_LOG_INFO("Start...\n");
+    RD_LOG_INFO("Start...");
     //TODO:BOIL
-    RD_LOG_INFO("Start success!\n");
+    RD_LOG_INFO("Start success!");
     _state = ProgramState::RUNNING;
   }
 }
@@ -42,9 +42,9 @@ bool Program::Start() {
 bool Program::Stop() {
   if (_state == ProgramState::STOPPED) {
     _state = ProgramState::STOPPING;
-    printf("Stop...\n");
+    RD_LOG_INFO("Stop...\n");
     //TODO:BOIL
-    printf("Stop success!\n");
+    RD_LOG_INFO("Stop success!\n");
   }
 }
 
@@ -59,11 +59,11 @@ void Program::LateUpdate() {
 void Program::AddSystem(ISystem &system) {
   auto hash_code = system.GetType().hash_code();
   if (_systems.contains(hash_code)) {
-    printf("AddSystem fail ! The %s already exist.\n", system.ToString().c_str());
+    RD_LOG_INFO("AddSystem fail ! The {} already exist.", system.ToString());
     return;
   }
   _systems[hash_code] = &system;
-  printf("AddSystem %s success !\n", system.ToString().c_str());
+  RD_LOG_INFO("AddSystem {} success !", system.ToString());
 }
 
 

@@ -30,12 +30,12 @@ void ParserLogInfo(boost::program_options::variables_map &vm) {
 }
 
 void Options::ShowInfo() {
-  std::cout << " - 程序类型： " << m_program_type << std::endl;
-  std::cout << " - 区： " << m_zone_id << std::endl;
-  std::cout << " - 服： " << m_server_id << std::endl;
-  std::cout << " - 进程编号： " << m_process_num << std::endl;
-  std::cout << " - 配置文件目录： " << m_run_mode << std::endl;
-  std::cout << " - 运行模式： " << m_run_mode << std::endl;
+  RD_LOG_INFO("- 程序类型： {}", m_program_type);
+  RD_LOG_INFO("- 区： {}", m_zone_id);
+  RD_LOG_INFO("- 服： {}", m_server_id);
+  RD_LOG_INFO("- 进程编号： {}", m_process_num);
+  RD_LOG_INFO("- 配置文件目录： {}", m_run_mode);
+  RD_LOG_INFO("- 运行模式： {}", m_run_mode);
 }
 
 void ParserArguments(boost::program_options::variables_map &vm) {

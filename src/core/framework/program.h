@@ -11,7 +11,7 @@
 #include "options.h"
 #include "singleton.h"
 
-enum class ProgramState {
+enum ProgramState {
   IDLE,           //闲置
   INITIALIZED,    //已经初始化
   RUNNING,        //正在运行
