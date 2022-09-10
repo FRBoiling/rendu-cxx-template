@@ -2,8 +2,8 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(LIB_NAME jemalloc)
-set(FOLDER_NAME deps)
+set(target-name jemalloc)
+set(project-name deps)
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux" AND NOT NOJEM)
   # 我们需要根据平台特定的设置生成jemalloc_def.h头文件
@@ -47,21 +47,21 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux" AND NOT NOJEM)
       # Exclude
   )
 
-  add_library(${LIB_NAME} STATIC ${jemalloc_STAT_SRC})
+  add_library(${target-name} STATIC ${jemalloc_STAT_SRC})
 
-  target_include_directories(${LIB_NAME}
+  target_include_directories(${target-name}
       PRIVATE
       ${BUILDDIR}
       ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-  target_compile_definitions(${LIB_NAME}
+  target_compile_definitions(${target-name}
       PUBLIC
       -DNO_BUFFERPOOL
       PRIVATE
       -D_GNU_SOURCE
       -D_REENTRAN)
 
-  target_link_libraries(${LIB_NAME}
+  target_link_libraries(${target-name}
       PRIVATE
       rendu-dependency-interface
       PUBLIC
@@ -69,15 +69,15 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux" AND NOT NOJEM)
       valgrind
       ${CMAKE_DL_LIBS})
 
-  set_target_properties(${LIB_NAME}
+  set_target_properties(${target-name}
       PROPERTIES
       FOLDER
-      ${FOLDER_NAME})
+      ${project-name})
 
 else ()
   # 为jemalloc提供一个虚拟目标，在禁用或不支持jemalloc时使用它。
-  add_library(${LIB_NAME} INTERFACE)
-  target_link_libraries(${LIB_NAME}
+  add_library(${target-name} INTERFACE)
+  target_link_libraries(${target-name}
       INTERFACE
       valgrind)
 

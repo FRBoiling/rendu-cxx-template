@@ -15,4 +15,4 @@ endif (WIN32)
 
 add_subdirectory(shared)
 add_subdirectory(framework)
-add_subdirectory(helloworld)
+add_subdirectory(template)

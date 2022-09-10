@@ -2,8 +2,8 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(LIB_NAME protobuf)
-set(FOLDER_NAME deps)
+set(target-name protobuf)
+set(project-name deps)
 
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -27,9 +27,9 @@ add_library(protobuf ${protobuf_STAT_SRCS})
 
 target_include_directories(protobuf
     PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/rd_custom)
+)
 
 target_link_libraries(protobuf
     PRIVATE

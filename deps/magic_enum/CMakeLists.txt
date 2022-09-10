@@ -1,43 +1,44 @@
 #**********************************
-#  Created by boil on 2022/8/14.
+#  Created by boil on 2022/9/10.
 #**********************************
 
-set(LIB_NAME magic_enum)
-set(FOLDER_NAME deps)
+set(target-name magic_enum)
+set(project-name deps)
 
-option(MAGIC_ENUM_OPT_ENABLE_NONASCII "Enable support for non-ASCII enumeration identifier" ON)
-option(MAGIC_ENUM_OPT_BUILD_EXAMPLES "Build magic_enum examples" ON)
-
-if (MAGIC_ENUM_OPT_BUILD_EXAMPLES)
-  add_subdirectory(example)
-endif ()
-
-if (MAGIC_ENUM_OPT_BUILD_TESTS)
-  enable_testing()
-  add_subdirectory(test)
-endif ()
-
-include(CMakePackageConfigHelpers)
-
+include(CheckSymbolExists)
 CollectSourceFiles(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    private_sources
     # Exclude
 )
 
-add_subdirectory(example)
+CollectIncludeDirectories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    public_includes
+)
 
-add_library(${LIB_NAME} STATIC ${SOURCES})
-target_include_directories(${LIB_NAME}
+add_library(${target-name} STATIC ${private_sources} ${public_includes})
+add_library(${target-name}::${target-name} ALIAS ${target-name})
+target_include_directories(${target-name}
+    PUBLIC
+    ${public_includes}
+    )
+
+add_library(${target-name}-header-only INTERFACE)
+add_library(${target-name}::${target-name}-header-only ALIAS ${target-name}-header-only)
+target_compile_definitions(${target-name}-header-only INTERFACE FMT_HEADER_ONLY=1)
+target_include_directories(${target-name}-header-only
     INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    ${public_includes}
+    )
 
-set_target_properties(${LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-# inherit RenduCore generic build options (e.g. fPIC)
-target_link_libraries(${LIB_NAME} PRIVATE rendu-dependency-interface)
+set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
 
-set_target_properties(${LIB_NAME}
+target_link_libraries(${target-name}
+    PRIVATE rendu-dependency-interface
+    )
+
+set_target_properties(${target-name}
     PROPERTIES
     FOLDER
-    ${FOLDER_NAME})
-
+    ${project-name})

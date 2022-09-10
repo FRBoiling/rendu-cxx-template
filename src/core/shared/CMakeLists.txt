@@ -2,40 +2,40 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(LIB_NAME shared)
-set(FOLDER_NAME cores)
+set(target-name shared)
+set(project-name cores)
 
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE_SOURCES
+    private_sources
     # Exclude
     ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers)
 
 if (USE_COREPCH)
-  set(PRIVATE_PCH_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/${LIB_NAME}_pch.h)
+  set(PRIVATE_PCH_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/${target-name}_pch.h)
 endif ()
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_definitions(-DRENDU_API_EXPORT_SHARED)
 
-add_library(${LIB_NAME}
-    ${PRIVATE_SOURCES}
+add_library(${target-name}
+    ${private_sources}
     )
 
 CollectIncludeDirectories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    PUBLIC_INCLUDES
+    public_includes
     # Exclude
     ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers)
 
-target_include_directories(${LIB_NAME}
+target_include_directories(${target-name}
     PUBLIC
-    ${PUBLIC_INCLUDES}
+    ${public_includes}
     PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${LIB_NAME}
+target_link_libraries(${target-name}
     PRIVATE
     rendu-interface
     common
@@ -45,10 +45,10 @@ target_link_libraries(${LIB_NAME}
     #TODO:添加reps库
     )
 
-set_target_properties(${LIB_NAME}
+set_target_properties(${target-name}
     PROPERTIES
     FOLDER
-    ${FOLDER_NAME})
+    ${project-name})
 
 if (BUILD_SHARED_LIBS)
   if (UNIX)
@@ -64,5 +64,5 @@ endif ()
 
 # Generate precompiled header
 if (USE_COREPCH)
-  add_cxx_pch(${LIB_NAME} ${PRIVATE_PCH_HEADER})
+  add_cxx_pch(${target-name} ${PRIVATE_PCH_HEADER})
 endif ()

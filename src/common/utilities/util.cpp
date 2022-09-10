@@ -16,7 +16,6 @@
 #include <sstream>
 #include <string>
 #include <utf8.h>
-#include <boost/core/demangle.hpp>
 
 #if RENDU_COMPILER == RENDU_COMPILER_GNU
 
@@ -263,15 +262,15 @@ std::string TimeToHumanReadable(time_t t) {
   return std::string(buf);
 }
 
-/// Check if the string is a valid ip address representation
-bool IsIPAddress(char const *ipaddress) {
-  if (!ipaddress)
-    return false;
-
-  boost::system::error_code error;
-  rendu::net::make_address(ipaddress, error);
-  return !error;
-}
+///// Check if the string is a valid ip address representation
+//bool IsIPAddress(char const *ipaddress) {
+//  if (!ipaddress)
+//    return false;
+//
+//  boost::system::error_code error;
+//  rendu::net::make_address(ipaddress, error);
+//  return !error;
+//}
 
 /// create PID file
 uint32 CreatePIDFile(std::string const &filename) {
@@ -820,7 +819,8 @@ bool StringCompareLessI(std::string_view a, std::string_view b) {
 }
 
 std::string GetTypeName(std::type_info const &info) {
-  return boost::core::demangle(info.name());
+//  return boost::core::demangle(info.name());
+  return "";
 }
 
 float DegToRad(float degrees) {

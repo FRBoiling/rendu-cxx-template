@@ -32,6 +32,7 @@
 #ifndef NEARGYE_MAGIC_ENUM_FORMAT_HPP
 #define NEARGYE_MAGIC_ENUM_FORMAT_HPP
 
+#if defined(MAGIC_ENUM_USE_STD_FORMAT)
 #if !defined(__cpp_lib_format)
 #  error "Format is not supported"
 #endif
@@ -75,5 +76,5 @@ struct std::formatter<E, std::enable_if_t<std::is_enum_v<E> && magic_enum::custo
 #  undef MAGIC_ENUM_DEFAULT_ENABLE_ENUM_FORMAT
 #  undef MAGIC_ENUM_DEFAULT_ENABLE_ENUM_FORMAT_AUTO_DEFINE
 #endif // MAGIC_ENUM_DEFAULT_ENABLE_ENUM_FORMAT_AUTO_DEFINE
-
+#endif // MAGIC_ENUM_USE_STD_FORMAT
 #endif // NEARGYE_MAGIC_ENUM_FORMAT_HPP

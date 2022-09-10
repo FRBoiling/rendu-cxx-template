@@ -2,8 +2,11 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-add_library(utf8cpp INTERFACE)
+set(target-name utf8cpp)
+set(project-name deps)
 
-target_include_directories(utf8cpp
+add_library(${target-name} INTERFACE)
+
+target_include_directories(${target-name}
     INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR})

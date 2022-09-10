@@ -34,16 +34,10 @@ public:
     return enum_index(value);
   }
 
-
-  template<typename Enum>
-  static Enum FromInter(int value) {
-    return ; }
-
-
   template<typename Enum>
   static bool IsValid(Enum value) {
     try {
-      return magic_enum::enum_contains(value);;
+      return magic_enum::enum_contains(value);
     } catch (...) {
       return false;
     }

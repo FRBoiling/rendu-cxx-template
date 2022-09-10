@@ -1,17 +1,17 @@
 #**********************************
 #  Created by boil on 2022/8/14.
 #**********************************
-set(LIB_NAME framework)
-set(FOLDER_NAME cores)
+set(target-name framework)
+set(project-name cores)
 
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE_SOURCES
+    private_sources
     # Exclude
     ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers)
 
 if (USE_COREPCH)
-  set(PRIVATE_PCH_HEADER precompiled_headers/${LIB_NAME}_pch.h)
+  set(PRIVATE_PCH_HEADER precompiled_headers/${target-name}_pch.h)
 endif ()
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
@@ -20,49 +20,49 @@ add_definitions(-DRENDU_API_EXPORT_FRAMEWORK)
 
 CollectIncludeDirectories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    PUBLIC_INCLUDES
+    public_includes
     # Exclude
     ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers)
 
 # Provide an interface target for the game project to allow
 # dependent projects to build meanwhile.
-add_library(${LIB_NAME}-interface INTERFACE)
+add_library(${target-name}-interface INTERFACE)
 
-target_include_directories(${LIB_NAME}-interface
+target_include_directories(${target-name}-interface
     INTERFACE
-    ${PUBLIC_INCLUDES})
+    ${public_includes})
 
-target_link_libraries(${LIB_NAME}-interface
+target_link_libraries(${target-name}-interface
     INTERFACE
     )
 
-add_library(${LIB_NAME}
-    ${PRIVATE_SOURCES})
+add_library(${target-name}
+    ${private_sources})
 
-target_include_directories(${LIB_NAME}
+target_include_directories(${target-name}
     PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${LIB_NAME}
+target_link_libraries(${target-name}
     PRIVATE
     rendu-interface
     PUBLIC
     common
     shared
-    ${LIB_NAME}-interface)
+    ${target-name}-interface)
 
-set_target_properties(${LIB_NAME}
+set_target_properties(${target-name}
     PROPERTIES
     FOLDER
-    ${FOLDER_NAME})
+    ${project-name})
 
 if (BUILD_SHARED_LIBS)
   if (UNIX)
-    install(TARGETS ${LIB_NAME}
+    install(TARGETS ${target-name}
         LIBRARY
         DESTINATION lib)
   elseif (WIN32)
-    install(TARGETS ${LIB_NAME}
+    install(TARGETS ${target-name}
         RUNTIME
         DESTINATION "${CMAKE_INSTALL_PREFIX}")
   endif ()
@@ -70,5 +70,5 @@ endif ()
 
 # Generate precompiled header
 if (USE_COREPCH)
-  add_cxx_pch(${LIB_NAME} ${PRIVATE_PCH_HEADER})
+  add_cxx_pch(${target-name} ${PRIVATE_PCH_HEADER})
 endif ()

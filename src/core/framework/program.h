@@ -11,7 +11,6 @@
 #include "options.h"
 #include "singleton.h"
 
-
 enum class ProgramState {
   IDLE = 0,           //闲置
   INITIALIZED,    //已经初始化
@@ -22,33 +21,34 @@ enum class ProgramState {
 
 enum class ProgramType {
   All = 0,
+  Hall = 1,
+  World = 2,
 };
 
 class Program : public Singleton<Program> {
 public:
-  int Initialize();
+  void Initialize();
 
   void Run();
 
   bool IsStopped();
 
-  bool Exit();
+  void Exit();
 
   void AddSystem(ISystem &system);
 
 private:
-  ProgramState _state;
-  std::map<size_t, ISystem *> _systems;
 
-  bool Start();
+  void Start();
 
-  bool Stop();
+  void Stop();
 
   void Update();
 
   void LateUpdate();
 
-  void ShowOptions();
+  ProgramState _state;
+  std::map<size_t, ISystem *> _systems;
 };
 
 #define sProgram Program::GetInstance()

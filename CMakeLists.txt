@@ -75,6 +75,8 @@ include(cmake/showoptions.cmake)
 add_subdirectory(deps)
 # add core sources
 add_subdirectory(src)
+# add example project
+add_subdirectory(example)
 
 if (BUILD_TESTING)
   include(CTest)

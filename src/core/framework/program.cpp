@@ -4,22 +4,24 @@
 #include "program.h"
 #include "log.h"
 #include "smart_enum.h"
+#include "banner.h"
 
-int Program::Initialize() {
+void Program::Initialize() {
+  rendu::banner::Show();
   RD_LOG_INFO("initialize...");
 
   RD_LOG_INFO("initialize success!");
-  _state = ProgramState::INITIALIZED;
   RD_LOG_INFO("ProgramState is {}", EnumUtils::ToString(_state));
+  _state = ProgramState::INITIALIZED;
 }
 
 bool Program::IsStopped() {
   return _state == ProgramState::STOPPED;
 }
 
-bool Program::Exit() {
-  _state = ProgramState::STOPPING;
+void Program::Exit() {
   RD_LOG_INFO("exit ....!");
+  _state = ProgramState::STOPPING;
 }
 
 void Program::Run() {
@@ -32,7 +34,7 @@ void Program::Run() {
   RD_LOG_INFO("exit success!");
 }
 
-bool Program::Start() {
+void Program::Start() {
   if (_state == ProgramState::INITIALIZED) {
     RD_LOG_INFO("start...");
     //TODO:BOIL
@@ -41,7 +43,7 @@ bool Program::Start() {
   }
 }
 
-bool Program::Stop() {
+void Program::Stop() {
   if (_state == ProgramState::STOPPED) {
     _state = ProgramState::STOPPING;
     RD_LOG_INFO("stop...\n");
@@ -68,9 +70,6 @@ void Program::AddSystem(ISystem &system) {
       RD_LOG_DEBUG("AddSystem {} success !", system.ToString());
 }
 
-void Program::ShowOptions() {
-
-}
 
 
 

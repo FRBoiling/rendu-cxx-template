@@ -12,7 +12,7 @@
 #define _FULL_DATABASE             "TDB_full_world_925.22071_2022_07_25.sql"
 #define _HOTFIXES_DATABASE         "TDB_full_hotfixes_925.22071_2022_07_25.sql"
 #define VER_COMPANYNAME_STR        "RenduCore Developers"
-#define VER_LEGALCOPYRIGHT_STR     "(c)2008-@rev_year@ RenduCore"
+#define VER_LEGALCOPYRIGHT_STR     "(c)2022-@rev_year@ RenduCore"
 #define VER_FILEVERSION            0,0,0
 #define VER_FILEVERSION_STR        "@rev_hash@ @rev_date@ (@rev_branch@ branch)"
 #define VER_PRODUCTVERSION         VER_FILEVERSION
