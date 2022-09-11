@@ -10,28 +10,12 @@
 #include <argparse/argparse.hpp>
 #include "smart_enum.h"
 
-//void ParserLogInfo(boost::program_options::variables_map &vm) {
-//  for (auto &[name, value]: vm) {
-//    std::cout
-//        << std::boolalpha
-//        << "defaulted : " << value.defaulted()
-//        << "\tkey : " << name;
-////        << "\tempty:" << value.empty();
-//    if (typeid(std::string) == value.value().type())
-//      std::cout << " - string " << std::__1::quoted(value.as<std::string>()) << "\n";
-//    else if (typeid(int) == value.value().type())
-//      std::cout << " - int " << value.as<int>() << "\n";
-//    else if (!value.empty())
-//      std::cout << " - unknown type\n";
-//  }
-//}
-
 template<>
 struct fmt::formatter<Options> : formatter<std::string> {
   auto format(Options options, format_context &ctx) -> decltype(ctx.out()) {
     return format_to(ctx.out(),
                      "  [程序类型：{}]-[区：{}][服：{}][进程编号：{}]-[运行模式：{}]\n  [配置文件目录：{}]",
-                     EnumUtils::ToString(static_cast<ProgramType>(options.m_program_type)),
+                     EnumUtils::ToString(options.m_program_type),
                      options.m_zone_id,
                      options.m_server_id,
                      options.m_process_num,
@@ -52,9 +36,8 @@ void ParserArguments(argparse::ArgumentParser parser) {
 }
 
 int Options::Initialize(int argc, char **argv) {
-  argparse::ArgumentParser parser("allowed options");
-  parser.add_description("Forward a thing to the next member.");
 
+  argparse::ArgumentParser parser("allowed options");
   parser.add_argument("--program", "-p").help("程序类型").required()
       .default_value(ProgramType::All).scan<'i', int>();
   parser.add_argument("--zone", "-z").help("区").required()
@@ -67,7 +50,6 @@ int Options::Initialize(int argc, char **argv) {
       .default_value(std::string("../config"));
   parser.add_argument("--mode", "-m").help("运行模式, 0正式 1开发 2压测").required()
       .scan<'i', int>().default_value(0).scan<'i', int>();
-  parser.add_epilog("Possible things include betingalw, chiz, and res.");
 
   try {
     parser.parse_args(argc, argv);
