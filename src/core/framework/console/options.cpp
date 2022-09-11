@@ -3,9 +3,7 @@
 */
 
 #include "options.h"
-#include "git_revision.h"
 #include <iostream>
-#include <iomanip>
 #include <ostream>
 #include <argparse/argparse.hpp>
 #include "smart_enum.h"

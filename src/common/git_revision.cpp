@@ -41,13 +41,13 @@ char const *GitRevision::GetMySQLExecutable() {
   return _MYSQL_EXECUTABLE;
 }
 
-char const *GitRevision::GetFullDatabase() {
-  return _FULL_DATABASE;
-}
-
-char const *GitRevision::GetHotfixesDatabase() {
-  return _HOTFIXES_DATABASE;
-}
+//char const *GitRevision::GetFullDatabase() {
+//  return _FULL_DATABASE;
+//}
+//
+//char const *GitRevision::GetHotfixesDatabase() {
+//  return _HOTFIXES_DATABASE;
+//}
 
 #if RENDU_PLATFORM == RENDU_PLATFORM_WINDOWS
 #  ifdef _WIN64
