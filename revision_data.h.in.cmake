@@ -9,8 +9,6 @@
 #define _SOURCE_DIRECTORY          R"(@CMAKE_SOURCE_DIR@)"
 #define _BUILD_DIRECTORY           R"(@BUILDDIR@)"
 #define _MYSQL_EXECUTABLE          R"(@MYSQL_EXECUTABLE@)"
-#define _FULL_DATABASE             "TDB_full_world_925.22071_2022_07_25.sql"
-#define _HOTFIXES_DATABASE         "TDB_full_hotfixes_925.22071_2022_07_25.sql"
 #define VER_COMPANYNAME_STR        "RenduCore Developers"
 #define VER_LEGALCOPYRIGHT_STR     "(c)2022-@rev_year@ RenduCore"
 #define VER_FILEVERSION            0,0,0
