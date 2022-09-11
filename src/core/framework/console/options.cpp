@@ -9,6 +9,7 @@
 #include <ostream>
 #include <argparse/argparse.hpp>
 #include "smart_enum.h"
+#include "string_format.h"
 
 template<>
 struct fmt::formatter<Options> : formatter<std::string> {
@@ -32,6 +33,12 @@ void ParserArguments(argparse::ArgumentParser parser) {
   sOptions.m_process_num = parser.get<int>("-n");
   sOptions.m_config_path = parser.get<std::string>("-c");
   sOptions.m_run_mode = parser.get<int>("-m");
+
+  sOptions.m_program_name = rendu::StringFormat("{}_{}_{}_{}",
+                                                EnumUtils::ToString(sOptions.m_program_type),
+                                                sOptions.m_zone_id,
+                                                sOptions.m_server_id,
+                                                sOptions.m_process_num);
   RD_LOG_INFO("options show:\n{}", sOptions);
 }
 
@@ -61,7 +68,5 @@ int Options::Initialize(int argc, char **argv) {
   }
 //  std::cout<<parser;
   ParserArguments(parser);
-
-
   return 1;
 }

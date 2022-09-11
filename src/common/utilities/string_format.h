@@ -12,7 +12,7 @@ namespace rendu {
   template<typename Format, typename... Args>
   inline std::string StringFormat(Format &&fmt, Args &&... args) {
     try {
-      return fmt::sprintf(std::forward<Format>(fmt), std::forward<Args>(args)...);
+      return fmt::format(std::forward<Format>(fmt), std::forward<Args>(args)...);
     }
     catch (const fmt::format_error &formatError) {
       std::string error =
