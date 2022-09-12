@@ -33,7 +33,7 @@
 // The above software in this distribution may have been modified by 
 // THL A29 Limited ("Tencent Modifications"). 
 // All Tencent Modifications are Copyright (C) 2015 THL A29 Limited.
-
+#ifdef MSVC
 #ifndef _MSC_VER // [
 #error "Use this header only with Microsoft Visual C++ compilers!"
 #endif // _MSC_VER ]
@@ -298,3 +298,5 @@ typedef uint64_t  uintmax_t;
 #endif // _MSC_VER >= 1600 ]
 
 #endif // _MSC_STDINT_H_ ]
+
+#endif // MSVC

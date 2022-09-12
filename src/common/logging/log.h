@@ -4,7 +4,7 @@
 
 #ifndef RENDU_LOG_H_
 #define RENDU_LOG_H_
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 #include "spdlog/pattern_formatter.h"
 
 #define RD_LOG_DEBUG SPDLOG_DEBUG

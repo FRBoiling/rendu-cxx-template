@@ -2,16 +2,11 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-add_subdirectory(fmt)
-add_subdirectory(threads)
-add_subdirectory(magic_enum)
-add_subdirectory(spdlog)
-add_subdirectory(argparse)
-add_subdirectory(utf8cpp)
-add_subdirectory(sfmt)
+AddSubdirectory(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    # Exclude
+    #    ${CMAKE_CURRENT_SOURCE_DIR}/spdlog
+    #    ${CMAKE_CURRENT_SOURCE_DIR}/fmt
+)
 
-add_subdirectory(protobuf)
-add_subdirectory(rapidjson)
-add_subdirectory(readline)
-add_subdirectory(valgrind)
 

@@ -5,7 +5,6 @@
 set(target-name spdlog)
 set(project-name deps)
 
-include(CheckSymbolExists)
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     private_sources
@@ -17,22 +16,25 @@ CollectIncludeDirectories(
 )
 
 add_library(${target-name} STATIC ${private_sources} ${public_includes})
-add_library(${target-name}::${target-name} ALIAS ${target-name})
-#target_compile_definitions(${target-name} PUBLIC SPDLOG_COMPILED_LIB SPDLOG_FMT_EXTERNAL)
-target_compile_definitions(${target-name} PUBLIC SPDLOG_COMPILED_LIB)
-target_include_directories(${target-name}
+
+target_compile_definitions(${target-name}
     PUBLIC
-    ${public_includes}
+    -DSPDLOG_COMPILED_LIB
     )
 
-set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
+#if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64)|(AMD64|amd64)|(^i.86$)")
+#  target_compile_definitions(${target-name} INTERFACE -DRAPIDJSON_SSE2)
+#elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
+#  target_compile_definitions(${target-name} INTERFACE -DRAPIDJSON_NEON)
+#elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^aarch64")
+#  target_compile_definitions(${target-name} INTERFACE -DRAPIDJSON_NEON)
+#endif ()
 
 target_link_libraries(${target-name}
     PRIVATE rendu-dependency-interface
-    PUBLIC fmt::fmt
+    PUBLIC threads fmt magic_enum
     )
 
-set_target_properties(${target-name}
-    PROPERTIES
-    FOLDER
-    ${project-name})
+target_include_directories(${target-name} PUBLIC ${public_includes})
+#set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${target-name} PROPERTIES FOLDER ${project-name})

@@ -19,8 +19,6 @@ target_link_libraries(${EXEC_NAME}
     PRIVATE
     rendu-interface
     PUBLIC
-    fmt
-    threads
     spdlog
     #TODO:BOIL 添加依赖项
     )
