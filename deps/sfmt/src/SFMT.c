@@ -20,7 +20,6 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 #include <string.h>
 #include <assert.h>
 #include "../include/SFMT.h"

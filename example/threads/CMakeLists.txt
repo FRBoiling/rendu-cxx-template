@@ -2,7 +2,7 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(EXEC_NAME example_spdlog)
+set(EXEC_NAME example_threads)
 
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -19,7 +19,7 @@ target_link_libraries(${EXEC_NAME}
     PRIVATE
     rendu-interface
     PUBLIC
-    spdlog
+    threads
     #TODO:BOIL 添加依赖项
     )
 
