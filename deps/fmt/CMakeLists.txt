@@ -37,6 +37,6 @@ target_link_libraries(${target-name}
     PUBLIC utf8cpp
     )
 
-target_include_directories(${target-name} PUBLIC ${public_includes})
+target_include_directories(${target-name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 #set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${target-name} PROPERTIES FOLDER ${project-name})

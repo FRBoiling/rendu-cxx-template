@@ -199,6 +199,7 @@ public:
 
   bool StartArray();
 
+  bool EndArray(rapidjson::SizeType memberCount);
 
   std::vector<std::string> const &GetErrors() const { return _errors; }
 
@@ -426,7 +427,7 @@ bool JSON::Deserialize(std::string const &json, google::protobuf::Message *messa
   Deserializer deserializer;
   if (!deserializer.ReadMessage(json, message)) {
     for (std::size_t i = 0; i < deserializer.GetErrors().size(); ++i)
-      RD_LOG_ERROR("serializer", "%s", deserializer.GetErrors()[i].c_str());
+      RD_LOG_ERROR ("serializer", "%s", deserializer.GetErrors()[i].c_str());
     return false;
   }
 
