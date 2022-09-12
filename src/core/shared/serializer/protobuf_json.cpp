@@ -199,7 +199,6 @@ public:
 
   bool StartArray();
 
-  bool EndArray(rapidjson::SizeType memberCount);
 
   std::vector<std::string> const &GetErrors() const { return _errors; }
 
