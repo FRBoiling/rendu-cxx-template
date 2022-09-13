@@ -2,7 +2,7 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(EXEC_NAME example_utf8cpp)
+set(target_name example_utf8cpp)
 
 CollectSourceFiles(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -11,11 +11,11 @@ CollectSourceFiles(
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(${EXEC_NAME}
+add_executable(${target_name}
     ${private_sources}
     )
 
-target_link_libraries(${EXEC_NAME}
+target_link_libraries(${target_name}
     PRIVATE
     rendu-interface
     PUBLIC
@@ -28,7 +28,7 @@ CollectIncludeDirectories(
     public_includes
 )
 
-target_include_directories(${EXEC_NAME}
+target_include_directories(${target_name}
     PUBLIC
     ${public_includes}
     PRIVATE

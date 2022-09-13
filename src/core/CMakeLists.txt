@@ -13,6 +13,7 @@ if (WIN32)
       )
 endif (WIN32)
 
-add_subdirectory(shared)
-add_subdirectory(framework)
-add_subdirectory(template)
+AddSubdirectory(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+

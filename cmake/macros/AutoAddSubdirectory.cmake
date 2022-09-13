@@ -2,6 +2,15 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
+# 添加子项目，用于包含所有子项目。忽略可变参数中列出的完全限定目录。
+# Use it like:
+# AddSubdirectory(
+#   ${CMAKE_CURRENT_SOURCE_DIR}
+#   # Exclude
+#   ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers
+#   ${CMAKE_CURRENT_SOURCE_DIR}/platform)
+#
+
 function(AddSubdirectory current_dir)
   list(FIND ARGN "${current_dir}" IS_EXCLUDED)
   if(IS_EXCLUDED EQUAL -1)
