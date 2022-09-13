@@ -2,7 +2,7 @@
 #  Created by boil on 2022/9/10.
 #**********************************
 
-set(target-name fmt)
+set(target-name zlib)
 set(project-name deps)
 
 CollectSourceFiles(
@@ -19,9 +19,9 @@ add_library(${target-name} STATIC ${private_sources} ${public_includes})
 
 target_link_libraries(${target-name}
     PRIVATE rendu-dependency-interface
-    PUBLIC utf8cpp
     )
 
 target_include_directories(${target-name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 #set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${target-name} PROPERTIES FOLDER ${project-name})
+

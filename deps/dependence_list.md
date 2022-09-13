@@ -48,9 +48,6 @@ Version: [1.5.4](https://github.com/MersenneTwister-Lab/SFMT/releases/tag/1.5.4)
 以可移植的方式使用C++实现UTF-8
 [http://utfcpp.sourceforge.net/](http://utfcpp.sourceforge.net/)
 Version: [Release 2.3.4](https://sourceforge.net/projects/utfcpp/files/utf8cpp_2x/Release%202.3.4/)
-# cotire
-CMake模块可加快构建速度_。_
-_cotire 提供的功能已被_[_添加到 CMake 3.16 的功能所取代_](https://cmake.org/cmake/help/latest/release/3.16.html)_。对_[_预编译_](https://cmake.org/cmake/help/latest/command/target_precompile_headers.html)_和_[_统一构建的支持_](https://cmake.org/cmake/help/v3.16/prop_tgt/UNITY_BUILD.html)_现已内置于 CMake 中。因此，该项目不会有任何进一步的更新或支持。_~~[_https://github.com/sakra/cotire_](https://github.com/sakra/cotire)~~~~  Version: 1.7.10 516d78476f6dda336181fc5514f72774e1e0a8e2~~
 # efws
 Entropia File System Watcher
 是一个C++跨平台文件系统观察程序和通告程序。

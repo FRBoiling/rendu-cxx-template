@@ -22,14 +22,6 @@ target_compile_definitions(${target-name}
     -DSPDLOG_COMPILED_LIB
     )
 
-#if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64)|(AMD64|amd64)|(^i.86$)")
-#  target_compile_definitions(${target-name} INTERFACE -DRAPIDJSON_SSE2)
-#elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
-#  target_compile_definitions(${target-name} INTERFACE -DRAPIDJSON_NEON)
-#elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^aarch64")
-#  target_compile_definitions(${target-name} INTERFACE -DRAPIDJSON_NEON)
-#endif ()
-
 target_link_libraries(${target-name}
     PRIVATE rendu-dependency-interface
     PUBLIC threads fmt magic_enum
