@@ -6,7 +6,7 @@
 #include <iostream>
 using namespace std;
 
-int main(int, char *[]) {
+int main(int argc, char **argv) {
   string str = fmt::format("{}{}{}",1,2,3);
   cout<<str<< endl;
   return 0;

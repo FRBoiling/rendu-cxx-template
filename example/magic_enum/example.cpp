@@ -19,7 +19,7 @@ enum EnumNormal{
   Num2
 };
 
-int main(int, char *[]) {
+int main(int argc, char **argv) {
 
 
   int a = magic_enum::enum_integer(EnumClass::Num1);

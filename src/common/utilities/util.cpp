@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
 #endif
 #if RENDU_COMPILER == RENDU_COMPILER_MICROSOFT
 #include <windows.h>
@@ -292,17 +293,20 @@ uint32 CreatePIDFile(std::string const &filename) {
 
   return pid;
 }
+
 #if RENDU_COMPILER == RENDU_COMPILER_MICROSOFT
 uint32 GetPID() {
-	DWORD pid = GetCurrentProcessId();
-	return uint32(pid);
+  DWORD pid = GetCurrentProcessId();
+  return uint32(pid);
 }
 #else
+
 uint32 GetPID() {
   pid_t pid = getpid();
 
   return uint32(pid);
 }
+
 #endif
 
 
