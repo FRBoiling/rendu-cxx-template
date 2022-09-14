@@ -3,6 +3,7 @@
 */
 
 #include <magic_enum.hpp>
+#include <iostream>
 
 using namespace std;
 
@@ -37,6 +38,8 @@ int main(int, char *[]) {
   auto h = magic_enum::enum_flags_name(EnumClass::Num1);
 
   auto i = magic_enum::enum_name(EnumClass::Num1);
+
+  std::cout << a << std::endl;
 
   return 0;
 }

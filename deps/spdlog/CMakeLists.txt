@@ -17,10 +17,21 @@ CollectIncludeDirectories(
 
 add_library(${target-name} STATIC ${private_sources} ${public_includes})
 
-target_compile_definitions(${target-name}
+
+ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+ target_compile_definitions(${target-name}
+    PUBLIC
+    -DSPDLOG_COMPILED_LIB
+    -DSPDLOG_USE_STD_FORMAT
+    )
+ else()
+ target_compile_definitions(${target-name}
     PUBLIC
     -DSPDLOG_COMPILED_LIB
     )
+endif ()
+
+
 
 target_link_libraries(${target-name}
     PRIVATE rendu-dependency-interface

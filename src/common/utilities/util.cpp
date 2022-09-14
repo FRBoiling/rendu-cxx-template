@@ -22,8 +22,15 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
 #endif
+#if RENDU_COMPILER == RENDU_COMPILER_MICROSOFT
+#include <windows.h>
+#include <processthreadsapi.h>
+#include <consoleapi.h>
+#include <WinUser.h>
+#include <WinBase.h>
+#endif
+
 
 std::vector<std::string_view> rendu::Tokenize(std::string_view str, char sep, bool keepEmpty) {
   std::vector<std::string_view> tokens;
@@ -285,16 +292,19 @@ uint32 CreatePIDFile(std::string const &filename) {
 
   return pid;
 }
-
+#if RENDU_COMPILER == RENDU_COMPILER_MICROSOFT
 uint32 GetPID() {
-#ifdef _WIN32
-  DWORD pid = GetCurrentProcessId();
+	DWORD pid = GetCurrentProcessId();
+	return uint32(pid);
+}
 #else
+uint32 GetPID() {
   pid_t pid = getpid();
-#endif
 
   return uint32(pid);
 }
+#endif
+
 
 size_t utf8length(std::string &utf8str) {
   try {

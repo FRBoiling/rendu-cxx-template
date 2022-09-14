@@ -12,7 +12,7 @@
 template<>
 struct fmt::formatter<Options> : formatter<std::string> {
   auto format(Options options, format_context &ctx) -> decltype(ctx.out()) {
-    return format_to(ctx.out(),
+    return fmt::format_to(ctx.out(),
                      "  [程序类型：{}]-[区：{}][服：{}][进程编号：{}]-[运行模式：{}]\n  [配置文件目录：{}]",
                      EnumUtils::ToString(options.m_program_type),
                      options.m_zone_id,

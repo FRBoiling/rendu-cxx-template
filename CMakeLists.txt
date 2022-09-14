@@ -71,9 +71,11 @@ AddSubdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}
     # Exclude
     ${CMAKE_CURRENT_SOURCE_DIR}/.git
+    ${CMAKE_CURRENT_SOURCE_DIR}/.vs
     ${CMAKE_CURRENT_SOURCE_DIR}/.idea
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake
     ${CMAKE_CURRENT_SOURCE_DIR}/build
+    ${CMAKE_CURRENT_SOURCE_DIR}/out
 )
 
 # 测试模块构建
