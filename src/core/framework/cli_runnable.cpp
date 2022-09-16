@@ -45,7 +45,7 @@ namespace rendu::Impl::Readline
     int cli_hook_func()
     {
         if (sProgram.IsStopped())
-            ::rl_done = 1;
+//            ::rl_done = 1;
         return 0;
     }
 }
@@ -97,7 +97,7 @@ void CliThread()
         static char BLANK = '\0';
         ::rl_completer_word_break_characters = &BLANK;
     }
-    ::rl_event_hook = &rendu::Impl::Readline::cli_hook_func;
+//    ::rl_event_hook = &rendu::Impl::Readline::cli_hook_func;
 #endif
 
 //    if (sConfigMgr->GetBoolDefault("BeepAtStart", true))

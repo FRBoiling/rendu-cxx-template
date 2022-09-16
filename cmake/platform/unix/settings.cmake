@@ -21,7 +21,6 @@ add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
 )
 message(STATUS "UNIX: 创建卸载目标")
-
 if(USE_LD_GOLD)
   execute_process(COMMAND ${CMAKE_C_COMPILER} -fuse-ld=gold -Wl,--version ERROR_QUIET OUTPUT_VARIABLE LD_VERSION)
   if("${LD_VERSION}" MATCHES "GNU gold")
