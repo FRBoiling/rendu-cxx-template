@@ -9,20 +9,13 @@ target_compile_definitions(rendu-compile-option-interface
   INTERFACE
     -D_BUILD_DIRECTIVE="$<CONFIG>")
 
-set(CLANG_EXPECTED_VERSION 14.0.0)
+set(CLANG_EXPECTED_VERSION 7.0.0)
 
 if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS CLANG_EXPECTED_VERSION)
   message(FATAL_ERROR "Clang: This project requires version ${CLANG_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
 else()
   message(STATUS "Clang: Minimum version required is ${CLANG_EXPECTED_VERSION}, found ${CMAKE_CXX_COMPILER_VERSION} - ok!")
 endif()
-
-#if (NOT CLANG_HAVE_PROPER_CHARCONV)
-#  message(STATUS "Clang: 检测到64位整数的from_chars错误，启用了解决方案 ")
-#  target_compile_definitions(rendu-compile-option-interface
-#  INTERFACE
-#    -DRENDU_NEED_CHARCONV_WORKAROUND)
-#endif()
 
 if(WITH_WARNINGS)
   target_compile_options(rendu-warning-interface
@@ -119,13 +112,13 @@ if(BUILD_TIME_ANALYSIS)
   message(STATUS "Clang: 启用构建时间分析(-ftime-trace) ")
 endif()
 
-# -wno-narrow，需要在g3d中抑制警告。
-# -wno-deprecdeprece-register，在Unix系统上，需要# 来抑制185个gsoap警告。
-# -Wno-deprecated-copy，需要在g3d中抑制警告
-target_compile_options(rendu-compile-option-interface
-  INTERFACE
-    -Wno-narrowing
-    -Wno-deprecated-register)
+## -wno-narrow，需要在g3d中抑制警告。
+## -wno-deprecdeprece-register，在Unix系统上，需要# 来抑制185个gsoap警告。
+## -Wno-deprecated-copy，需要在g3d中抑制警告
+#target_compile_options(rendu-compile-option-interface
+#  INTERFACE
+#    -Wno-narrowing
+#    -Wno-deprecated-register)
 
 if(BUILD_SHARED_LIBS)
   # -fPIC，需要允许在共享库中进行静态链接。

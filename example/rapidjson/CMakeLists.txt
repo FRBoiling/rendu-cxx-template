@@ -17,8 +17,9 @@ add_executable(${target_name}
 
 target_link_libraries(${target_name}
     PRIVATE
-    rendu-interface
+    rendu-core-interface
     PUBLIC
+    spdlog
     rapidjson
     #TODO:BOIL 添加依赖项
     )

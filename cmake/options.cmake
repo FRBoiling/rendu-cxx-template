@@ -47,7 +47,7 @@ option(COPY_CONF        "拷贝 可执行程序 和 .conf.dist 文件到项目�
 set(WITH_SOURCE_TREE    "hierarchical" CACHE STRING "为IDE构建源代码树。")
 set_property(CACHE WITH_SOURCE_TREE PROPERTY STRINGS no flat hierarchical hierarchical-folders)
 option(WITHOUT_GIT      "禁用GIT测试例程"                     0)
-option(BUILD_TESTING    "构建测试套件"                        0)
+option(BUILD_TESTING    "构建测试套件"                        1)
 
 if(UNIX)
   option(USE_LD_GOLD    "Use GNU gold 连接器"                0)

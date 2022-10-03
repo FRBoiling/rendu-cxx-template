@@ -29,25 +29,122 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Author: kenton@google.com (Kenton Varda)
+//
+// Deals with the fact that hash_map is not defined everywhere.
 
 #ifndef GOOGLE_PROTOBUF_STUBS_HASH_H__
 #define GOOGLE_PROTOBUF_STUBS_HASH_H__
 
-#include <cstring>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
+#include <string.h>
+#include <google/protobuf/stubs/common.h>
+#include "config.h"
 
-# define GOOGLE_PROTOBUF_HASH_NAMESPACE_DECLARATION_START \
-  namespace google {                                      \
-  namespace protobuf {
-# define GOOGLE_PROTOBUF_HASH_NAMESPACE_DECLARATION_END }}
+#if defined(HAVE_HASH_MAP) && defined(HAVE_HASH_SET)
+#include HASH_MAP_H
+#include HASH_SET_H
+#else
+#define MISSING_HASH
+#include <map>
+#include <set>
+#endif
 
 namespace google {
 namespace protobuf {
 
+#ifdef MISSING_HASH
+
+// This system doesn't have hash_map or hash_set.  Emulate them using map and
+// set.
+
+// Make hash<T> be the same as less<T>.  Note that everywhere where custom
+// hash functions are defined in the protobuf code, they are also defined such
+// that they can be used as "less" functions, which is required by MSVC anyway.
 template <typename Key>
-struct hash : public std::hash<Key> {};
+struct hash {
+  // Dummy, just to make derivative hash functions compile.
+  int operator()(const Key& key) {
+    GOOGLE_LOG(FATAL) << "Should never be called.";
+    return 0;
+  }
+
+  inline bool operator()(const Key& a, const Key& b) const {
+    return a < b;
+  }
+};
+
+// Make sure char* is compared by value.
+template <>
+struct hash<const char*> {
+  // Dummy, just to make derivative hash functions compile.
+  int operator()(const char* key) {
+    GOOGLE_LOG(FATAL) << "Should never be called.";
+    return 0;
+  }
+
+  inline bool operator()(const char* a, const char* b) const {
+    return strcmp(a, b) < 0;
+  }
+};
+
+template <typename Key, typename Data,
+          typename HashFcn = hash<Key>,
+          typename EqualKey = int >
+class hash_map : public std::map<Key, Data, HashFcn> {
+ public:
+  hash_map(int = 0) {}
+};
+
+template <typename Key,
+          typename HashFcn = hash<Key>,
+          typename EqualKey = int >
+class hash_set : public std::set<Key, HashFcn> {
+ public:
+  hash_set(int = 0) {}
+};
+
+#elif defined(_MSC_VER) && !defined(_STLPORT_VERSION)
+
+template <typename Key>
+struct hash : public HASH_NAMESPACE::hash_compare<Key> {
+};
+
+// MSVC's hash_compare<const char*> hashes based on the string contents but
+// compares based on the string pointer.  WTF?
+class CstringLess {
+ public:
+  inline bool operator()(const char* a, const char* b) const {
+    return strcmp(a, b) < 0;
+  }
+};
+
+template <>
+struct hash<const char*>
+  : public HASH_NAMESPACE::hash_compare<const char*, CstringLess> {
+};
+
+template <typename Key, typename Data,
+          typename HashFcn = hash<Key>,
+          typename EqualKey = int >
+class hash_map : public HASH_NAMESPACE::hash_map<
+    Key, Data, HashFcn> {
+ public:
+  hash_map(int = 0) {}
+};
+
+template <typename Key,
+          typename HashFcn = hash<Key>,
+          typename EqualKey = int >
+class hash_set : public HASH_NAMESPACE::hash_set<
+    Key, HashFcn> {
+ public:
+  hash_set(int = 0) {}
+};
+
+#else
+
+template <typename Key>
+struct hash : public HASH_NAMESPACE::hash<Key> {
+};
 
 template <typename Key>
 struct hash<const Key*> {
@@ -63,35 +160,48 @@ struct hash<const char*> {
   inline size_t operator()(const char* str) const {
     size_t result = 0;
     for (; *str != '\0'; str++) {
-      result = 5 * result + static_cast<size_t>(*str);
+      result = 5 * result + *str;
     }
     return result;
   }
 };
 
-template<>
-struct hash<bool> {
-  size_t operator()(bool x) const {
-    return static_cast<size_t>(x);
-  }
+template <typename Key, typename Data,
+          typename HashFcn = hash<Key>,
+          typename EqualKey = std::equal_to<Key> >
+class hash_map : public HASH_NAMESPACE::HASH_MAP_CLASS<
+    Key, Data, HashFcn, EqualKey> {
+ public:
+  hash_map(int = 0) {}
 };
 
+template <typename Key,
+          typename HashFcn = hash<Key>,
+          typename EqualKey = std::equal_to<Key> >
+class hash_set : public HASH_NAMESPACE::HASH_SET_CLASS<
+    Key, HashFcn, EqualKey> {
+ public:
+  hash_set(int = 0) {}
+};
+
+#endif
+
 template <>
-struct hash<std::string> {
-  inline size_t operator()(const std::string& key) const {
+struct hash<string> {
+  inline size_t operator()(const string& key) const {
     return hash<const char*>()(key.c_str());
   }
 
   static const size_t bucket_size = 4;
   static const size_t min_buckets = 8;
-  inline bool operator()(const std::string& a, const std::string& b) const {
+  inline size_t operator()(const string& a, const string& b) const {
     return a < b;
   }
 };
 
 template <typename First, typename Second>
-struct hash<std::pair<First, Second> > {
-  inline size_t operator()(const std::pair<First, Second>& key) const {
+struct hash<pair<First, Second> > {
+  inline size_t operator()(const pair<First, Second>& key) const {
     size_t first_hash = hash<First>()(key.first);
     size_t second_hash = hash<Second>()(key.second);
 
@@ -102,9 +212,17 @@ struct hash<std::pair<First, Second> > {
 
   static const size_t bucket_size = 4;
   static const size_t min_buckets = 8;
-  inline bool operator()(const std::pair<First, Second>& a,
-                           const std::pair<First, Second>& b) const {
+  inline size_t operator()(const pair<First, Second>& a,
+                           const pair<First, Second>& b) const {
     return a < b;
+  }
+};
+
+// Used by GCC/SGI STL only.  (Why isn't this provided by the standard
+// library?  :( )
+struct streq {
+  inline bool operator()(const char* a, const char* b) const {
+    return strcmp(a, b) == 0;
   }
 };
 

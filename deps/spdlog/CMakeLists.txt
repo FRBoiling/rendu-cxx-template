@@ -15,7 +15,7 @@ CollectIncludeDirectories(
     public_includes
 )
 
-add_library(${target-name} STATIC ${private_sources} ${public_includes})
+add_library(${target-name} ${private_sources} ${public_includes})
 
 
  if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
@@ -28,6 +28,7 @@ add_library(${target-name} STATIC ${private_sources} ${public_includes})
  target_compile_definitions(${target-name}
     PUBLIC
     -DSPDLOG_COMPILED_LIB
+#    -DSPDLOG_USE_STD_FORMAT
     )
 endif ()
 
@@ -35,9 +36,9 @@ endif ()
 
 target_link_libraries(${target-name}
     PRIVATE rendu-dependency-interface
-    PUBLIC threads fmt magic_enum
+    PUBLIC threads
     )
 
+set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${target-name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-#set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${target-name} PROPERTIES FOLDER ${project-name})

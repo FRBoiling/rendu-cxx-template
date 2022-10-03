@@ -6,11 +6,13 @@
 #include "errors.h"
 #include "log.h"
 #include "string_format.h"
-#include "google/protobuf/message.h"
+#include <google/protobuf/message.h>
 #include "rapidjson/reader.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 #include <stack>
+
+using namespace rendu;
 
 class Serializer {
 public:
@@ -427,7 +429,7 @@ bool JSON::Deserialize(std::string const &json, google::protobuf::Message *messa
   Deserializer deserializer;
   if (!deserializer.ReadMessage(json, message)) {
     for (std::size_t i = 0; i < deserializer.GetErrors().size(); ++i)
-      RD_LOG_ERROR ("serializer", "%s", deserializer.GetErrors()[i].c_str());
+      RD_ERROR ("serializer", "%s", deserializer.GetErrors()[i].c_str());
     return false;
   }
 

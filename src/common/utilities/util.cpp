@@ -15,7 +15,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include "utf8/utf8.h"
+#include <utf8/utf8.h>
 
 #if RENDU_COMPILER == RENDU_COMPILER_GNU
 

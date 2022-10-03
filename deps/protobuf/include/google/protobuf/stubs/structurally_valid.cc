@@ -425,7 +425,7 @@ int UTF8GenericScan(const UTF8ScanObj* st,
       uint32 temp = (s0123 - losub) | (s0123 + hiadd) |
                     (s4567 - losub) | (s4567 + hiadd);
       if ((temp & 0x80808080) != 0) {
-        // We typically end up here on cr/lf/ht; src was incremented
+        // We typically end up here on cr/lf/ht; include was incremented
         int e0123 = (Tbl2[src[-8]] | Tbl2[src[-7]]) |
                     (Tbl2[src[-6]] | Tbl2[src[-5]]);
         if (e0123 != 0) {

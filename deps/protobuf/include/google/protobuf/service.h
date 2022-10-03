@@ -33,7 +33,7 @@
 //  Sanjay Ghemawat, Jeff Dean, and others.
 //
 // DEPRECATED:  This module declares the abstract interfaces underlying proto2
-// RPC services.  These are intended to be independent of any particular RPC
+// RPC services.  These are intented to be independent of any particular RPC
 // implementation, so that proto2 services can be used on top of a variety
 // of implementations.  Starting with version 2.3.0, RPC implementations should
 // not try to build on these, but should instead provide code generator plugins
@@ -69,17 +69,17 @@
 //       done->Run();
 //     }
 //   };
-// You would then register an instance of MyServiceImpl with your RPC server
+// You would then register an instance of MyServiceImpl with your RPC servers
 // implementation.  (How to do that depends on the implementation.)
 //
 // To call a remote MyServiceImpl, first you need an RpcChannel connected to it.
 // How to construct a channel depends, again, on your RPC implementation.
-// Here we use a hypothetical "MyRpcChannel" as an example:
+// Here we use a hypothentical "MyRpcChannel" as an example:
 //   MyRpcChannel channel("rpc:hostname:1234/myservice");
 //   MyRpcController controller;
 //   MyServiceImpl::Stub stub(&channel);
 //   FooRequest request;
-//   FooResponse response;
+//   FooRespnose response;
 //
 //   // ... fill in request ...
 //
@@ -100,17 +100,8 @@
 #ifndef GOOGLE_PROTOBUF_SERVICE_H__
 #define GOOGLE_PROTOBUF_SERVICE_H__
 
-
 #include <string>
-#include <google/protobuf/stubs/callback.h>
 #include <google/protobuf/stubs/common.h>
-
-#ifdef SWIG
-#error "You cannot SWIG proto headers"
-#endif
-
-// Must be included last.
-#include <google/protobuf/port_def.inc>
 
 namespace google {
 namespace protobuf {
@@ -121,17 +112,17 @@ class RpcController;
 class RpcChannel;
 
 // Defined in other files.
-class Descriptor;         // descriptor.h
-class ServiceDescriptor;  // descriptor.h
-class MethodDescriptor;   // descriptor.h
-class Message;            // message.h
+class Descriptor;            // descriptor.h
+class ServiceDescriptor;     // descriptor.h
+class MethodDescriptor;      // descriptor.h
+class Message;               // message.h
 
 // Abstract base interface for protocol-buffer-based RPC services.  Services
 // themselves are abstract interfaces (implemented either by servers or as
 // stubs), but they subclass this base interface.  The methods of this
 // interface can be used to call the methods of the Service without knowing
 // its exact type at compile time (analogous to Reflection).
-class PROTOBUF_EXPORT Service {
+class LIBPROTOBUF_EXPORT Service {
  public:
   inline Service() {}
   virtual ~Service();
@@ -139,7 +130,10 @@ class PROTOBUF_EXPORT Service {
   // When constructing a stub, you may pass STUB_OWNS_CHANNEL as the second
   // parameter to the constructor to tell it to delete its RpcChannel when
   // destroyed.
-  enum ChannelOwnership { STUB_OWNS_CHANNEL, STUB_DOESNT_OWN_CHANNEL };
+  enum ChannelOwnership {
+    STUB_OWNS_CHANNEL,
+    STUB_DOESNT_OWN_CHANNEL
+  };
 
   // Get the ServiceDescriptor describing this service and its methods.
   virtual const ServiceDescriptor* GetDescriptor() = 0;
@@ -159,19 +153,21 @@ class PROTOBUF_EXPORT Service {
   //   used by this Service.  For stubs, the "correct type" depends on the
   //   RpcChannel which the stub is using.  Server-side Service
   //   implementations are expected to accept whatever type of RpcController
-  //   the server-side RPC implementation uses.
+  //   the servers-side RPC implementation uses.
   //
   // Postconditions:
   // * "done" will be called when the method is complete.  This may be
   //   before CallMethod() returns or it may be at some point in the future.
   // * If the RPC succeeded, "response" contains the response returned by
-  //   the server.
+  //   the servers.
   // * If the RPC failed, "response"'s contents are undefined.  The
   //   RpcController can be queried to determine if an error occurred and
   //   possibly to get more information about the error.
   virtual void CallMethod(const MethodDescriptor* method,
-                          RpcController* controller, const Message* request,
-                          Message* response, Closure* done) = 0;
+                          RpcController* controller,
+                          const Message* request,
+                          Message* response,
+                          Closure* done) = 0;
 
   // CallMethod() requires that the request and response passed in are of a
   // particular subclass of Message.  GetRequestPrototype() and
@@ -187,9 +183,9 @@ class PROTOBUF_EXPORT Service {
   //   request->ParseFromString(input);
   //   service->CallMethod(method, *request, response, callback);
   virtual const Message& GetRequestPrototype(
-      const MethodDescriptor* method) const = 0;
+    const MethodDescriptor* method) const = 0;
   virtual const Message& GetResponsePrototype(
-      const MethodDescriptor* method) const = 0;
+    const MethodDescriptor* method) const = 0;
 
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(Service);
@@ -203,14 +199,14 @@ class PROTOBUF_EXPORT Service {
 // "least common denominator" set of features which we expect all
 // implementations to support.  Specific implementations may provide more
 // advanced features (e.g. deadline propagation).
-class PROTOBUF_EXPORT RpcController {
+class LIBPROTOBUF_EXPORT RpcController {
  public:
   inline RpcController() {}
   virtual ~RpcController();
 
   // Client-side methods ---------------------------------------------
   // These calls may be made from the client side only.  Their results
-  // are undefined on the server side (may crash).
+  // are undefined on the servers side (may crash).
 
   // Resets the RpcController to its initial state so that it may be reused in
   // a new call.  Must not be called while an RPC is in progress.
@@ -223,7 +219,7 @@ class PROTOBUF_EXPORT RpcController {
   virtual bool Failed() const = 0;
 
   // If Failed() is true, returns a human-readable description of the error.
-  virtual std::string ErrorText() const = 0;
+  virtual string ErrorText() const = 0;
 
   // Advises the RPC system that the caller desires that the RPC call be
   // canceled.  The RPC system may cancel it immediately, may wait awhile and
@@ -233,7 +229,7 @@ class PROTOBUF_EXPORT RpcController {
   virtual void StartCancel() = 0;
 
   // Server-side methods ---------------------------------------------
-  // These calls may be made from the server side only.  Their results
+  // These calls may be made from the servers side only.  Their results
   // are undefined on the client side (may crash).
 
   // Causes Failed() to return true on the client side.  "reason" will be
@@ -241,10 +237,10 @@ class PROTOBUF_EXPORT RpcController {
   // you need to return machine-readable information about failures, you
   // should incorporate it into your response protocol buffer and should
   // NOT call SetFailed().
-  virtual void SetFailed(const std::string& reason) = 0;
+  virtual void SetFailed(const string& reason) = 0;
 
-  // If true, indicates that the client canceled the RPC, so the server may
-  // as well give up on replying to it.  The server should still call the
+  // If true, indicates that the client canceled the RPC, so the servers may
+  // as well give up on replying to it.  The servers should still call the
   // final "done" callback.
   virtual bool IsCanceled() const = 0;
 
@@ -269,7 +265,7 @@ class PROTOBUF_EXPORT RpcController {
 //   RpcChannel* channel = new MyRpcChannel("remotehost.example.com:1234");
 //   MyService* service = new MyService::Stub(channel);
 //   service->MyMethod(request, &response, callback);
-class PROTOBUF_EXPORT RpcChannel {
+class LIBPROTOBUF_EXPORT RpcChannel {
  public:
   inline RpcChannel() {}
   virtual ~RpcChannel();
@@ -280,16 +276,16 @@ class PROTOBUF_EXPORT RpcChannel {
   // need not be of any specific class as long as their descriptors are
   // method->input_type() and method->output_type().
   virtual void CallMethod(const MethodDescriptor* method,
-                          RpcController* controller, const Message* request,
-                          Message* response, Closure* done) = 0;
+                          RpcController* controller,
+                          const Message* request,
+                          Message* response,
+                          Closure* done) = 0;
 
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RpcChannel);
 };
 
 }  // namespace protobuf
+
 }  // namespace google
-
-#include <google/protobuf/port_undef.inc>
-
 #endif  // GOOGLE_PROTOBUF_SERVICE_H__

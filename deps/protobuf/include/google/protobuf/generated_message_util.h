@@ -39,70 +39,59 @@
 #define GOOGLE_PROTOBUF_GENERATED_MESSAGE_UTIL_H__
 
 #include <assert.h>
-
-#include <atomic>
-#include <climits>
 #include <string>
-#include <vector>
+
+#include <google/protobuf/stubs/once.h>
 
 #include <google/protobuf/stubs/common.h>
-#include <google/protobuf/stubs/once.h>  // Add direct dep on port for pb.cc
-#include <google/protobuf/port.h>
-#include <google/protobuf/stubs/strutil.h>
-#include <google/protobuf/any.h>
-#include <google/protobuf/has_bits.h>
-#include <google/protobuf/implicit_weak_message.h>
-#include <google/protobuf/message_lite.h>
-#include <google/protobuf/repeated_field.h>
-#include <google/protobuf/wire_format_lite.h>
-#include <google/protobuf/stubs/casts.h>
-
-// Must be included last.
-#include <google/protobuf/port_def.inc>
-
-#ifdef SWIG
-#error "You cannot SWIG proto headers"
-#endif
-
 namespace google {
+
 namespace protobuf {
-
-class Arena;
-class Message;
-
-namespace io {
-class CodedInputStream;
-}
-
 namespace internal {
 
-template <typename To, typename From>
-inline To DownCast(From* f) {
-  return PROTOBUF_NAMESPACE_ID::internal::down_cast<To>(f);
-}
-template <typename To, typename From>
-inline To DownCast(From& f) {
-  return PROTOBUF_NAMESPACE_ID::internal::down_cast<To>(f);
-}
+
+// Annotation for the compiler to emit a deprecation message if a field marked
+// with option 'deprecated=true' is used in the code, or for other things in
+// generated code which are deprecated.
+//
+// For internal use in the pb.cc files, deprecation warnings are suppressed
+// there.
+#undef DEPRECATED_PROTOBUF_FIELD
+#define PROTOBUF_DEPRECATED
 
 
-// This fastpath inlines a single branch instead of having to make the
-// InitProtobufDefaults function call.
-// It also generates less inlined code than a function-scope static initializer.
-PROTOBUF_EXPORT extern std::atomic<bool> init_protobuf_defaults_state;
-PROTOBUF_EXPORT void InitProtobufDefaultsSlow();
-PROTOBUF_EXPORT inline void InitProtobufDefaults() {
-  if (PROTOBUF_PREDICT_FALSE(
-          !init_protobuf_defaults_state.load(std::memory_order_acquire))) {
-    InitProtobufDefaultsSlow();
-  }
-}
+// Constants for special floating point values.
+LIBPROTOBUF_EXPORT double Infinity();
+LIBPROTOBUF_EXPORT double NaN();
 
-// This used by proto1
-PROTOBUF_EXPORT inline const std::string& GetEmptyString() {
-  InitProtobufDefaults();
+// TODO(jieluo): Change to template. We have tried to use template,
+// but it causes net/rpc/python:rpcutil_test fail (the empty string will
+// init twice). It may related to swig. Change to template after we
+// found the solution.
+
+// Default empty string object. Don't use the pointer directly. Instead, call
+// GetEmptyString() to get the reference.
+LIBPROTOBUF_EXPORT extern const ::std::string* empty_string_;
+LIBPROTOBUF_EXPORT extern ProtobufOnceType empty_string_once_init_;
+LIBPROTOBUF_EXPORT void InitEmptyString();
+
+
+LIBPROTOBUF_EXPORT inline const ::std::string& GetEmptyStringAlreadyInited() {
+  assert(empty_string_ != NULL);
+  return *empty_string_;
+}
+LIBPROTOBUF_EXPORT inline const ::std::string& GetEmptyString() {
+  ::google::protobuf::GoogleOnceInit(&empty_string_once_init_, &InitEmptyString);
   return GetEmptyStringAlreadyInited();
 }
+
+// Defined in generated_message_reflection.cc -- not actually part of the lite
+// library.
+//
+// TODO(jasonh): The various callers get this declaration from a variety of
+// places: probably in most cases repeated_field.h. Clean these up so they all
+// get the declaration from this file.
+LIBPROTOBUF_EXPORT int StringSpaceUsedExcludingSelf(const string& str);
 
 
 // True if IsInitialized() is true for all elements of t.  Type is expected
@@ -110,105 +99,15 @@ PROTOBUF_EXPORT inline const std::string& GetEmptyString() {
 // helper here to keep the protobuf compiler from ever having to emit loops in
 // IsInitialized() methods.  We want the C++ compiler to inline this or not
 // as it sees fit.
-template <typename Msg>
-bool AllAreInitialized(const RepeatedPtrField<Msg>& t) {
-  for (int i = t.size(); --i >= 0;) {
+template <class Type> bool AllAreInitialized(const Type& t) {
+  for (int i = t.size(); --i >= 0; ) {
     if (!t.Get(i).IsInitialized()) return false;
   }
   return true;
 }
 
-// "Weak" variant of AllAreInitialized, used to implement implicit weak fields.
-// This version operates on MessageLite to avoid introducing a dependency on the
-// concrete message type.
-template <class T>
-bool AllAreInitializedWeak(const RepeatedPtrField<T>& t) {
-  for (int i = t.size(); --i >= 0;) {
-    if (!reinterpret_cast<const RepeatedPtrFieldBase&>(t)
-             .Get<ImplicitWeakTypeHandler<T> >(i)
-             .IsInitialized()) {
-      return false;
-    }
-  }
-  return true;
-}
-
-inline bool IsPresent(const void* base, uint32_t hasbit) {
-  const uint32_t* has_bits_array = static_cast<const uint32_t*>(base);
-  return (has_bits_array[hasbit / 32] & (1u << (hasbit & 31))) != 0;
-}
-
-inline bool IsOneofPresent(const void* base, uint32_t offset, uint32_t tag) {
-  const uint32_t* oneof = reinterpret_cast<const uint32_t*>(
-      static_cast<const uint8_t*>(base) + offset);
-  return *oneof == tag >> 3;
-}
-
-typedef void (*SpecialSerializer)(const uint8_t* base, uint32_t offset,
-                                  uint32_t tag, uint32_t has_offset,
-                                  io::CodedOutputStream* output);
-
-PROTOBUF_EXPORT void ExtensionSerializer(const MessageLite* extendee,
-                                         const uint8_t* ptr, uint32_t offset,
-                                         uint32_t tag, uint32_t has_offset,
-                                         io::CodedOutputStream* output);
-PROTOBUF_EXPORT void UnknownFieldSerializerLite(const uint8_t* base,
-                                                uint32_t offset, uint32_t tag,
-                                                uint32_t has_offset,
-                                                io::CodedOutputStream* output);
-
-PROTOBUF_EXPORT MessageLite* DuplicateIfNonNullInternal(MessageLite* message);
-PROTOBUF_EXPORT MessageLite* GetOwnedMessageInternal(Arena* message_arena,
-                                                     MessageLite* submessage,
-                                                     Arena* submessage_arena);
-PROTOBUF_EXPORT void GenericSwap(MessageLite* m1, MessageLite* m2);
-// We specialize GenericSwap for non-lite messages to benefit from reflection.
-PROTOBUF_EXPORT void GenericSwap(Message* m1, Message* m2);
-
-template <typename T>
-T* DuplicateIfNonNull(T* message) {
-  // The casts must be reinterpret_cast<> because T might be a forward-declared
-  // type that the compiler doesn't know is related to MessageLite.
-  return reinterpret_cast<T*>(
-      DuplicateIfNonNullInternal(reinterpret_cast<MessageLite*>(message)));
-}
-
-template <typename T>
-T* GetOwnedMessage(Arena* message_arena, T* submessage,
-                   Arena* submessage_arena) {
-  // The casts must be reinterpret_cast<> because T might be a forward-declared
-  // type that the compiler doesn't know is related to MessageLite.
-  return reinterpret_cast<T*>(GetOwnedMessageInternal(
-      message_arena, reinterpret_cast<MessageLite*>(submessage),
-      submessage_arena));
-}
-
-// Hide atomic from the public header and allow easy change to regular int
-// on platforms where the atomic might have a perf impact.
-class PROTOBUF_EXPORT CachedSize {
- public:
-  int Get() const { return size_.load(std::memory_order_relaxed); }
-  void Set(int size) { size_.store(size, std::memory_order_relaxed); }
-
- private:
-  std::atomic<int> size_{0};
-};
-
-PROTOBUF_EXPORT void DestroyMessage(const void* message);
-PROTOBUF_EXPORT void DestroyString(const void* s);
-// Destroy (not delete) the message
-inline void OnShutdownDestroyMessage(const void* ptr) {
-  OnShutdownRun(DestroyMessage, ptr);
-}
-// Destroy the string (call std::string destructor)
-inline void OnShutdownDestroyString(const std::string* ptr) {
-  OnShutdownRun(DestroyString, ptr);
-}
-
 }  // namespace internal
 }  // namespace protobuf
+
 }  // namespace google
-
-#include <google/protobuf/port_undef.inc>
-
 #endif  // GOOGLE_PROTOBUF_GENERATED_MESSAGE_UTIL_H__
