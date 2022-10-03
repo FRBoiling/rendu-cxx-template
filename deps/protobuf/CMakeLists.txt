@@ -6,40 +6,21 @@ set(target-name protobuf)
 set(project-name deps)
 
 CollectSourceFiles(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    protobuf_STAT_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    private_sources
     # Exclude
 )
 
-if (MSVC)
-  set(protobuf_STAT_SRCS
-      ${protobuf_STAT_SRCS}
-      src/google/protobuf/stubs/atomicops_internals_x86_msvc.cc
-      )
-else ()
-  set(protobuf_STAT_SRCS
-      ${protobuf_STAT_SRCS}
-      src/google/protobuf/stubs/atomicops_internals_x86_gcc.cc
-      )
-endif ()
-
-add_library(protobuf ${protobuf_STAT_SRCS})
-
-target_include_directories(protobuf
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+CollectIncludeDirectories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    public_includes
+    # Exclude
 )
+add_library(${target-name} INTERFACE ${private_sources} ${public_includes})
 
-target_link_libraries(protobuf
-    PRIVATE
-    rendu-default-interface
-    rendu-no-warning-interface
-    PUBLIC
-    threads)
 
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions(protobuf
+  target_compile_definitions(${target-name}
       PRIVATE
       -DLIBPROTOBUF_EXPORTS
       -DLIBPROTOC_EXPORTS
@@ -48,28 +29,19 @@ if (BUILD_SHARED_LIBS)
 endif ()
 
 if (MSVC)
-  target_compile_options(protobuf
+  target_compile_options(${target-name}
       PRIVATE
       /wd4996)
 
-  target_compile_definitions(protobuf
+  target_compile_definitions(${target-name}
       PRIVATE
       -D_SCL_SECURE_NO_WARNINGS)
 endif ()
 
-set_target_properties(protobuf
-    PROPERTIES
-    FOLDER
-    "deps")
-
-if (BUILD_SHARED_LIBS)
-  if (UNIX)
-    install(TARGETS protobuf
-        LIBRARY
-        DESTINATION lib)
-  elseif (WIN32)
-    install(TARGETS protobuf
-        RUNTIME
-        DESTINATION "${CMAKE_INSTALL_PREFIX}")
-  endif ()
-endif ()
+target_link_libraries(${target-name}
+    INTERFACE rendu-dependency-interface
+    #    PUBLIC
+    )
+set_target_properties(${target-name} PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(${target-name} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set_target_properties(${target-name} PROPERTIES FOLDER ${project-name})

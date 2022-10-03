@@ -12,10 +12,10 @@ namespace google::protobuf {
   class Message;
 }
 
-namespace JSON {
-  RD_SHARED_API std::string Serialize(google::protobuf::Message const &message);
+namespace rendu::JSON {
+    RD_SHARED_API std::string Serialize(google::protobuf::Message const &message);
 
-  RD_SHARED_API bool Deserialize(std::string const &json, google::protobuf::Message *message);
-}
+    RD_SHARED_API bool Deserialize(std::string const &json, google::protobuf::Message *message);
+  }//namespace rendu
 
 #endif // RENDU_PROTOBUF_JSON_H_

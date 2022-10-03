@@ -37,7 +37,7 @@ target_include_directories(${target-name}
 
 target_link_libraries(${target-name}
     PRIVATE
-    rendu-interface
+    rendu-core-interface
     common
     PUBLIC
     protobuf

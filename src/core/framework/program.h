@@ -11,45 +11,49 @@
 #include "options.h"
 #include "singleton.h"
 
-enum class ProgramState {
-  IDLE = 0,           //闲置
-  INITIALIZED,    //已经初始化
-  RUNNING,        //正在运行
-  STOPPING,       //正在停止
-  STOPPED         //已经停止
-};
+namespace rendu {
 
-enum class ProgramType {
-  All = 0,
-  Hall = 1,
-  World = 2,
-};
+  enum class ProgramState {
+    IDLE = 0,           //闲置
+    INITIALIZED,    //已经初始化
+    RUNNING,        //正在运行
+    STOPPING,       //正在停止
+    STOPPED         //已经停止
+  };
 
-class Program : public Singleton<Program> {
-public:
-  void Initialize();
+  enum class ProgramType {
+    All = 0,
+    Hall = 1,
+    World = 2,
+  };
 
-  void Run();
+  class Program : public Singleton<Program> {
+  public:
+    void Initialize();
 
-  bool IsStopped();
+    void Run();
 
-  void Exit();
+    bool IsStopped();
 
-  void AddSystem(ISystem &system);
+    void Exit();
 
-private:
+    void AddSystem(ISystem &system);
 
-  void Start();
+  private:
 
-  void Stop();
+    void Start();
 
-  void Update();
+    void Stop();
 
-  void LateUpdate();
+    void Update();
 
-  ProgramState _state;
-  std::map<size_t, ISystem *> _systems;
-};
+    void LateUpdate();
+
+    ProgramState _state;
+    std::map<size_t, ISystem *> _systems;
+  };
 
 #define sProgram Program::GetInstance()
+}//namespace rendu
+
 #endif //RENDU_PROGRAM_H_

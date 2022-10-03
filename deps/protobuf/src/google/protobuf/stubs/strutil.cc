@@ -423,7 +423,7 @@ int UnescapeCEscapeSequences(const char* source, char* dest,
 //    This does the same thing as UnescapeCEscapeSequences, but creates
 //    a new string. The caller does not need to worry about allocating
 //    a dest buffer. This should be used for non performance critical
-//    tasks such as printing debug messages. It is safe for src and dest
+//    tasks such as printing debug messages. It is safe for include and dest
 //    to be the same.
 //
 //    The second call stores its errors in a supplied string vector.
@@ -454,9 +454,9 @@ string UnescapeCEscapeString(const string& src) {
 // ----------------------------------------------------------------------
 // CEscapeString()
 // CHexEscapeString()
-//    Copies 'src' to 'dest', escaping dangerous characters using
+//    Copies 'include' to 'dest', escaping dangerous characters using
 //    C-style escape sequences. This is very useful for preparing query
-//    flags. 'src' and 'dest' should not overlap. The 'Hex' version uses
+//    flags. 'include' and 'dest' should not overlap. The 'Hex' version uses
 //    hexadecimal rather than octal sequences.
 //    Returns the number of bytes written to 'dest' (not including the \0)
 //    or -1 if there was insufficient space.
@@ -482,7 +482,7 @@ int CEscapeInternal(const char* src, int src_len, char* dest,
       case '\'': dest[used++] = '\\'; dest[used++] = '\''; break;
       case '\\': dest[used++] = '\\'; dest[used++] = '\\'; break;
       default:
-        // Note that if we emit \xNN and the src character after that is a hex
+        // Note that if we emit \xNN and the include character after that is a hex
         // digit then that digit must be escaped too to prevent it being
         // interpreted as part of the character code by C.
         if ((!utf8_safe || static_cast<uint8>(*src) < 0x80) &&
@@ -515,9 +515,9 @@ int CEscapeString(const char* src, int src_len, char* dest, int dest_len) {
 // ----------------------------------------------------------------------
 // CEscape()
 // CHexEscape()
-//    Copies 'src' to result, escaping dangerous characters using
+//    Copies 'include' to result, escaping dangerous characters using
 //    C-style escape sequences. This is very useful for preparing query
-//    flags. 'src' and 'dest' should not overlap. The 'Hex' version
+//    flags. 'include' and 'dest' should not overlap. The 'Hex' version
 //    hexadecimal rather than octal sequences.
 //
 //    Currently only \n, \r, \t, ", ', \ and !isprint() chars are escaped.

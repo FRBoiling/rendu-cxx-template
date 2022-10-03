@@ -39,7 +39,7 @@ set_target_properties(${EXEC_NAME} PROPERTIES LINK_FLAGS "${${EXEC_NAME}_LINK_FL
 
 target_link_libraries(${EXEC_NAME}
     PRIVATE
-    rendu-interface
+    rendu-core-interface
     PUBLIC
     framework
     #TODO:BOIL 添加依赖项

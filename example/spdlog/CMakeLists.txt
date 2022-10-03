@@ -17,9 +17,10 @@ add_executable(${EXEC_NAME}
 
 target_link_libraries(${EXEC_NAME}
     PRIVATE
-    rendu-interface
+    rendu-core-interface
     PUBLIC
     spdlog
+    threads
     #TODO:BOIL 添加依赖项
     )
 

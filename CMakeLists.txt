@@ -38,8 +38,6 @@ include(cmake/showoptions.cmake)
 # turn off PCH totally if enabled (hidden setting, mainly for devs)
 ## find git binary
 find_package(Git 1.7)
-## find mysql client binary (needed by genrev)
-find_package(MySQL OPTIONAL_COMPONENTS binary)
 ## find pch binary
 find_package(PCHSupport)
 if (NOPCH)
@@ -63,9 +61,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Set RPATH-handing (CMake parameters)
 set(CMAKE_SKIP_BUILD_RPATH 0)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH 0)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1)
+#set(CMAKE_BUILD_WITH_INSTALL_RPATH 0)
+#set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+#set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1)
 
 AddSubdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -74,17 +72,20 @@ AddSubdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}/.idea
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake
     ${CMAKE_CURRENT_SOURCE_DIR}/build
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests
 )
 
-# 测试模块构建
-# **********************************
-if (BUILD_TESTING)
-  include(CTest)
-  list(APPEND CMAKE_MODULE_PATH "${Catch2_SOURCE_DIR}/contrib")
+include(CTest)
+if(BUILD_TESTING)
+  list(APPEND CMAKE_MODULE_PATH
+      "${Catch2_SOURCE_DIR}/contrib")
   include(Catch)
+
   add_subdirectory(tests)
-  # Catch cmakefile messes with our settings we explicitly leave up to the user restore user preference
+
+  # Catch cmakefile messes with our settings we explicitly leave up to the user
+  # restore user preference
   if (NOT WITH_SOURCE_TREE STREQUAL "hierarchical-folders")
     set_property(GLOBAL PROPERTY USE_FOLDERS OFF)
-  endif ()
-endif ()
+  endif()
+endif()

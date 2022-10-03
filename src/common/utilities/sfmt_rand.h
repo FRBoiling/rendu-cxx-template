@@ -6,7 +6,7 @@
 #define RENDU_SFMT_RAND_H_
 
 #include "define.h"
-#include <SFMT.h>
+#include "sfmt.h"
 #include <new>
 
 /*

@@ -32,6 +32,15 @@
 #include <cstddef>
 #include <cinttypes>
 #include <climits>
+#include <array>
+#include <cassert>
+#include <cstdint>
+#include <cstddef>
+#include <iosfwd>
+#include <limits>
+#include <type_traits>
+#include <utility>
+#include <variant>
 
 #define RENDU_LITTLEENDIAN 0
 #define RENDU_BIGENDIAN    1

@@ -48,8 +48,8 @@ target_link_libraries(rendu-dependency-interface
     rendu-hidden-symbols-interface)
 
 # 提供核心目标使用的标志和定义的接口合并
-add_library(rendu-interface INTERFACE)
-target_link_libraries(rendu-interface
+add_library(rendu-core-interface INTERFACE)
+target_link_libraries(rendu-core-interface
   INTERFACE
     rendu-default-interface
     rendu-warning-interface)
