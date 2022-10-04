@@ -1,6 +1,6 @@
 # 概述
 rendu-cxx-template是c++的cmake构建模版。
-模版 ：[https://github.com/FRBoiling/rendu-cxx-template](https://github.com/FRBoiling/rendu-cxx-template)
+
 目前包含cmake，deps，example，src，tests模块，后续添加 配置文件，脚本等模块。
 模版目的是简化项目构建配置，以达到开发过程中不用编写cmake，尽量只关注c++代码实现。
 模版结构如下图所示
