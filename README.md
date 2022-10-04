@@ -1,6 +1,4 @@
 # 概述
-RenduCore是一个modern c++项目。
-先从项目结构开始。使用rendu-cxx-template模版。
 rendu-cxx-template是c++的cmake构建模版。
 模版 ：[https://github.com/FRBoiling/rendu-cxx-template](https://github.com/FRBoiling/rendu-cxx-template)
 目前包含cmake，deps，example，src，tests模块，后续添加 配置文件，脚本等模块。
