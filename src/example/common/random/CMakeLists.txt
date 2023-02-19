@@ -2,35 +2,20 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(EXEC_NAME example_random)
-
-CollectSourceFiles(
+set(target_name example_random)
+rendu_add_executable(
+    NAME
+    ${target_name}
+    CMAKE_CUR_SOURCE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
-    private_sources
+    CMAKE_CUR_BINARY_DIR
+    ${CMAKE_CURRENT_BINARY_DIR}
+    CMAKE_BINARY_DIR
+    ${CMAKE_BINARY_DIR}
+    PRIVATE_DEPS
+    PUBLIC_DEPS
+    rendu::common
+    DEFINES
+    LINKOPTS
 )
-
-GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
-
-add_executable(${EXEC_NAME}
-    ${private_sources}
-    )
-
-target_link_libraries(${EXEC_NAME}
-    PRIVATE
-    rendu-core-interface
-    PUBLIC
-    common
-    #TODO:BOIL 添加依赖项
-    )
-
-CollectIncludeDirectories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    public_includes
-)
-
-target_include_directories(${EXEC_NAME}
-    PUBLIC
-    ${public_includes}
-    PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR})
 

@@ -1,10 +1,7 @@
 #**********************************
-#  Created by boil on 2022/8/14.
+#  Created by boil on 2022/10/19.
 #**********************************
-
-include(CheckCXXSourceCompiles)
-
-# 设置build-directive(在core中用来告诉我们使用了哪种build类型)
+# Set build-directive (used in core to tell which buildtype we used)
 target_compile_definitions(rendu-compile-option-interface
   INTERFACE
     -D_BUILD_DIRECTIVE="$<CONFIG>")
@@ -12,9 +9,34 @@ target_compile_definitions(rendu-compile-option-interface
 set(CLANG_EXPECTED_VERSION 7.0.0)
 
 if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS CLANG_EXPECTED_VERSION)
-  message(FATAL_ERROR "Clang: This project requires version ${CLANG_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
+  message(FATAL_ERROR "Clang: RenduCore requires version ${CLANG_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
 else()
   message(STATUS "Clang: Minimum version required is ${CLANG_EXPECTED_VERSION}, found ${CMAKE_CXX_COMPILER_VERSION} - ok!")
+endif()
+
+# This tests for a bug in clang-7 that causes linkage to fail for 64-bit from_chars (in some configurations)
+# If the clang requirement is bumped to >= clang-8, you can remove this check, as well as
+# the associated ifdef block in src/common/utils/StringConvert.h
+include(CheckCXXSourceCompiles)
+
+check_cxx_source_compiles("
+#include <charconv>
+#include <cstdint>
+
+int main()
+{
+    uint64_t n;
+    char const c[] = \"0\";
+    std::from_chars(c, c+1, n);
+    return static_cast<int>(n);
+}
+" CLANG_HAVE_PROPER_CHARCONV)
+
+if (NOT CLANG_HAVE_PROPER_CHARCONV)
+  message(STATUS "Clang: Detected from_chars bug for 64-bit integers, workaround enabled")
+  target_compile_definitions(rendu-compile-option-interface
+  INTERFACE
+    -DRENDU_NEED_CHARCONV_WORKAROUND)
 endif()
 
 if(WITH_WARNINGS)
@@ -29,7 +51,7 @@ if(WITH_WARNINGS)
       -Wno-mismatched-tags
       -Woverloaded-virtual)
 
-  message(STATUS "Clang: 启用 所有警告 ")
+  message(STATUS "Clang: All warnings enabled")
 endif()
 
 if(WITH_COREDEBUG)
@@ -55,7 +77,7 @@ if(ASAN)
       -fsanitize-recover=address
       -fsanitize-address-use-after-scope)
 
-  message(STATUS "Clang: 启用 Address Sanitizer ASan")
+  message(STATUS "Clang: Enabled Address Sanitizer ASan")
 endif()
 
 if(MSAN)
@@ -73,7 +95,7 @@ if(MSAN)
       -fsanitize=memory
       -fsanitize-memory-track-origins)
 
-  message(STATUS "Clang: 启用 Memory Sanitizer MSan")
+  message(STATUS "Clang: Enabled Memory Sanitizer MSan")
 endif()
 
 if(UBSAN)
@@ -87,7 +109,7 @@ if(UBSAN)
       -fno-omit-frame-pointer
       -fsanitize=undefined)
 
-  message(STATUS "Clang: 启用 Undefined Behavior Sanitizer UBSan")
+  message(STATUS "Clang: Enabled Undefined Behavior Sanitizer UBSan")
 endif()
 
 if(TSAN)
@@ -101,28 +123,20 @@ if(TSAN)
       -fno-omit-frame-pointer
       -fsanitize=thread)
 
-  message(STATUS "Clang: 启用 Thread Sanitizer TSan")
+  message(STATUS "Clang: Enabled Thread Sanitizer TSan")
 endif()
 
-if(BUILD_TIME_ANALYSIS)
-  target_compile_options(rendu-compile-option-interface
-    INTERFACE
-      -ftime-trace)
-
-  message(STATUS "Clang: 启用构建时间分析(-ftime-trace) ")
-endif()
-
-## -wno-narrow，需要在g3d中抑制警告。
-## -wno-deprecdeprece-register，在Unix系统上，需要# 来抑制185个gsoap警告。
-## -Wno-deprecated-copy，需要在g3d中抑制警告
-#target_compile_options(rendu-compile-option-interface
-#  INTERFACE
-#    -Wno-narrowing
-#    -Wno-deprecated-register)
+# -Wno-narrowing needed to suppress a warning in g3d
+# -Wno-deprecated-register is needed to suppress 185 gsoap warnings on Unix systems.
+# -Wno-deprecated-copy needed to suppress a warning in g3d
+target_compile_options(rendu-compile-option-interface
+  INTERFACE
+    -Wno-narrowing
+    -Wno-deprecated-register)
 
 if(BUILD_SHARED_LIBS)
-  # -fPIC，需要允许在共享库中进行静态链接。
-  # -fvisibility=hidden，将默认可见性设置为hidden，以防止导出所有的符号。
+  # -fPIC is needed to allow static linking in shared libs.
+  # -fvisibility=hidden sets the default visibility to hidden to prevent exporting of all symbols.
   target_compile_options(rendu-compile-option-interface
     INTERFACE
       -fPIC)
@@ -131,18 +145,9 @@ if(BUILD_SHARED_LIBS)
     INTERFACE
       -fvisibility=hidden)
 
-  # --no-undefined 当有未定义符号时抛出错误
-  # (由于缺少RENDU_*_API宏导致)。
+  # --no-undefined to throw errors when there are undefined symbols
+  # (caused through missing RENDU_*_API macros).
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --no-undefined")
-  message(STATUS "Clang: 不允许未定义的符号 ")
-endif()
 
-# 通过在PCH生成期间强制模板实例化来加速PCH构建
-set(CMAKE_REQUIRED_FLAGS "-fpch-instantiate-templates")
-check_cxx_source_compiles("int main() { return 0; }" CLANG_HAS_PCH_INSTANTIATE_TEMPLATES)
-unset(CMAKE_REQUIRED_FLAGS)
-if(CLANG_HAS_PCH_INSTANTIATE_TEMPLATES)
-  target_compile_options(rendu-compile-option-interface
-    INTERFACE
-      -fpch-instantiate-templates)
+  message(STATUS "Clang: Disallow undefined symbols")
 endif()

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <ostream>
 #include "enum.h"
+#include "argument_parser.h"
+#include "string_format.h"
 
 using namespace rendu;
 

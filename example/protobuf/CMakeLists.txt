@@ -3,35 +3,20 @@
 #**********************************
 
 set(target_name example_protobuf)
-
-CollectSourceFiles(
+rendu_add_executable(
+    NAME
+    ${target_name}
+    CMAKE_CUR_SOURCE_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
-    private_sources
+    CMAKE_CUR_BINARY_DIR
+    ${CMAKE_CURRENT_BINARY_DIR}
+    CMAKE_BINARY_DIR
+    ${CMAKE_BINARY_DIR}
+    PRIVATE_DEPS
+    PUBLIC_DEPS
+    rendu::common
+    rendu::framework
+    DEFINES
+    LINKOPTS
 )
-
-GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
-
-add_executable(${target_name}
-    ${private_sources}
-    )
-
-target_link_libraries(${target_name}
-    PRIVATE
-    rendu-core-interface
-    PUBLIC
-    spdlog
-    protobuf
-    #TODO:BOIL 添加依赖项
-    )
-
-CollectIncludeDirectories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    public_includes
-)
-
-target_include_directories(${target_name}
-    PUBLIC
-    ${public_includes}
-    PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR})
 

@@ -22,32 +22,32 @@ namespace rendu {
   }
 
   int32 irand(int32 min, int32 max) {
-        ASSERT(max >= min);
+        assert(max >= min);
     std::uniform_int_distribution<int32> uid(min, max);
     return uid(engine);
   }
 
   uint32 urand(uint32 min, uint32 max) {
-        ASSERT(max >= min);
+    assert(max >= min);
     std::uniform_int_distribution<uint32> uid(min, max);
     return uid(engine);
   }
 
   uint32 urandms(uint32 min, uint32 max) {
-        ASSERT(std::numeric_limits<uint32>::max() / Milliseconds::period::den >= max);
+    assert(std::numeric_limits<uint32>::max() / Milliseconds::period::den >= max);
     return urand(min * Milliseconds::period::den, max * Milliseconds::period::den);
   }
 
   float frand(float min, float max) {
-        ASSERT(max >= min);
+    assert(max >= min);
     std::uniform_real_distribution<float> urd(min, max);
     return urd(engine);
   }
 
   Milliseconds randtime(Milliseconds min, Milliseconds max) {
     long long diff = max.count() - min.count();
-        ASSERT(diff >= 0);
-        ASSERT(diff <= (uint32) -1);
+    assert(diff >= 0);
+    assert(diff <= (uint32) -1);
     return min + Milliseconds(urand(0, diff));
   }
 

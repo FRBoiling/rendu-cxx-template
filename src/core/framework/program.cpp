@@ -3,6 +3,8 @@
 */
 #include "program.h"
 #include "banner.h"
+#include "log.h"
+#include "enum.h"
 
 using namespace rendu;
 

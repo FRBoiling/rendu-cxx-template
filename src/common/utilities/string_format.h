@@ -5,7 +5,7 @@
 #ifndef RENDU_STRING_FORMAT_H_
 #define RENDU_STRING_FORMAT_H_
 
-#include "fmt/printf.h"
+#include "fmt/fmt.h"
 
 namespace rendu {
   /// Default RD string format function.

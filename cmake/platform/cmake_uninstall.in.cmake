@@ -1,8 +1,7 @@
 #**********************************
-#  Created by boil on 2022/8/14.
+#  Created by boil on 2022/10/19.
 #**********************************
-
-# 来自 cmake wiki
+# from cmake wiki
 IF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
   MESSAGE(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt\"")
 ENDIF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")

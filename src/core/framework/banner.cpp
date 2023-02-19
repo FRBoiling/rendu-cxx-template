@@ -6,6 +6,9 @@
 #include "git_revision.h"
 #include "options.h"
 #include "enum.h"
+#include <fmt/fmt.h>
+#include <log.h>
+
 using namespace rendu;
 
 template<>
