@@ -13,6 +13,8 @@ rendu_add_executable(
     SETTING
     rendu-core-interface
     DEPS
+    dep::fmt
+    dep::threads
     dep::spdlog
     DEFINES
     LINKOPTS

@@ -13,7 +13,7 @@ rendu_add_test(
     SETTING
     rendu-core-interface
     DEPS
-    rendu::common
+    dep::magic_enum
     rendu::test
     DEFINES
     LINKOPTS

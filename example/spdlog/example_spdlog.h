@@ -343,6 +343,7 @@ int spdlog_example() {
     std::printf("Log initialization failed: %s\n", ex.what());
     return 1;
   }
-}
 
+  return 0;
+}
 #endif //RENDU_EXAMPLE_SPDLOG_H_

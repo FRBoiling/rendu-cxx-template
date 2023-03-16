@@ -2,55 +2,9 @@
 * Created by boil on 2022/9/25.
 */
 #include <test/rdtest.h>
-#include "enum.h"
-namespace {
-
-enum class Color { RED = 1, GREEN = 2, BLUE = 4 };
-
-enum class Numbers : int {
-  one = 1 << 1,
-  two = 1 << 2,
-  three = 1 << 3,
-  many = 1 << 30,
-};
-
-enum Directions : std::uint64_t {
-  Left = std::uint64_t{1} << 10,
-  Down = std::uint64_t{1} << 20,
-  Up = std::uint64_t{1} << 31,
-  Right = std::uint64_t{1} << 63,
-};
-
-#if defined(MAGIC_ENUM_ENABLE_NONASCII)
-enum class Language : int {
-  日本語 = 1 << 1,
-  한국어 = 1 << 2,
-  English = 1 << 3,
-  😃 = 1 << 4
-};
-#endif
-
-enum number : unsigned long {
-  one = 1 << 1,
-  two = 1 << 2,
-  three = 1 << 3,
-  four = 1 << 4,
-
-#if defined(MAGIC_ENUM_SUPPORTED_ALIASES)
-  _1 = one,
-  _2 = two,
-  _3 = three,
-  _4 = four
-#endif
-};
-template<>
-struct rendu::customize::enum_range<number> {
-  static constexpr int min = 100;
-  static constexpr int max = 300;
-};
-
-using namespace rendu;
-using namespace rendu::bitwise_operators;
+#include "enum_fwd.h"
+using namespace magic_enum;
+using namespace magic_enum::bitwise_operators;
 
 TEST(Flags, enum_string) {
   constexpr auto cr = enum_cast<Color>("RED");
@@ -64,22 +18,22 @@ TEST(Flags, enum_string) {
                      == (Color::BLUE | Color::RED));
   EXPECT_TRUE(enum_cast<Color &>("GREEN|RED").value() == (Color::GREEN | Color::RED));
   EXPECT_TRUE(enum_cast<Color &>("GREEN|RED|RED").value() == (Color::GREEN | Color::RED));
-  RD_EXPECT_FALSE(enum_cast<Color &>("GREEN|RED|None").has_value());
-  RD_EXPECT_FALSE(enum_cast<Color>("None").has_value());
+  EXPECT_FALSE(enum_cast<Color &>("GREEN|RED|None").has_value());
+  EXPECT_FALSE(enum_cast<Color>("None").has_value());
 
   constexpr auto no = enum_cast<Numbers>("one");
   EXPECT_TRUE(no.value() == Numbers::one);
   EXPECT_TRUE(enum_cast<Numbers>("two").value() == Numbers::two);
   EXPECT_TRUE(enum_cast<Numbers>("three").value() == Numbers::three);
   EXPECT_TRUE(enum_cast<Numbers>("many") == Numbers::many);
-  RD_EXPECT_FALSE(enum_cast<Numbers>("None").has_value());
+  EXPECT_FALSE(enum_cast<Numbers>("None").has_value());
 
   constexpr auto dr = enum_cast<Directions>("Right");
   EXPECT_TRUE(enum_cast<Directions &>("Up").value() == Directions::Up);
   EXPECT_TRUE(enum_cast<const Directions>("Down").value() == Directions::Down);
   EXPECT_TRUE(dr.value() == Directions::Right);
   EXPECT_TRUE(enum_cast<Directions>("Left").value() == Directions::Left);
-  RD_EXPECT_FALSE(enum_cast<Directions>("None").has_value());
+  EXPECT_FALSE(enum_cast<Directions>("None").has_value());
 
 #if defined(MAGIC_ENUM_ENABLE_NONASCII)
   constexpr auto lang = enum_cast<Language>("日本語");
@@ -87,7 +41,7 @@ TEST(Flags, enum_string) {
   EXPECT_TRUE(enum_cast<const Language>("English").value() == Language::English);
   EXPECT_TRUE(lang.value() == Language::日本語);
   EXPECT_TRUE(enum_cast<Language>("😃").value() == Language::😃);
-  RD_EXPECT_FALSE(enum_cast<Language>("None").has_value());
+  EXPECT_FALSE(enum_cast<Language>("None").has_value());
 #endif
 
   constexpr auto nto = enum_cast<number>("three|one");
@@ -96,7 +50,7 @@ TEST(Flags, enum_string) {
   EXPECT_TRUE(enum_cast<number>("three").value() == number::three);
   EXPECT_TRUE(enum_cast<number>("four") == number::four);
   EXPECT_TRUE(nto.value() == (number::three | number::one));
-  RD_EXPECT_FALSE(enum_cast<number>("None").has_value());
+  EXPECT_FALSE(enum_cast<number>("None").has_value());
 }
 
 TEST(Flags, enum_integer) {
@@ -107,23 +61,23 @@ TEST(Flags, enum_integer) {
   EXPECT_TRUE(enum_cast<Color>(static_cast<int>(cm[2])).value() == Color::BLUE);
   EXPECT_TRUE(enum_cast<Color>(1 | 2).value() == (Color::GREEN | Color::RED));
   EXPECT_TRUE(enum_cast<Color>(1 | 2 | 1).value() == (Color::GREEN | Color::RED));
-  RD_EXPECT_FALSE(enum_cast<Color>(1 | 2 | 8).has_value());
-  RD_EXPECT_FALSE(enum_cast<Color>(0).has_value());
+  EXPECT_FALSE(enum_cast<Color>(1 | 2 | 8).has_value());
+  EXPECT_FALSE(enum_cast<Color>(0).has_value());
 
   constexpr auto no = enum_cast<Numbers>(2);
   EXPECT_TRUE(no.value() == Numbers::one);
   EXPECT_TRUE(enum_cast<Numbers>(4).value() == Numbers::two);
   EXPECT_TRUE(enum_cast<Numbers>(8).value() == Numbers::three);
   EXPECT_TRUE(enum_cast<Numbers>(1 << 30).value() == Numbers::many);
-  RD_EXPECT_FALSE(enum_cast<Numbers>(127).has_value());
-  RD_EXPECT_FALSE(enum_cast<Numbers>(0).has_value());
+  EXPECT_FALSE(enum_cast<Numbers>(127).has_value());
+  EXPECT_FALSE(enum_cast<Numbers>(0).has_value());
 
   constexpr auto dr = enum_cast<Directions>(std::uint64_t{1} << 63);
   EXPECT_TRUE(enum_cast<Directions &>(std::uint64_t{1} << 31).value() == Directions::Up);
   EXPECT_TRUE(enum_cast<const Directions>(std::uint64_t{1} << 20).value() == Directions::Down);
   EXPECT_TRUE(dr.value() == Directions::Right);
   EXPECT_TRUE(enum_cast<Directions>(std::uint64_t{1} << 10).value() == Directions::Left);
-  RD_EXPECT_FALSE(enum_cast<Directions>(0).has_value());
+  EXPECT_FALSE(enum_cast<Directions>(0).has_value());
 
 #if defined(MAGIC_ENUM_ENABLE_NONASCII)
   constexpr auto lang = enum_cast<Language>(1 << 1);
@@ -131,7 +85,7 @@ TEST(Flags, enum_integer) {
   EXPECT_TRUE(enum_cast<const Language>(1 << 3).value() == Language::English);
   EXPECT_TRUE(lang.value() == Language::日本語);
   EXPECT_TRUE(enum_cast<Language>(1 << 4).value() == Language::😃);
-  RD_EXPECT_FALSE(enum_cast<Language>(0).has_value());
+  EXPECT_FALSE(enum_cast<Language>(0).has_value());
 #endif
 
   constexpr auto nto = enum_cast<number>(2 | 8);
@@ -140,7 +94,7 @@ TEST(Flags, enum_integer) {
   EXPECT_TRUE(enum_cast<number>(1 << 3).value() == number::three);
   EXPECT_TRUE(enum_cast<number>(1 << 4).value() == number::four);
   EXPECT_TRUE(nto.value() == (number::three | number::one));
-  RD_EXPECT_FALSE(enum_cast<number>(0).has_value());
+  EXPECT_FALSE(enum_cast<number>(0).has_value());
 }
 
 TEST(Flags, enum_index2) {
@@ -150,17 +104,17 @@ TEST(Flags, enum_index2) {
   EXPECT_TRUE(cr.value() == 0);
   EXPECT_TRUE(enum_index<Color &>(cg).value() == 1);
   EXPECT_TRUE(enum_index(cm[2]).value() == 2);
-  RD_EXPECT_FALSE(enum_index<Color>(Color::RED | Color::GREEN).has_value());
-  RD_EXPECT_FALSE(enum_index<Color>(Color::RED | Color::GREEN | Color::RED).has_value());
-  RD_EXPECT_FALSE(enum_index<Color>(Color::RED | Color{8}).has_value());
-  RD_EXPECT_FALSE(enum_index(static_cast<Color>(0)).has_value());
+  EXPECT_FALSE(enum_index<Color>(Color::RED | Color::GREEN).has_value());
+  EXPECT_FALSE(enum_index<Color>(Color::RED | Color::GREEN | Color::RED).has_value());
+  EXPECT_FALSE(enum_index<Color>(Color::RED | Color{8}).has_value());
+  EXPECT_FALSE(enum_index(static_cast<Color>(0)).has_value());
 
   constexpr auto no = enum_index(Numbers::one);
   EXPECT_TRUE(no.value() == 0);
   EXPECT_TRUE(enum_index(Numbers::two).value() == 1);
   EXPECT_TRUE(enum_index(Numbers::three).value() == 2);
   EXPECT_TRUE(enum_index(Numbers::many).value() == 3);
-  RD_EXPECT_FALSE(enum_index(static_cast<Numbers>(0)).has_value());
+  EXPECT_FALSE(enum_index(static_cast<Numbers>(0)).has_value());
 
   constexpr auto dr = enum_index(Directions::Right);
   Directions dl = Directions::Left;
@@ -168,7 +122,7 @@ TEST(Flags, enum_index2) {
   EXPECT_TRUE(enum_index<const Directions>(Directions::Down).value() == 1);
   EXPECT_TRUE(enum_index(Directions::Up).value() == 2);
   EXPECT_TRUE(dr.value() == 3);
-  RD_EXPECT_FALSE(enum_index(static_cast<Directions>(0)).has_value());
+  EXPECT_FALSE(enum_index(static_cast<Directions>(0)).has_value());
 
 #if defined(MAGIC_ENUM_ENABLE_NONASCII)
   constexpr auto lang = enum_index<Language>(Language::日本語);
@@ -177,7 +131,7 @@ TEST(Flags, enum_index2) {
   EXPECT_TRUE(enum_index<const Language>(Language::English).value() == 2);
   EXPECT_TRUE(enum_index(Language::😃).value() == 3);
   EXPECT_TRUE(lang.value() == 0);
-  RD_EXPECT_FALSE(enum_index(static_cast<Language>(0)).has_value());
+  EXPECT_FALSE(enum_index(static_cast<Language>(0)).has_value());
 #endif
 
   constexpr auto nto = enum_index(number::three | number::one);
@@ -185,8 +139,8 @@ TEST(Flags, enum_index2) {
   EXPECT_TRUE(enum_index(number::two).value() == 1);
   EXPECT_TRUE(enum_index(number::three).value() == 2);
   EXPECT_TRUE(enum_index(number::four).value() == 3);
-  RD_EXPECT_FALSE(nto.has_value());
-  RD_EXPECT_FALSE(enum_index(static_cast<number>(0)).has_value());
+  EXPECT_FALSE(nto.has_value());
+  EXPECT_FALSE(enum_index(static_cast<number>(0)).has_value());
 }
 
 TEST(Flags, enum_contains_value) {
@@ -198,15 +152,15 @@ TEST(Flags, enum_contains_value) {
   EXPECT_TRUE(enum_contains(cm[2]));
   EXPECT_TRUE(enum_contains<Color>(Color::RED | Color::GREEN));
   EXPECT_TRUE(enum_contains<Color>(Color::RED | Color::GREEN | Color::GREEN));
-  RD_EXPECT_FALSE(enum_contains<Color>(Color::RED | Color{8}));
-  RD_EXPECT_FALSE(enum_contains(static_cast<Color>(0)));
+  EXPECT_FALSE(enum_contains<Color>(Color::RED | Color{8}));
+  EXPECT_FALSE(enum_contains(static_cast<Color>(0)));
 
   constexpr auto no = enum_contains(Numbers::one);
   EXPECT_TRUE(no);
   EXPECT_TRUE(enum_contains(Numbers::two));
   EXPECT_TRUE(enum_contains(Numbers::three));
   EXPECT_TRUE(enum_contains(Numbers::many));
-  RD_EXPECT_FALSE(enum_contains(static_cast<Numbers>(0)));
+  EXPECT_FALSE(enum_contains(static_cast<Numbers>(0)));
 
   constexpr auto dr = enum_contains(Directions::Right);
   Directions dl = Directions::Left;
@@ -214,7 +168,7 @@ TEST(Flags, enum_contains_value) {
   EXPECT_TRUE(enum_contains<const Directions>(Directions::Down));
   EXPECT_TRUE(enum_contains(Directions::Up));
   EXPECT_TRUE(dr);
-  RD_EXPECT_FALSE(enum_contains(static_cast<Directions>(0)));
+  EXPECT_FALSE(enum_contains(static_cast<Directions>(0)));
 
 #if defined(MAGIC_ENUM_ENABLE_NONASCII)
   constexpr auto lang = enum_index<Language>(Language::日本語);
@@ -223,7 +177,7 @@ TEST(Flags, enum_contains_value) {
   EXPECT_TRUE(enum_contains<const Language>(Language::English));
   EXPECT_TRUE(enum_contains(Language::😃));
   EXPECT_TRUE(lang);
-  RD_EXPECT_FALSE(enum_contains(static_cast<Language>(0)));
+  EXPECT_FALSE(enum_contains(static_cast<Language>(0)));
 #endif
 
   constexpr auto nto = enum_contains(number::three | number::one);
@@ -232,7 +186,7 @@ TEST(Flags, enum_contains_value) {
   EXPECT_TRUE(enum_contains(number::one));
   EXPECT_TRUE(enum_contains(number::four));
   EXPECT_TRUE(nto);
-  RD_EXPECT_FALSE(enum_contains(static_cast<number>(0)));
+  EXPECT_FALSE(enum_contains(static_cast<number>(0)));
 }
 
 TEST(Flags, enum_contains_integer) {
@@ -241,8 +195,8 @@ TEST(Flags, enum_contains_integer) {
   EXPECT_TRUE(enum_contains<Color>(4));
   EXPECT_TRUE(enum_contains<Color>(1 | 2));
   EXPECT_TRUE(enum_contains<Color>(1 | 2 | 1));
-  RD_EXPECT_FALSE(enum_contains<Color>(1 | 2 | 8));
-  RD_EXPECT_FALSE(enum_contains<Color>(0));
+  EXPECT_FALSE(enum_contains<Color>(1 | 2 | 8));
+  EXPECT_FALSE(enum_contains<Color>(0));
 
   constexpr auto no = enum_contains<Numbers>(1 << 1);
   EXPECT_TRUE(no);
@@ -255,7 +209,7 @@ TEST(Flags, enum_contains_integer) {
   EXPECT_TRUE(enum_contains<const Directions>(std::uint64_t{1} << 10));
   EXPECT_TRUE(enum_contains<Directions>(std::uint64_t{1} << 20));
   EXPECT_TRUE(enum_contains<Directions>(std::uint64_t{1} << 31));
-  RD_EXPECT_FALSE(enum_contains<Directions>(static_cast<Directions>(0)));
+  EXPECT_FALSE(enum_contains<Directions>(static_cast<Directions>(0)));
 
 #if defined(MAGIC_ENUM_ENABLE_NONASCII)
   constexpr auto lang = enum_contains<Language&>(1 << 1);
@@ -263,7 +217,7 @@ TEST(Flags, enum_contains_integer) {
   EXPECT_TRUE(enum_contains<const Language>(1 << 2));
   EXPECT_TRUE(enum_contains<Language>(1 << 3));
   EXPECT_TRUE(enum_contains<Language>(1 << 4));
-  RD_EXPECT_FALSE(enum_contains(static_cast<Language>(0)));
+  EXPECT_FALSE(enum_contains(static_cast<Language>(0)));
 #endif
 
   constexpr auto nto = enum_contains<number>(8 | 2);
@@ -274,8 +228,8 @@ TEST(Flags, enum_contains_integer) {
   EXPECT_TRUE(enum_contains<number>(8 | 2 | 16));
   EXPECT_TRUE(enum_contains<number>(8 | 16 | 16));
   EXPECT_TRUE(nto);
-  RD_EXPECT_FALSE(enum_contains<number>(8 | 64));
-  RD_EXPECT_FALSE(enum_contains<number>(0));
+  EXPECT_FALSE(enum_contains<number>(8 | 64));
+  EXPECT_FALSE(enum_contains<number>(0));
 }
 
 TEST(Flags, enum_contains_string) {
@@ -288,22 +242,22 @@ TEST(Flags, enum_contains_string) {
                                         [](char lhs, char rhs) { return std::tolower(lhs) == std::tolower(rhs); }));
   EXPECT_TRUE(enum_contains<Color &>("GREEN|RED"));
   EXPECT_TRUE(enum_contains<Color &>("GREEN|RED|RED"));
-  RD_EXPECT_FALSE(enum_contains<Color>("GREEN|RED|None"));
-  RD_EXPECT_FALSE(enum_contains<Color>("None"));
+  EXPECT_FALSE(enum_contains<Color>("GREEN|RED|None"));
+  EXPECT_FALSE(enum_contains<Color>("None"));
 
   constexpr auto no = std::string_view{"one"};
   EXPECT_TRUE(enum_contains<Numbers>(no));
   EXPECT_TRUE(enum_contains<Numbers>("two"));
   EXPECT_TRUE(enum_contains<Numbers>("three"));
   EXPECT_TRUE(enum_contains<Numbers>("many"));
-  RD_EXPECT_FALSE(enum_contains<Numbers>("None"));
+  EXPECT_FALSE(enum_contains<Numbers>("None"));
 
   auto dr = std::string{"Right"};
   EXPECT_TRUE(enum_contains<Directions &>("Up"));
   EXPECT_TRUE(enum_contains<Directions>("Down"));
   EXPECT_TRUE(enum_contains<const Directions>(dr));
   EXPECT_TRUE(enum_contains<Directions>("Left"));
-  RD_EXPECT_FALSE(enum_contains<Directions>("None"));
+  EXPECT_FALSE(enum_contains<Directions>("None"));
 
 #if defined(MAGIC_ENUM_ENABLE_NONASCII)
   auto lang = std::string{"日本語"};
@@ -311,7 +265,7 @@ TEST(Flags, enum_contains_string) {
   EXPECT_TRUE(enum_contains<Language>("English"));
   EXPECT_TRUE(enum_contains<const Language>(lang));
   EXPECT_TRUE(enum_contains<Language>("😃"));
-  RD_EXPECT_FALSE(enum_contains<Language>("None"));
+  EXPECT_FALSE(enum_contains<Language>("None"));
 #endif
 
   constexpr auto nto = enum_contains<number>("three|one");
@@ -320,7 +274,7 @@ TEST(Flags, enum_contains_string) {
   EXPECT_TRUE(enum_contains<number>("three"));
   EXPECT_TRUE(enum_contains<number>("four"));
   EXPECT_TRUE(nto);
-  RD_EXPECT_FALSE(enum_contains<number>("None"));
+  EXPECT_FALSE(enum_contains<number>("None"));
 }
 
 TEST(Flags, enum_value2) {
@@ -376,7 +330,7 @@ TEST(Flags, enum_value2) {
 }
 
 TEST(Flags, enum_value3) {
-  EXPECT_TRUE((std::is_same_v<decltype(rendu::enum_values<Color>()), const std::array<Color, 3> &>));
+  EXPECT_TRUE((std::is_same_v<decltype(enum_values<Color>()), const std::array<Color, 3> &>));
 
   constexpr auto &s1 = enum_values<Color &>();
   EXPECT_TRUE((s1 == std::array<Color, 3>{{Color::RED, Color::GREEN, Color::BLUE}}));
@@ -524,7 +478,7 @@ TEST(Flags, enum_flags_name) {
 }
 
 TEST(Flags, enum_names2) {
-  EXPECT_TRUE((std::is_same_v<decltype(rendu::enum_names<Color>()), const std::array<std::string_view, 3> &>));
+  EXPECT_TRUE((std::is_same_v<decltype(enum_names<Color>()), const std::array<std::string_view, 3> &>));
 
   constexpr auto &s1 = enum_names<Color &>();
   EXPECT_TRUE((s1 == std::array<std::string_view, 3>{{"RED", "GREEN", "BLUE"}}));
@@ -545,7 +499,7 @@ TEST(Flags, enum_names2) {
 }
 
 TEST(Flags, enum_entries2) {
-  EXPECT_TRUE((std::is_same_v<decltype(rendu::enum_entries<Color>()), const std::array<std::pair<Color,
+  EXPECT_TRUE((std::is_same_v<decltype(enum_entries<Color>()), const std::array<std::pair<Color,
                                                                                                     std::string_view>,
                                                                                           3> &>));
 
@@ -580,7 +534,7 @@ TEST(Flags, enum_entries2) {
 
 TEST(Flags, ostream_operators2) {
   auto test_ostream = [](auto e, std::string name) {
-    using namespace rendu::ostream_operators;
+    using namespace ostream_operators;
     std::stringstream ss;
     ss << e;
     EXPECT_TRUE(ss.str() == name);
@@ -629,7 +583,7 @@ TEST(Flags, ostream_operators2) {
 
 TEST(Flags, istream_operators2) {
   auto test_istream = [](const auto e, std::string name) {
-    using namespace rendu::istream_operators;
+    using namespace istream_operators;
     std::istringstream ss(name);
     std::decay_t<decltype(e)> v;
     ss >> v;
@@ -799,8 +753,8 @@ template<typename E, E V>
 struct Foo {};
 
 TEST(Flags, constexpr_for2) {
-  constexpr_for<0, rendu::enum_count<Color>(), 1>([](auto i) {
-    [[maybe_unused]] Foo<Color, rendu::enum_value<Color, i>()> bar{};
+  constexpr_for<0, magic_enum::enum_count<Color>(), 1>([](auto i) {
+    [[maybe_unused]] Foo<Color, magic_enum::enum_value<Color, i>()> bar{};
   });
 }
 
@@ -815,4 +769,3 @@ TEST("format-base") {
 }
 
 #endif
-}
