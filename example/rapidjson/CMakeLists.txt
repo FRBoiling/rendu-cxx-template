@@ -3,21 +3,17 @@
 #**********************************
 
 set(target_name rapidjson)
-
 rendu_add_executable(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
     NAME
     ${target_name}
-    CMAKE_CUR_SOURCE_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    CMAKE_CUR_BINARY_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}
-    CMAKE_BINARY_DIR
-    ${CMAKE_BINARY_DIR}
-    PRIVATE_DEPS
-
-    PUBLIC_DEPS
-    rapidjson::rapidjson
+    SETTING
+    rendu-core-interface
+    DEPS
+    dep::rapidjson
     DEFINES
     LINKOPTS
 )
-

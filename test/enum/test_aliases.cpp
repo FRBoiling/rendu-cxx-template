@@ -79,36 +79,36 @@ constexpr bool operator==(MyStringView lhs, MyStringView rhs) {
 
 enum class Color { RED = 1, GREEN = 2, BLUE = 4 };
 
-RD_TEST(Enum,optional) {
+TEST(Enum,optional) {
   constexpr auto cr = enum_cast<Color>("RED");
-  RD_EXPECT_TRUE(cr.has_value());
-  RD_EXPECT_TRUE(cr.value() == Color::RED);
+  EXPECT_TRUE(cr.has_value());
+  EXPECT_TRUE(cr.value() == Color::RED);
 
   constexpr auto cn = enum_cast<Color>("NONE");
   RD_EXPECT_FALSE(cn.has_value());
 }
 
-RD_TEST(Enum,String) {
+TEST(Enum,String) {
   auto cr = enum_flags_name(Color::RED);
   RD_EXPECT_FALSE(cr.empty());
-  RD_EXPECT_TRUE(cr.compare("RED") == 0);
+  EXPECT_TRUE(cr.compare("RED") == 0);
 
   auto crg = enum_flags_name(Color::RED | Color::GREEN);
   RD_EXPECT_FALSE(crg.empty());
-  RD_EXPECT_TRUE(crg.compare("RED|GREEN") == 0);
+  EXPECT_TRUE(crg.compare("RED|GREEN") == 0);
 
   auto cn = enum_flags_name(Color{0});
-  RD_EXPECT_TRUE(cn.empty());
-  RD_EXPECT_TRUE(cn.size() == 0);
+  EXPECT_TRUE(cn.empty());
+  EXPECT_TRUE(cn.size() == 0);
 }
 
-RD_TEST(Enum,StringView) {
+TEST(Enum,StringView) {
   auto cr = enum_name(Color::RED);
   RD_EXPECT_FALSE(cr.empty());
-  RD_EXPECT_TRUE(cr.compare("RED") == 0);
+  EXPECT_TRUE(cr.compare("RED") == 0);
 
   auto cn = enum_name(Color{0});
-  RD_EXPECT_TRUE(cn.empty());
-  RD_EXPECT_TRUE(cn.size() == 0);
+  EXPECT_TRUE(cn.empty());
+  EXPECT_TRUE(cn.size() == 0);
 }
 }

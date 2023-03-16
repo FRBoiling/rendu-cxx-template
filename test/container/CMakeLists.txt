@@ -1,19 +1,20 @@
 #**********************************
 #  Created by boil on 2023/02/19.
 #**********************************
-set(PROJECT_NAME test)
+
+set(target_name container)
 rendu_add_test(
-    NAME
-    container
-    CMAKE_CUR_SOURCE_DIR
+    DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
-    CMAKE_CUR_BINARY_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}
-    CMAKE_BINARY_DIR
-    ${CMAKE_BINARY_DIR}
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
+    rendu-core-interface
     DEPS
+    rendu::common
     rendu::test
     DEFINES
     LINKOPTS
 )
-

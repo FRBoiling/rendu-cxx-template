@@ -6,7 +6,6 @@ if(NOT CONF_DIR)
   set(CONF_DIR ${CMAKE_INSTALL_PREFIX}/etc CACHE PATH "Configuration directory")
   message(STATUS "MAC: Using default configuration directory")
 endif()
-
 # configure uninstaller
 configure_file(
   "${CMAKE_SOURCE_DIR}/cmake/platform/cmake_uninstall.in.cmake"
@@ -44,5 +43,6 @@ elseif(CMAKE_C_COMPILER MATCHES "clang" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
 else()
   target_compile_definitions(rendu-compile-option-interface
     INTERFACE
-      -D_BUILD_DIRECTIVE="${CMAKE_BUILD_TYPE}")
+      -D_BUILD_DIRECTIVE="${CMAKE_BUILD_TYPE}"
+      )
 endif()

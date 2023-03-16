@@ -1,18 +1,22 @@
+
 # Clion ================================
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
+.gitee
+.git
 # Clion ==============================
 .idea/
 
 # vscode ================================
 .vscode/
+.vs
+.out
 
 # File-based project format
 *.iws
 
 # C++ ================================
- Prerequisites
+# Prerequisites
 *.d
 
 # Compiled Object files
@@ -45,7 +49,6 @@
 *.out
 *.app
 
-
 # CMake ================================
 cmake-build-*/
 bin/
@@ -64,4 +67,6 @@ CTestTestfile.cmake
 
 # User ================================
 # 用户自定义的其他忽略文件
+
+
 

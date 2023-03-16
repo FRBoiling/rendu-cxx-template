@@ -23,6 +23,7 @@ function(CollectAllFiles current_dir variable)
         ${current_dir}/*.hpp
         ${current_dir}/*.ipp
         ${current_dir}/*.pb.h
+        ${current_dir}/*.inc
         )
     list(APPEND ${variable} ${COLLECTED_FILES})
     file(GLOB SUB_DIRECTORIES ${current_dir}/*)
@@ -83,6 +84,7 @@ function(CollectHeaderFiles current_dir variable)
         ${current_dir}/*.hpp
         ${current_dir}/*.ipp
         ${current_dir}/*.pb.h
+        ${current_dir}/*.inc
         )
     list(APPEND ${variable} ${COLLECTED_HEADERS})
     file(GLOB SUB_DIRECTORIES ${current_dir}/*)
@@ -111,7 +113,8 @@ function(CollectIncludeDirectories current_dir variable)
     file(GLOB SUB_DIRECTORIES ${current_dir}/*)
     foreach (SUB_DIRECTORY ${SUB_DIRECTORIES})
       if (IS_DIRECTORY ${SUB_DIRECTORY})
-        CollectIncludeDirectories(${SUB_DIRECTORY} ${variable} ${ARGN})
+        list(APPEND ${variable} ${SUB_DIRECTORY})
+#        CollectIncludeDirectories(${SUB_DIRECTORY} ${variable} ${ARGN})
       endif ()
     endforeach ()
     set(${variable} ${${variable}} PARENT_SCOPE)

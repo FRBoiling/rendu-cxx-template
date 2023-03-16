@@ -3,23 +3,18 @@
 #**********************************
 
 set(target_name zlib)
-
 rendu_add_executable(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
     NAME
     ${target_name}
-    CMAKE_CUR_SOURCE_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    CMAKE_CUR_BINARY_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}
-    CMAKE_BINARY_DIR
-    ${CMAKE_BINARY_DIR}
-    PRIVATE_DEPS
-
-    PUBLIC_DEPS
-    zlib::zlib
-    spdlog::spdlog
+    SETTING
+    rendu-core-interface
+    DEPS
+    dep::zlib
+    dep::spdlog
     DEFINES
     LINKOPTS
 )
-
-

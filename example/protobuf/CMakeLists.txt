@@ -2,21 +2,18 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(target_name example_protobuf)
+set(target_name protobuf)
 rendu_add_executable(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
     NAME
     ${target_name}
-    CMAKE_CUR_SOURCE_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    CMAKE_CUR_BINARY_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}
-    CMAKE_BINARY_DIR
-    ${CMAKE_BINARY_DIR}
-    PRIVATE_DEPS
-    PUBLIC_DEPS
+    SETTING
+    rendu-core-interface
+    DEPS
     rendu::common
-    rendu::framework
     DEFINES
     LINKOPTS
 )
-

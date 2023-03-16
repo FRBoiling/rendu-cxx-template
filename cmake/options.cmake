@@ -7,10 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 set(CXX_EXTENSIONS OFF)
 
-set(RENDU_PROJECT_OUTDIR ${RENDU_PROJECT_DIR}/Build)
-set(RENDU_PROJECT_BINDIR ${RENDU_PROJECT_OUTDIR}/Bin)
+set(RENDU_PROJECT_OUTDIR ${RENDU_PROJECT_DIR}/build)
+set(RENDU_PROJECT_BINDIR ${RENDU_PROJECT_OUTDIR}/bin)
 
-option(USE_COREPCH      "Use precompiled headers when compiling servers"              0)
+option(USE_PCH      "Use precompiled headers when compiling servers"              0)
 option(WITH_DYNAMIC_LINKING "Enable dynamic library linking."                         0)
 IsDynamicLinkingRequired(WITH_DYNAMIC_LINKING_FORCED)
 if(WITH_DYNAMIC_LINKING AND WITH_DYNAMIC_LINKING_FORCED)

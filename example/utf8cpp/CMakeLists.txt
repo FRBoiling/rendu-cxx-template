@@ -2,22 +2,19 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(target_name example_utf8cpp)
-
+set(target_name utf8cpp)
 rendu_add_executable(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
     NAME
     ${target_name}
-    CMAKE_CUR_SOURCE_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    CMAKE_CUR_BINARY_DIR
-    ${CMAKE_CURRENT_BINARY_DIR}
-    CMAKE_BINARY_DIR
-    ${CMAKE_BINARY_DIR}
-    PRIVATE_DEPS
-
-    PUBLIC_DEPS
-    utf8cpp::utf8
-    spdlog::spdlog
+    SETTING
+    rendu-core-interface
+    DEPS
+    dep::utf8cpp
+    dep::spdlog
     DEFINES
     LINKOPTS
 )

@@ -1,6 +1,3 @@
-#**********************************
-#  Created by boil on 2022/8/14.
-#**********************************
 #|--------------------------------
 #| rendu-core rendu project
 #|--------------------------------
@@ -10,11 +7,16 @@ cmake_minimum_required (VERSION 3.21.7)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
-# Set projectname (must be done AFTER setting configurationtypes)
+# Set project name (must be done AFTER setting configuration types)
 set(RENDU_PROJECT_NAME rendu)
 set(RENDU_PROJECT_DIR ${CMAKE_SOURCE_DIR})
 set(RENDU_PROJECT_VERSION 2.0.0)
 project(${RENDU_PROJECT_NAME} LANGUAGES C CXX)
+#
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${RENDU_PROJECT_DIR}/bin/archive)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${RENDU_PROJECT_DIR}/bin/library)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RENDU_PROJECT_DIR}/bin/runtime)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/path)
 
 #|--------------------------------
 #| Set supported build types
@@ -60,16 +62,14 @@ include(cmake/options.cmake)
 include(cmake/showoptions.cmake)
 
 find_package(PCHSupport)
-
-rendu_add_subdirectory(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    # Exclude
-    ${CMAKE_CURRENT_SOURCE_DIR}/.git
-    ${CMAKE_CURRENT_SOURCE_DIR}/.idea
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake
-    ${CMAKE_CURRENT_SOURCE_DIR}/build
-    ${CMAKE_CURRENT_SOURCE_DIR}/test
-)
+# add third_party dependencies
+add_subdirectory(dep)
+## add core sources
+add_subdirectory(rendu)
+## add tool project
+add_subdirectory(tool)
+# add example project
+add_subdirectory(example)
 
 if (BUILD_TESTING)
   include(CTest)
