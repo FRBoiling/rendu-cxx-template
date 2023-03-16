@@ -13,4 +13,6 @@ rendu_add_library(
     SETTING
     rendu-dependency-interface
     DEPS
+    DEFINES
+    -DSPDLOG_COMPILED_LIB
 )
