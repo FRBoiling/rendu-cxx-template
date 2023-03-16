@@ -1,12 +1,15 @@
 #**********************************
-#  Created by boil on 2022/8/14.
+#  Created by boil on 2022/10/24.
 #**********************************
-
-AddSubdirectory(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    # Exclude
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/spdlog
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/fmt
-)
+#|--------------------------------
+#| rendu-core examples project
+#|--------------------------------
+if (RENDU_FLAG_EXAMPLES)
+  set(PROJECT_NAME example)
+  rendu_add_subdirectory(
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      # Exclude
+  )
+endif ()
 
 

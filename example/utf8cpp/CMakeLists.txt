@@ -2,36 +2,20 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-set(target_name example_utf8cpp)
-
-CollectSourceFiles(
+set(target_name utf8cpp)
+rendu_add_executable(
+    DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
-    private_sources
-)
-
-GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
-
-add_executable(${target_name}
-    ${private_sources}
-    )
-
-target_link_libraries(${target_name}
-    PRIVATE
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
     rendu-core-interface
-    PUBLIC
-    spdlog
-    utf8cpp
-    #TODO:BOIL 添加依赖项
-    )
-
-CollectIncludeDirectories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    public_includes
+    DEPS
+    dep::utf8cpp
+    dep::spdlog
+    DEFINES
+    LINKOPTS
 )
-
-target_include_directories(${target_name}
-    PUBLIC
-    ${public_includes}
-    PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR})
 

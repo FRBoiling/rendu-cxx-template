@@ -1,16 +1,70 @@
 #**********************************
-#  Created by boil on 2022/8/14.
+#  Created by boil on 2022/10/19.
 #**********************************
-
-# 这个文件定义了以下宏，供开发人员使用，以确保安装的软件版本正确:
+# This file defines the following macros for developers to use in ensuring
+# that installed software is of the right version:
 #
+# ENSURE_VERSION        - test that a version number is greater than
+#                               or equal to some minimum
+# ENSURE_VERSION_RANGE - test that a version number is greater than
+#                               or equal to some minimum and less than some
+#                               maximum
+# ENSURE_VERSION2       - deprecated, do not use in new code
+#
+
+# ENSURE_VERSION
+# This macro compares version numbers of the form "x.y.z" or "x.y"
+# ENSURE_VERSION(FOO_MIN_VERSION FOO_VERSION_FOUND FOO_VERSION_OK)
+# will set FOO_VERSION_OK to true if FOO_VERSION_FOUND >= FOO_MIN_VERSION
+# Leading and trailing text is ok, e.g.
+# ENSURE_VERSION("2.5.31" "flex 2.5.4a" VERSION_OK)
+# which means 2.5.31 is required and "flex 2.5.4a" is what was found on the system
+
+# Copyright (c) 2006, David Faure, <faure@kde.org>
+# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+# ENSURE_VERSION_RANGE
+# This macro ensures that a version number of the form
+# "x.y.z" or "x.y" falls within a range defined by
+# min_version <= found_version < max_version.
+# If this expression holds, FOO_VERSION_OK will be set TRUE
+#
+# Example: ENSURE_VERSION_RANGE3("0.1.0" ${FOOCODE_VERSION} "0.7.0" FOO_VERSION_OK)
+#
+# This macro will break silently if any of x,y,z are greater than 100.
+#
+# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 # NORMALIZE_VERSION
-#   帮助宏，将形式"x.y.z"的版本号转换为等于10^4 * x + 10^2 * y + z的整数
-#   如果x,y,z中的任何一个大于100，这个宏将会静默中断。
+# Helper macro to convert version numbers of the form "x.y.z"
+# to an integer equal to 10^4 * x + 10^2 * y + z
+#
+# This macro will break silently if any of x,y,z are greater than 100.
+#
+# Copyright (c) 2006, David Faure, <faure@kde.org>
+# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+# CHECK_RANGE_INCLUSIVE_LOWER
+# Helper macro to check whether x <= y < z
+#
+# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 MACRO(NORMALIZE_VERSION _requested_version _normalized_version)
     STRING(REGEX MATCH "[^0-9]*[0-9]+\\.[0-9]+\\.[0-9]+.*" _threePartMatch "${_requested_version}")
     if(_threePartMatch)
-    # 解析版本字符串的各个部分
+    # parse the parts of the version string
         STRING(REGEX REPLACE "[^0-9]*([0-9]+)\\.[0-9]+\\.[0-9]+.*" "\\1" _major_vers "${_requested_version}")
         STRING(REGEX REPLACE "[^0-9]*[0-9]+\\.([0-9]+)\\.[0-9]+.*" "\\1" _minor_vers "${_requested_version}")
         STRING(REGEX REPLACE "[^0-9]*[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" _patch_vers "${_requested_version}")
@@ -19,12 +73,11 @@ MACRO(NORMALIZE_VERSION _requested_version _normalized_version)
         STRING(REGEX REPLACE "[0-9]+\\.([0-9]+)" "\\1" _minor_vers "${_requested_version}")
         set(_patch_vers "0")
     endif(_threePartMatch)
-    # 计算可以一次比较的整体版本号
+
+    # compute an overall version number which can be compared at once
     MATH(EXPR ${_normalized_version} "${_major_vers}*10000 + ${_minor_vers}*100 + ${_patch_vers}")
 ENDMACRO(NORMALIZE_VERSION)
 
-# CHECK_RANGE_INCLUSIVE_LOWER
-#   帮助宏检查 x <= y < z
 MACRO(CHECK_RANGE_INCLUSIVE_LOWER _lower_limit _value _upper_limit _ok)
    if(${_value} LESS ${_lower_limit})
       set(${_ok} FALSE)
@@ -39,13 +92,6 @@ MACRO(CHECK_RANGE_INCLUSIVE_LOWER _lower_limit _value _upper_limit _ok)
   endif(${_value} LESS ${_lower_limit})
 ENDMACRO(CHECK_RANGE_INCLUSIVE_LOWER)
 
-# ENSURE_VERSION        - 测试版本号是否大于或等于某个最小值
-# ENSURE_VERSION(FOO_MIN_VERSION FOO_VERSION_FOUND FOO_VERSION_OK)
-#   将设置FOO_VERSION_OK为true如果FOO_VERSION_FOUND >= FOO_MIN_VERSION开头和结尾的文本是ok的，
-# 例如，
-#   ENSURE_VERSION("2.5.31" "flex 2.5.4a" VERSION_OK)
-#   意味着2.5.31是必需的，“flex 2.5.4a”是在系统上发现的
-#   这个宏比较表单的版本号 "x.y.z" or "x.y"
 MACRO(ENSURE_VERSION requested_version found_version var_too_old)
     NORMALIZE_VERSION(${requested_version} req_vers_num)
     NORMALIZE_VERSION(${found_version} found_vers_num)
@@ -58,12 +104,10 @@ MACRO(ENSURE_VERSION requested_version found_version var_too_old)
 
 ENDMACRO(ENSURE_VERSION)
 
-# ENSURE_VERSION_RANGE  - 测试版本号是否大于或等于某个最小值且小于某个最大
-#   这个宏确保表单“x.y.z”或“x.y”的版本号在定义的范围内 min_version <= found_version < max_version.
-#   如果这个表达式成立，FOO_VERSION_OK 会被设置成 TRUE
-# 例如，
-#   ENSURE_VERSION_RANGE3("0.1.0" ${FOOCODE_VERSION} "0.7.0" FOO_VERSION_OK)
-#   如果x,y,z中的任何一个大于100，这个宏将会静默中断。
+MACRO(ENSURE_VERSION2 requested_version2 found_version2 var_too_old2)
+    ENSURE_VERSION(${requested_version2} ${found_version2} ${var_too_old2})
+ENDMACRO(ENSURE_VERSION2)
+
 MACRO(ENSURE_VERSION_RANGE min_version found_version max_version var_ok)
     NORMALIZE_VERSION(${min_version} req_vers_num)
     NORMALIZE_VERSION(${found_version} found_vers_num)

@@ -1,7 +1,6 @@
 #**********************************
-#  Created by boil on 2022/8/14.
+#  Created by boil on 2022/10/19.
 #**********************************
-
 target_compile_definitions(rendu-compile-option-interface
   INTERFACE
     -D_BUILD_DIRECTIVE="$<CONFIG>")
@@ -21,7 +20,7 @@ if(WITH_WARNINGS)
     INTERFACE
       -w1)
 
-  message(STATUS "ICC: 启用 所有警告 ")
+  message(STATUS "ICC: All warnings enabled")
 endif()
 
 if(WITH_COREDEBUG)

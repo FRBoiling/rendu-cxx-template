@@ -1,79 +1,159 @@
 # 概述
+RenduCore是一个modern c++项目。
+先从项目结构开始。使用rendu-cxx-template模版。
 rendu-cxx-template是c++的cmake构建模版。
-
-目前包含cmake，deps，example，src，tests模块，后续添加 配置文件，脚本等模块。
-模版目的是简化项目构建配置，尽量实现在开发过程中不用编写cmake，只关注c++代码。
+模版 ：[https://github.com/FRBoiling/rendu-cxx-template](https://github.com/FRBoiling/rendu-cxx-template)
+目前包含cmake，dep，example，rendu，test，tool模块，后续添加 配置文件，脚本等模块。
+模版目的是简化项目构建配置，以达到开发过程中尽量减少编写cmake，只关注c++代码实现的目的。
 模版结构如下图所示
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664115392523-39d2e152-d5ab-477a-8713-0da3d3eb8a71.png#clientId=uf32e7b2e-aa61-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=223&id=u9847b3f4&margin=%5Bobject%20Object%5D&name=image.png&originHeight=223&originWidth=251&originalType=binary&ratio=1&rotation=0&showTitle=false&size=14605&status=done&style=none&taskId=u108babb1-92ce-4e83-8598-0b2d6a07b96&title=&width=251)
-
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953231938-9f5bf8a0-6292-4882-ad4f-bc7e44c5dca0.png#averageHue=%233d4144&clientId=ueae1df6c-2a2c-4&from=paste&height=266&id=u06701cab&name=image.png&originHeight=266&originWidth=332&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9148&status=done&style=none&taskId=uc949724b-3a2c-4e23-be44-3b8f4f833bb&title=&width=332)
 # 简介
 ## cmake模块
-
 cmake项目框架通用cmake封装
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664870318106-1455f244-38ac-4bf6-bece-37a3d0fc14d8.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=161&id=u3a21a85e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=161&originWidth=200&originalType=binary&ratio=1&rotation=0&showTitle=false&size=22417&status=done&style=none&taskId=u81972000-d44b-4e0f-b366-3f95847809f&title=&width=200)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953278074-7d93df36-db53-42cd-a46a-e501d5813a85.png#averageHue=%233e4246&clientId=ueae1df6c-2a2c-4&from=paste&height=144&id=u40632b56&name=image.png&originHeight=144&originWidth=218&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3886&status=done&style=none&taskId=u3fa1e6c6-d647-470e-9d95-3b00b32dc98&title=&width=218)
 ## deps模块
-
 一些外部依赖库
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664870659832-c0eabac6-0ed5-4adb-b63d-6d0a7f68c3b9.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=205&id=u983d954f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=205&originWidth=234&originalType=binary&ratio=1&rotation=0&showTitle=false&size=11656&status=done&style=none&taskId=u759100a4-b8cb-4447-8fbd-33ca79b5a6d&title=&width=234)
-
-## src模块
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953292026-80743314-c840-437b-86bb-b13daf6adcd6.png#averageHue=%233f4346&clientId=ueae1df6c-2a2c-4&from=paste&height=278&id=ufb0fb7be&name=image.png&originHeight=278&originWidth=196&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6063&status=done&style=none&taskId=u339e1214-25f4-425b-a9ba-22ec190f6e1&title=&width=196)
+## rendu模块
 源代码（就是实际开中自己写的代码）
-
 包括以下4个模块。commom，core，example，genrev
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871056442-4bd3761d-a4f7-496b-87fe-733f97070336.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=124&id=u8fda5d61&margin=%5Bobject%20Object%5D&name=image.png&originHeight=124&originWidth=155&originalType=binary&ratio=1&rotation=0&showTitle=false&size=5383&status=done&style=none&taskId=ud36f7896-8237-451a-a1ee-ba21d1a8ca7&title=&width=155)
-
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953309861-c5e8e508-5622-415b-9227-ab9afbd0226e.png#averageHue=%23404447&clientId=ueae1df6c-2a2c-4&from=paste&height=116&id=u931a0ebf&name=image.png&originHeight=116&originWidth=158&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3049&status=done&style=none&taskId=uda0e1d9d-146d-43c2-814d-060be7a91cd&title=&width=158)
 ### common模块
-
 通用模块。基础的通用代码模块
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871375159-8a568116-cdfa-47da-9e1b-496ecca8defe.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=379&id=u4d307df2&margin=%5Bobject%20Object%5D&name=image.png&originHeight=379&originWidth=239&originalType=binary&ratio=1&rotation=0&showTitle=false&size=17023&status=done&style=none&taskId=ucba2be25-e2c0-4dbc-9f85-04d97b6d2dd&title=&width=239)
-
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953337188-ea6140f6-d5d3-488d-a3a1-3b61fab603ea.png#averageHue=%233e4246&clientId=ueae1df6c-2a2c-4&from=paste&height=140&id=ue2a04dc3&name=image.png&originHeight=140&originWidth=220&originalType=binary&ratio=1&rotation=0&showTitle=false&size=4057&status=done&style=none&taskId=u6c5aa61a-ee7a-4ece-8994-9ab2e27baf0&title=&width=220)
 ### core模块
-
 项目核心，不同项目有各自的不同的实现
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871633499-7c7eb6f9-9a60-474a-8d4d-e502ac505b7f.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=100&id=udb533c61&margin=%5Bobject%20Object%5D&name=image.png&originHeight=100&originWidth=198&originalType=binary&ratio=1&rotation=0&showTitle=false&size=12440&status=done&style=none&taskId=u67aa63a8-10e6-4a1b-9fdf-4d5cb0c6966&title=&width=198)
-
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953350209-5141d448-7649-41c0-944a-75367aba0e75.png#averageHue=%233b4145&clientId=ueae1df6c-2a2c-4&from=paste&height=280&id=u8cd0574f&name=image.png&originHeight=280&originWidth=248&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6849&status=done&style=none&taskId=u5dfaa025-3747-4da5-9efe-4441db4c10b&title=&width=248)
 ### example模块
 例子模块
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871521718-5c5547a3-d950-48ee-97a0-ce5153563318.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=57&id=kbu2k&margin=%5Bobject%20Object%5D&name=image.png&originHeight=57&originWidth=167&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7924&status=done&style=none&taskId=ub4de07e4-4375-4fa9-b26d-beb3433208d&title=&width=167)
-
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953370256-f5d466ba-3012-4647-9088-5e43c16dfd4d.png#averageHue=%233f4346&clientId=ueae1df6c-2a2c-4&from=paste&height=296&id=uc345badc&name=image.png&originHeight=296&originWidth=202&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6647&status=done&style=none&taskId=u1e727338-a997-4cf6-9a76-8c9b1e13989&title=&width=202)
 ### genrev模块
-
-生成项目版本信息 
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871549064-39cae7a6-80b7-4f00-b748-56504c3472ec.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=39&id=bzUgu&margin=%5Bobject%20Object%5D&name=image.png&originHeight=39&originWidth=178&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3175&status=done&style=none&taskId=u9d665256-68a1-427d-bc56-073309a3e9a&title=&width=178)
+生成项目版本信息
+![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871549064-39cae7a6-80b7-4f00-b748-56504c3472ec.png#averageHue=%23404547&clientId=u0bc2c7f2-1f26-4&from=paste&height=39&id=bzUgu&name=image.png&originHeight=39&originWidth=178&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3175&status=done&style=none&taskId=u9d665256-68a1-427d-bc56-073309a3e9a&title=&width=178)
 从项目中的revision_data.h.in.cmake文件生成版本内容代码（revision_data.h）
-
 ## tests模块
-
 unittest单元测试模块
-
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871072168-bbea7d13-7bd7-48e9-8008-ebd9fd7499fe.png#clientId=u0bc2c7f2-1f26-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=141&id=u846986fe&margin=%5Bobject%20Object%5D&name=image.png&originHeight=141&originWidth=183&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6759&status=done&style=none&taskId=u2d4ffad2-1478-482f-be92-ea4ec8ebefd&title=&width=183)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953394796-0773f88b-6fba-4e4b-bc21-c4585f502b29.png#averageHue=%233f4346&clientId=ueae1df6c-2a2c-4&from=paste&height=159&id=u0777159d&name=image.png&originHeight=159&originWidth=218&originalType=binary&ratio=1&rotation=0&showTitle=false&size=4380&status=done&style=none&taskId=u56747be6-0001-43de-8af6-0e3d495be29&title=&width=218)
 # 使用
-
 这个框架只需要添加对映模块的文件夹和代码即可，几乎不用关心cmake代码。
 以下为概要（详细说明参照后续）
 ## 添加第三方依赖
 ### 源码方式引入
-在deps文件夹添加对映库源码
-### git方式引入
-在deps文件夹cmakelist.txt文件中添加对映cmake引入代码
-## 添加单元测试
-tests文件夹中添加单元测试的cpp代码（依赖catch2单元测试）
-## 添加例子程序
-example文件夹中添加例子程序代码
-## 添加项目相关核心代码
-src文件夹中添加功能代码
-### 1、添加通用实现
-common文件夹中通用代码
-### 2、添加项目相关实现
-core文件夹中添加实现代码
-### 3、添加例子
-example文件夹中添加例子代码
+在dep文件夹添加对应第三方库源码
+比如：fmt库，只需添加类似如下
+```cmake
+set(target_name fmt)
+rendu_add_library(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
+    rendu-dependency-interface
+    DEPS
+)
 
+```
+## 添加单元测试
+tests文件夹中添加单元测试的cpp代码（依赖googletest单元测试）
+比如：enum单元测试
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953551489-8a10e9eb-962d-4891-b1f7-f4a162a2af9c.png#averageHue=%233e4246&clientId=ueae1df6c-2a2c-4&from=paste&height=107&id=ue3b64b1d&name=image.png&originHeight=107&originWidth=207&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3630&status=done&style=none&taskId=ue79572af-fa5f-4277-bd7a-44d876e500b&title=&width=207)
+```cmake
+set(target_name enum)
+rendu_add_test(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
+    rendu-core-interface
+    DEPS
+    dep::magic_enum
+    rendu::test
+    DEFINES
+    LINKOPTS
+)
+```
+## 添加例子程序
+example文件夹中添加例子程序代码。
+例如：argparse的example 可执行文件如下。
+```cmake
+set(target_name argparse)
+rendu_add_executable(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
+    rendu-core-interface
+    DEPS
+    dep::argparse
+    dep::magic_enum
+    DEFINES
+    LINKOPTS
+)
+```
+## 添加项目相关核心代码
+rendu文件夹中添加功能代码
+### 1、添加通用实现库
+common文件夹中通用代码
+```cmake
+set(target_name common)
+rendu_add_library(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
+    rendu-core-interface
+    DEPS
+)
+
+```
+### 2、添加逻辑实现库
+core文件夹中添加实现代码
+```cmake
+set(target_name core)
+rendu_add_library(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
+    rendu-core-interface
+    DEPS
+    rendu::common
+)
+
+
+```
+### 3、添加启动进程
+launcher文件夹中添加启动进程代码
+```cmake
+set(target_name launcher)
+rendu_add_executable(
+    DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PROJECT
+    ${PROJECT_NAME}
+    NAME
+    ${target_name}
+    SETTING
+    rendu-core-interface
+    DEPS
+    rendu::core
+    rendu::common
+    DEFINES
+    LINKOPTS
+)
+```

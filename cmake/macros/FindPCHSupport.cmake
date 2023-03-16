@@ -8,7 +8,7 @@ if(CMAKE_VERSION VERSION_LESS "3.16.0")
 
   include(cotire)
 
-  function(ADD_CXX_PCH TARGET_NAME_LIST PCH_HEADER)
+  function(add_cxx_pch TARGET_NAME_LIST PCH_HEADER)
     # 对每个目标使用标头
     foreach(target-name ${TARGET_NAME_LIST})
       # 禁用unity版本
@@ -20,11 +20,11 @@ if(CMAKE_VERSION VERSION_LESS "3.16.0")
     endforeach()
 
     cotire(${TARGET_NAME_LIST})
-  endfunction(ADD_CXX_PCH)
+  endfunction(add_cxx_pch)
 else()
-  function(ADD_CXX_PCH TARGET_NAME_LIST PCH_HEADER)
+  function(add_cxx_pch TARGET_NAME_LIST PCH_HEADER)
     foreach(target-name ${TARGET_NAME_LIST})
       target_precompile_headers(${target-name} PRIVATE ${PCH_HEADER})
     endforeach()
-  endfunction(ADD_CXX_PCH)
+  endfunction(add_cxx_pch)
 endif()
