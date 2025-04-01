@@ -1,88 +1,71 @@
 #**********************************
-#  Created by boil on 2022/10/19.
+#  Created by boil on 2025/02/21.
 #**********************************
-# Set build-directive (used in core to tell which buildtype we used)
-target_compile_definitions(rendu-compile-option-interface
-  INTERFACE
-    -D_BUILD_DIRECTIVE="$<CONFIG>")
 
-set(GCC_EXPECTED_VERSION 8.3.0)
+#======================= 编译器版本检测 =======================#
+set(GCC_EXPECTED_VERSION 11.1.0)
+
+message(STATUS "GCC: 编译器路径 = ${CMAKE_CXX_COMPILER}")
+message(STATUS "GCC: 期望版本 >= ${GCC_EXPECTED_VERSION}")
+message(STATUS "GCC: 实际版本 = ${CMAKE_CXX_COMPILER_VERSION}")
 
 if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS GCC_EXPECTED_VERSION)
-  message(FATAL_ERROR "GCC: RenduCore requires version ${GCC_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
+  message(FATAL_ERROR "GCC: 不满足最低版本要求\n"
+      "需求版本: ${GCC_EXPECTED_VERSION}\n"
+      "当前版本: ${CMAKE_CXX_COMPILER_VERSION}\n"
+      "编译器路径: ${CMAKE_CXX_COMPILER}")
 else()
-  message(STATUS "GCC: Minimum version required is ${GCC_EXPECTED_VERSION}, found ${CMAKE_CXX_COMPILER_VERSION} - ok!")
+  message(STATUS "GCC: 版本检查通过")
 endif()
 
-if(PLATFORM EQUAL 32)
-  # Required on 32-bit systems to enable SSE2 (standard on x64)
-  target_compile_options(rendu-compile-option-interface
+#======================= 核心编译选项 =======================#
+target_compile_options(rendu-compile-option-interface
     INTERFACE
+    -fno-delete-null-pointer-checks
+    -Wno-attributes
+)
+
+#======================= 架构优化 =======================#
+if(PLATFORM EQUAL 32)
+  target_compile_options(rendu-compile-option-interface
+      INTERFACE
       -msse2
       -mfpmath=sse)
+  message(STATUS "GCC: 32位架构已启用SSE2优化")
 endif()
-if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-  target_compile_definitions(rendu-compile-option-interface
-    INTERFACE
-      -DHAVE_SSE2
-      -D__SSE2__)
-  message(STATUS "GCC: SFMT enabled, SSE2 flags forced")
-endif()
+
+#======================= 警告选项配置 =======================#
+set(GCC_WARNING_OPTS
+    -W
+    -Wall
+    -Wextra
+    -Winit-self
+    -Winvalid-pch
+    -Wfatal-errors
+    -Woverloaded-virtual
+    -Wno-missing-field-initializers
+    -Wno-maybe-uninitialized
+)
 
 if(WITH_WARNINGS)
-  target_compile_options(rendu-warning-interface
-    INTERFACE
-      -W
-      -Wall
-      -Wextra
-      -Winit-self
-      -Winvalid-pch
-      -Wfatal-errors
-      -Woverloaded-virtual)
-
-  message(STATUS "GCC: All warnings enabled")
+  target_compile_options(rendu-warning-interface INTERFACE ${GCC_WARNING_OPTS})
+  message(STATUS "GCC: 已启用严格警告模式")
 endif()
 
-if(WITH_COREDEBUG)
-  target_compile_options(rendu-compile-option-interface
-    INTERFACE
-      -g3)
-
-  message(STATUS "GCC: Debug-flags set (-g3)")
-endif()
+#======================= Sanitizers配置 =======================#
+function(configure_sanitizer name flags)
+  target_compile_options(rendu-compile-option-interface INTERFACE -fno-omit-frame-pointer ${flags})
+  target_link_options(rendu-compile-option-interface INTERFACE -fno-omit-frame-pointer ${flags})
+  message(STATUS "GCC: 已启用${name}")
+endfunction()
 
 if(ASAN)
-  target_compile_options(rendu-compile-option-interface
-    INTERFACE
-      -fno-omit-frame-pointer
-      -fsanitize=address
-      -fsanitize-recover=address
-      -fsanitize-address-use-after-scope)
-
-  target_link_options(rendu-compile-option-interface
-    INTERFACE
-      -fno-omit-frame-pointer
-      -fsanitize=address
-      -fsanitize-recover=address
-      -fsanitize-address-use-after-scope)
-
-  message(STATUS "GCC: Enabled Address Sanitizer")
+  configure_sanitizer("地址检测器(ASan)" "-fsanitize=address -fsanitize-recover=address")
 endif()
 
+#======================= 共享库配置 =======================#
 if(BUILD_SHARED_LIBS)
-  target_compile_options(rendu-compile-option-interface
-    INTERFACE
-      -fPIC
-      -Wno-attributes)
-
-  target_compile_options(rendu-hidden-symbols-interface
-    INTERFACE
-      -fvisibility=hidden)
-
-  # Should break the build when there are RENDU_*_API macros missing
-  # but it complains about missing references in precompiled headers.
-  # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,--no-undefined")
-  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined")
-
-  message(STATUS "GCC: Enabled shared linking")
+  target_compile_options(rendu-compile-option-interface INTERFACE -fPIC)
+  target_link_options(rendu-compile-option-interface INTERFACE --no-undefined)
+  message(STATUS "GCC: 共享库模式已启用(PIC+符号检查)")
 endif()

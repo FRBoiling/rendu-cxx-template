@@ -7,6 +7,55 @@ rendu-cxx-template是c++的cmake构建模版。
 模版目的是简化项目构建配置，以达到开发过程中尽量减少编写cmake，只关注c++代码实现的目的。
 模版结构如下图所示
 
+rendu/
+├── CMakeLists.txt
+├── assets/                  # 打包资源文件
+│   ├── installer.ico
+│   ├── uninstaller.ico
+│   ├── mac_icon.icns
+│   └── dmg_background.png
+├── cmake/
+│   ├── Project/
+│   │   ├── Components.cmake   # 组件定义
+│   │   ├── Options.cmake      # 项目选项
+│   │   └── Policies.cmake     # CMake策略
+│   ├── Platform/
+│   │   ├── Common.cmake       # 跨平台通用配置
+│   │   ├── Linux.cmake        # Linux特定配置
+│   │   ├── Windows.cmake      # Windows特定配置
+│   │   └── MacOS.cmake        # macOS特定配置
+│   ├── Compiler/
+│   │   ├── Common.cmake       # 编译器通用配置
+│   │   ├── GCC.cmake          # GCC配置
+│   │   ├── Clang.cmake        # Clang配置
+│   │   └── MSVC.cmake         # MSVC配置
+│   ├── Utilities/
+│   │   ├── CodeCoverage.cmake # 代码覆盖率
+│   │   └── StaticAnalysis.cmake # 静态分析
+│   └── Packing/              # 新增打包配置
+│       ├── Components.cmake  # 打包组件定义
+│       ├── Common.cmake      # 通用打包配置
+│       ├── Windows.cmake     # Windows打包
+│       ├── Linux.cmake       # Linux打包
+│       ├── MacOS.cmake       # macOS打包
+│       └── Info.plist        # macOS属性列表
+├── libs/
+│   ├── core/
+│   │   ├── include/          # 公共头文件
+│   │   └── src/              # 实现文件
+│   ├── network/
+│   │   ├── include/
+│   │   └── src/
+│   └── ...                   # 其他库
+├── apps/
+│   └── server/
+│       ├── include/
+│       └── src/              # 可执行文件源码
+├── docs/                     # 文档目录
+├── third_party/              # 第三方依赖（可选）
+│   └── spdlog/
+└── LICENSE                   # 项目许可证
+
 ![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953231938-9f5bf8a0-6292-4882-ad4f-bc7e44c5dca0.png#averageHue=%233d4144&clientId=ueae1df6c-2a2c-4&from=paste&height=266&id=u06701cab&name=image.png&originHeight=266&originWidth=332&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9148&status=done&style=none&taskId=uc949724b-3a2c-4e23-be44-3b8f4f833bb&title=&width=332)
 # 简介
 ## cmake模块
