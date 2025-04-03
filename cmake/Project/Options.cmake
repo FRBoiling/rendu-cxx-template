@@ -24,7 +24,7 @@ endif()
 set(RENDU_SCRIPTS_MODE "static" CACHE STRING "脚本模式")
 set_property(CACHE RENDU_SCRIPTS_MODE PROPERTY STRINGS ${RENDU_SCRIPTS_MODES})
 
-include(ConfigureScripts)
+include(Scripts)
 # Build a list of all script modules when -DSCRIPT="custom" is selected
 GetScriptModuleList(SCRIPT_MODULE_LIST)
 foreach(module ${SCRIPT_MODULE_LIST})
@@ -39,7 +39,7 @@ option(RENDU_USE_SCRIPT_PCH "脚本头文件预编译" ON)
 
 #===================== 链接配置 =====================#
 option(RENDU_DYNAMIC_LINKING "启用动态链接" OFF)
-include(ConfigureDynamicLinking)
+include(DynamicLinking)
 IsDynamicLinkingRequired(RENDU_FORCE_DYNAMIC_LINKING)
 
 #option(RENDU_FORCE_DYNAMIC_LINKING "强制动态链接（覆盖用户设置）" ON)

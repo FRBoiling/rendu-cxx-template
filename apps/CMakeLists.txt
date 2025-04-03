@@ -5,7 +5,8 @@
 #| rendu-core rendu module
 #|--------------------------------
 
-message(STATUS "正在编译 ${CMAKE_PROJECT_NAME} ")
+get_filename_component(FOLDER_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+message(STATUS "正在配置 ${FOLDER_NAME} ")
 
 rendu_add_subdirectory(
     ${CMAKE_CURRENT_SOURCE_DIR}

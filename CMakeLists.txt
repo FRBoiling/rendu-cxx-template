@@ -4,8 +4,11 @@
 # 最低CMake版本要求（必须第一个声明）
 cmake_minimum_required(VERSION 3.15)
 
-set(CMAKE_DISABLE_SOURCE_CHANGES ON)
-set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Utilities")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Project")
+
+include(Policies)
+include(GlobalVariables)
 
 # 项目定义
 project(rendu
@@ -15,14 +18,10 @@ project(rendu
     HOMEPAGE_URL "https://github.com/yourusername/rendu"
 )
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Utils")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Project")
+include(BaseHead)
 
-include(ProjectBase)
-
-include(CheckCXXSourceRuns)
-include(CheckIncludeFiles)
-include(ConfigureScripts)
+#----------------------- 项目配置 -----------------------
+include(BaseTargets)
 
 # 设置项目全局选项
 include(Options)
@@ -46,6 +45,7 @@ set(EXCLUDE_DIRS
     "${CMAKE_CURRENT_SOURCE_DIR}/build*"
 )
 
+include(CheckBuildDir)
 
 #-------------------------------------------------------------------------------
 # 子目录添加

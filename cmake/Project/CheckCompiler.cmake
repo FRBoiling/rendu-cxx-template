@@ -22,5 +22,4 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
   include("${CMAKE_SOURCE_DIR}/cmake/compiler/icc/settings.cmake")
   print_final_option("Intel编译器配置" "✔ 已加载" ${Cyan})
 endif ()
-message("")
 
