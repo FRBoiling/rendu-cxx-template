@@ -4,7 +4,7 @@
 
 # 增强路径获取的健壮性
 function(GetScriptsBasePath variable)
-  set(_base_path "${CMAKE_SOURCE_DIR}/src/scripts")
+  set(_base_path "${CMAKE_SOURCE_DIR}/apps/scripts")
   if(NOT IS_DIRECTORY "${_base_path}")
     message(FATAL_ERROR "脚本基础路径不存在: ${_base_path}")
   endif()

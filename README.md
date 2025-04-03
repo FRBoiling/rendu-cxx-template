@@ -1,218 +1,86 @@
-# 概述
-RenduCore是一个modern c++项目。
-先从项目结构开始。使用rendu-cxx-template模版。
-rendu-cxx-template是c++的cmake构建模版。
-模版 ：[https://github.com/FRBoiling/rendu-cxx-template](https://github.com/FRBoiling/rendu-cxx-template)
-目前包含cmake，dep，example，rendu，test，tool模块，后续添加 配置文件，脚本等模块。
-模版目的是简化项目构建配置，以达到开发过程中尽量减少编写cmake，只关注c++代码实现的目的。
-模版结构如下图所示
+# RenduCore - Modern C++ Project
 
-rendu/
-├── CMakeLists.txt
-├── assets/                  # 打包资源文件
-│   ├── installer.ico
-│   ├── uninstaller.ico
-│   ├── mac_icon.icns
-│   └── dmg_background.png
-├── cmake/
-│   ├── Project/
-│   │   ├── Components.cmake   # 组件定义
-│   │   ├── Options.cmake      # 项目选项
-│   │   └── Policies.cmake     # CMake策略
-│   ├── Platform/
-│   │   ├── Common.cmake       # 跨平台通用配置
-│   │   ├── Linux.cmake        # Linux特定配置
-│   │   ├── Windows.cmake      # Windows特定配置
-│   │   └── MacOS.cmake        # macOS特定配置
-│   ├── Compiler/
-│   │   ├── Common.cmake       # 编译器通用配置
-│   │   ├── GCC.cmake          # GCC配置
-│   │   ├── Clang.cmake        # Clang配置
-│   │   └── MSVC.cmake         # MSVC配置
-│   ├── Utilities/
-│   │   ├── CodeCoverage.cmake # 代码覆盖率
-│   │   └── StaticAnalysis.cmake # 静态分析
-│   └── Packing/              # 新增打包配置
-│       ├── Components.cmake  # 打包组件定义
-│       ├── Common.cmake      # 通用打包配置
-│       ├── Windows.cmake     # Windows打包
-│       ├── Linux.cmake       # Linux打包
-│       ├── MacOS.cmake       # macOS打包
-│       └── Info.plist        # macOS属性列表
-├── libs/
-│   ├── core/
-│   │   ├── include/          # 公共头文件
-│   │   └── src/              # 实现文件
-│   ├── network/
-│   │   ├── include/
-│   │   └── src/
-│   └── ...                   # 其他库
-├── apps/
-│   └── server/
-│       ├── include/
-│       └── src/              # 可执行文件源码
-├── docs/                     # 文档目录
-├── third_party/              # 第三方依赖（可选）
-│   └── spdlog/
-└── LICENSE                   # 项目许可证
+[![CMake](https://img.shields.io/badge/CMake-3.25+-blue.svg)](https://cmake.org)
+[![C++ Standard](https://img.shields.io/badge/C++-20-orange.svg)](https://isocpp.org/)
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953231938-9f5bf8a0-6292-4882-ad4f-bc7e44c5dca0.png#averageHue=%233d4144&clientId=ueae1df6c-2a2c-4&from=paste&height=266&id=u06701cab&name=image.png&originHeight=266&originWidth=332&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9148&status=done&style=none&taskId=uc949724b-3a2c-4e23-be44-3b8f4f833bb&title=&width=332)
-# 简介
-## cmake模块
-cmake项目框架通用cmake封装
+## 项目概述
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953278074-7d93df36-db53-42cd-a46a-e501d5813a85.png#averageHue=%233e4246&clientId=ueae1df6c-2a2c-4&from=paste&height=144&id=u40632b56&name=image.png&originHeight=144&originWidth=218&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3886&status=done&style=none&taskId=u3fa1e6c6-d647-470e-9d95-3b00b32dc98&title=&width=218)
-## deps模块
-一些外部依赖库
+RenduCore是基于现代C++（C++20）构建的项目模板，使用CMake作为构建系统。项目模板旨在简化构建配置流程，使开发者能够专注于核心代码实现。
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953292026-80743314-c840-437b-86bb-b13daf6adcd6.png#averageHue=%233f4346&clientId=ueae1df6c-2a2c-4&from=paste&height=278&id=ufb0fb7be&name=image.png&originHeight=278&originWidth=196&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6063&status=done&style=none&taskId=u339e1214-25f4-425b-a9ba-22ec190f6e1&title=&width=196)
-## rendu模块
-源代码（就是实际开中自己写的代码）
-包括以下4个模块。commom，core，example，genrev
+**项目模板**：[rendu-cxx-template](https://github.com/FRBoiling/rendu-cxx-template)
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953309861-c5e8e508-5622-415b-9227-ab9afbd0226e.png#averageHue=%23404447&clientId=ueae1df6c-2a2c-4&from=paste&height=116&id=u931a0ebf&name=image.png&originHeight=116&originWidth=158&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3049&status=done&style=none&taskId=uda0e1d9d-146d-43c2-814d-060be7a91cd&title=&width=158)
-### common模块
-通用模块。基础的通用代码模块
+## 项目结构
+rendu-cxx-template/
+├── cmake/                 # CMake模块系统
+│   ├── Compiler/          # 编译配置
+│   ├── Packaging/         # 打包配置
+│   ├── Platform/          # 平台配置
+│   ├── Project/           # 核心构建逻辑
+│   ├── Toolchain/         # 工具链配置
+│   ├── Utils/             # CMake工具函数
+│   └── Config.cmake.in    # 项目配置模板
+│
+├── libs/                   # 核心代码库
+│   ├── core/               # ECS核心实现
+│   │   └── CMakeLists.txt      # 子项目配置
+│   │
+│   └── common/            # 基础功能模块
+│   │   └── CMakeLists.txt      # 子项目配置
+│   └── CMakeLists.txt      # 子项目配置
+│
+├── apps/                   # 应用程序目录（新增）
+│   ├── launcher/               # 应用程序启动器（新增）
+│   │   └── CMakeLists.txt      # 子项目配置
+│   └── demo/               # 功能演示程序
+│   │   └── CMakeLists.txt      # 子项目配置
+│   └── CMakeLists.txt      # 子项目配置
+│
+├── tests/                  # 测试套件（结构调整）
+│   ├── integration/        # 集成测试（新增）
+│   │   └── core/            # 集成测试
+│   ├── benchmark/          # 性能测试（新增）
+│   │   └── core/            # 性能测试  
+│   └── unit/               # 单元测试（原结构升级）
+│       ├── core/           # 对应libs/core模块
+│       └── common/         # 对应libs/common模块
+│
+├── third_party/           # 第三方依赖（结构调整）
+│
+├── docs/                   # 文档系统（新增）
+│   ├── architecture/       # 架构设计文档
+│   ├── api/                # API参考手册
+│   └── tutorials/          # 使用教程
+│
+└── tools/                  # 开发工具（功能扩展）
+    ├── scripts/            # 构建脚本
+    ├── codegen/            # 代码生成工具
+    └── analysis/           # 静态分析配置
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953337188-ea6140f6-d5d3-488d-a3a1-3b61fab603ea.png#averageHue=%233e4246&clientId=ueae1df6c-2a2c-4&from=paste&height=140&id=ue2a04dc3&name=image.png&originHeight=140&originWidth=220&originalType=binary&ratio=1&rotation=0&showTitle=false&size=4057&status=done&style=none&taskId=u6c5aa61a-ee7a-4ece-8994-9ab2e27baf0&title=&width=220)
-### core模块
-项目核心，不同项目有各自的不同的实现
+## ✨ 功能特性
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953350209-5141d448-7649-41c0-944a-75367aba0e75.png#averageHue=%233b4145&clientId=ueae1df6c-2a2c-4&from=paste&height=280&id=u8cd0574f&name=image.png&originHeight=280&originWidth=248&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6849&status=done&style=none&taskId=u5dfaa025-3747-4da5-9efe-4441db4c10b&title=&width=248)
-### example模块
-例子模块
+- 开箱即用的CMake项目配置
+- 自动化依赖管理
+- 单元测试集成（需补充测试框架）
+- 跨平台支持（Linux/macOS/Windows）
+- 持续集成预配置（需补充CI配置）
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953370256-f5d466ba-3012-4647-9088-5e43c16dfd4d.png#averageHue=%233f4346&clientId=ueae1df6c-2a2c-4&from=paste&height=296&id=uc345badc&name=image.png&originHeight=296&originWidth=202&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6647&status=done&style=none&taskId=u1e727338-a997-4cf6-9a76-8c9b1e13989&title=&width=202)
-### genrev模块
-生成项目版本信息
+## 🚀 快速开始
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/29336172/1664871549064-39cae7a6-80b7-4f00-b748-56504c3472ec.png#averageHue=%23404547&clientId=u0bc2c7f2-1f26-4&from=paste&height=39&id=bzUgu&name=image.png&originHeight=39&originWidth=178&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3175&status=done&style=none&taskId=u9d665256-68a1-427d-bc56-073309a3e9a&title=&width=178)
-从项目中的revision_data.h.in.cmake文件生成版本内容代码（revision_data.h）
-## tests模块
-unittest单元测试模块
+### 前置要求
+- CMake ≥ 3.25
+- C++20兼容编译器（GCC 12+ / Clang 15+ / MSVC 2022+）
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953394796-0773f88b-6fba-4e4b-bc21-c4585f502b29.png#averageHue=%233f4346&clientId=ueae1df6c-2a2c-4&from=paste&height=159&id=u0777159d&name=image.png&originHeight=159&originWidth=218&originalType=binary&ratio=1&rotation=0&showTitle=false&size=4380&status=done&style=none&taskId=u56747be6-0001-43de-8af6-0e3d495be29&title=&width=218)
-# 使用
-这个框架只需要添加对映模块的文件夹和代码即可，几乎不用关心cmake代码。
-以下为概要（详细说明参照后续）
-## 添加第三方依赖
-### 源码方式引入
-在dep文件夹添加对应第三方库源码
-比如：fmt库，只需添加类似如下
-```cmake
-set(target_name fmt)
-rendu_add_library(
-    DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    PROJECT
-    ${PROJECT_NAME}
-    NAME
-    ${target_name}
-    SETTING
-    rendu-dependency-interface
-    DEPS
-)
+### 构建指南
+```bash
+# 克隆项目
+git clone https://github.com/FRBoiling/rendu-cxx-template.git
+cd rendu-cxx-template
 
-```
-## 添加单元测试
-tests文件夹中添加单元测试的cpp代码（依赖googletest单元测试）
-比如：enum单元测试
+# 配置项目
+cmake -B build -DCMAKE_BUILD_TYPE=Release
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/29336172/1678953551489-8a10e9eb-962d-4891-b1f7-f4a162a2af9c.png#averageHue=%233e4246&clientId=ueae1df6c-2a2c-4&from=paste&height=107&id=ue3b64b1d&name=image.png&originHeight=107&originWidth=207&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3630&status=done&style=none&taskId=ue79572af-fa5f-4277-bd7a-44d876e500b&title=&width=207)
-```cmake
-set(target_name enum)
-rendu_add_test(
-    DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    PROJECT
-    ${PROJECT_NAME}
-    NAME
-    ${target_name}
-    SETTING
-    rendu-core-interface
-    DEPS
-    dep::magic_enum
-    rendu::test
-    DEFINES
-    LINKOPTS
-)
-```
-## 添加例子程序
-example文件夹中添加例子程序代码。
-例如：argparse的example 可执行文件如下。
-```cmake
-set(target_name argparse)
-rendu_add_executable(
-    DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    PROJECT
-    ${PROJECT_NAME}
-    NAME
-    ${target_name}
-    SETTING
-    rendu-core-interface
-    DEPS
-    dep::argparse
-    dep::magic_enum
-    DEFINES
-    LINKOPTS
-)
-```
-## 添加项目相关核心代码
-rendu文件夹中添加功能代码
-### 1、添加通用实现库
-common文件夹中通用代码
-```cmake
-set(target_name common)
-rendu_add_library(
-    DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    PROJECT
-    ${PROJECT_NAME}
-    NAME
-    ${target_name}
-    SETTING
-    rendu-core-interface
-    DEPS
-)
+# 编译项目
+cmake --build build --config Release
 
-```
-### 2、添加逻辑实现库
-core文件夹中添加实现代码
-```cmake
-set(target_name core)
-rendu_add_library(
-    DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    PROJECT
-    ${PROJECT_NAME}
-    NAME
-    ${target_name}
-    SETTING
-    rendu-core-interface
-    DEPS
-    rendu::common
-)
-
-
-```
-### 3、添加启动进程
-launcher文件夹中添加启动进程代码
-```cmake
-set(target_name launcher)
-rendu_add_executable(
-    DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    PROJECT
-    ${PROJECT_NAME}
-    NAME
-    ${target_name}
-    SETTING
-    rendu-core-interface
-    DEPS
-    rendu::core
-    rendu::common
-    DEFINES
-    LINKOPTS
-)
-```
+# 运行测试（需先配置测试）
+cd build && ctest -V
