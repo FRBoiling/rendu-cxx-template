@@ -1,71 +1,85 @@
-#**********************************
-#  Created by boil on 2025/02/21.
-#**********************************
+# RenduCore - CMake settings for GCC compiler
+# =========================
+# GCC 编译器相关设置
+# =========================
+function(rendu_setup_gcc_options)
+    set(RENDU_GCC_EXPECTED_VERSION 11.1.0)
 
-#======================= 编译器版本检测 =======================#
-set(GCC_EXPECTED_VERSION 11.1.0)
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS RENDU_GCC_EXPECTED_VERSION)
+        rendu_log_fatal("GCC: RenduCore requires version ${RENDU_GCC_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
+    else ()
+        rendu_log_info("GCC: Minimum version required is ${RENDU_GCC_EXPECTED_VERSION}, found ${CMAKE_CXX_COMPILER_VERSION} - ok!")
+    endif ()
 
-message(STATUS "GCC: 编译器路径 = ${CMAKE_CXX_COMPILER}")
-message(STATUS "GCC: 期望版本 >= ${GCC_EXPECTED_VERSION}")
-message(STATUS "GCC: 实际版本 = ${CMAKE_CXX_COMPILER_VERSION}")
+    target_compile_options(rendu-compile-option-interface
+            INTERFACE
+            -fno-delete-null-pointer-checks)
 
-if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS GCC_EXPECTED_VERSION)
-  message(FATAL_ERROR "GCC: 不满足最低版本要求\n"
-      "需求版本: ${GCC_EXPECTED_VERSION}\n"
-      "当前版本: ${CMAKE_CXX_COMPILER_VERSION}\n"
-      "编译器路径: ${CMAKE_CXX_COMPILER}")
-else()
-  message(STATUS "GCC: 版本检查通过")
-endif()
+    if (RENDU_PLATFORM EQUAL 32)
+        # 32位系统需要手动开启 SSE2（x64 默认支持）
+        target_compile_options(rendu-compile-option-interface
+                INTERFACE
+                -msse2
+                -mfpmath=sse)
+    endif ()
 
-#======================= 核心编译选项 =======================#
-target_compile_options(rendu-compile-option-interface
-    INTERFACE
-    -fno-delete-null-pointer-checks
-    -Wno-attributes
-)
+    if (RENDU_SYSTEM_PROCESSOR MATCHES "x86|amd64")
+        target_compile_definitions(rendu-compile-option-interface
+                INTERFACE
+                HAVE_SSE2
+                __SSE2__)
+        rendu_log_info("GCC: SFMT enabled, SSE2 flags forced")
+    endif ()
 
-#======================= 架构优化 =======================#
-if(PLATFORM EQUAL 32)
-  target_compile_options(rendu-compile-option-interface
-      INTERFACE
-      -msse2
-      -mfpmath=sse)
-  message(STATUS "GCC: 32位架构已启用SSE2优化")
-endif()
+    if (RENDU_WITH_WARNINGS)
+        target_compile_options(rendu-warning-interface
+                INTERFACE
+                -W
+                -Wall
+                -Wextra
+                -Winit-self
+                -Winvalid-pch
+                -Wfatal-errors
+                -Woverloaded-virtual
+                -Wno-missing-field-initializers # 结构体成员有默认值时该警告无意义
+                -Wno-maybe-uninitialized)       # std::optional 场景下该警告易误报
+        rendu_log_info("GCC: All warnings enabled")
+    endif ()
 
-#======================= 警告选项配置 =======================#
-set(GCC_WARNING_OPTS
-    -W
-    -Wall
-    -Wextra
-    -Winit-self
-    -Winvalid-pch
-    -Wfatal-errors
-    -Woverloaded-virtual
-    -Wno-missing-field-initializers
-    -Wno-maybe-uninitialized
-)
+    if (RENDU_WITH_COREDEBUG)
+        target_compile_options(rendu-compile-option-interface
+                INTERFACE
+                -g3)
+        message(STATUS "GCC: Debug-flags set (-g3)")
+    endif ()
 
-if(WITH_WARNINGS)
-  target_compile_options(rendu-warning-interface INTERFACE ${GCC_WARNING_OPTS})
-  message(STATUS "GCC: 已启用严格警告模式")
-endif()
+    if (RENDU_ASAN)
+        target_compile_options(rendu-compile-option-interface
+                INTERFACE
+                -fno-omit-frame-pointer
+                -fsanitize=address
+                -fsanitize-recover=address
+                -fsanitize-address-use-after-scope)
+        target_link_options(rendu-compile-option-interface
+                INTERFACE
+                -fno-omit-frame-pointer
+                -fsanitize=address
+                -fsanitize-recover=address
+                -fsanitize-address-use-after-scope)
+        rendu_log_info("GCC: Enabled Address Sanitizer")
+    endif ()
 
-#======================= Sanitizers配置 =======================#
-function(configure_sanitizer name flags)
-  target_compile_options(rendu-compile-option-interface INTERFACE -fno-omit-frame-pointer ${flags})
-  target_link_options(rendu-compile-option-interface INTERFACE -fno-omit-frame-pointer ${flags})
-  message(STATUS "GCC: 已启用${name}")
+    if (BUILD_SHARED_LIBS)
+        target_compile_options(rendu-compile-option-interface
+                INTERFACE
+                -fPIC
+                -Wno-attributes)
+        target_compile_options(rendu-hidden-symbols-interface
+                INTERFACE
+                -fvisibility=hidden)
+        # -Wl,--no-undefined 可用于链接阶段强制符号完整，但会影响 PCH
+        rendu_log_info("GCC: Enabled shared linking")
+    endif ()
 endfunction()
 
-if(ASAN)
-  configure_sanitizer("地址检测器(ASan)" "-fsanitize=address -fsanitize-recover=address")
-endif()
-
-#======================= 共享库配置 =======================#
-if(BUILD_SHARED_LIBS)
-  target_compile_options(rendu-compile-option-interface INTERFACE -fPIC)
-  target_link_options(rendu-compile-option-interface INTERFACE --no-undefined)
-  message(STATUS "GCC: 共享库模式已启用(PIC+符号检查)")
-endif()
+rendu_setup_gcc_options()
