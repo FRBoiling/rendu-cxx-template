@@ -6,16 +6,22 @@
   - 增强Windows终端检测
   - 统一变量命名规范
   - 改进颜色禁用逻辑
+  - 确保跨平台兼容性（包括macOS）
 ]]
+
+set(CMAKE_COLOR_MAKEFILE ON CACHE BOOL "Enable colored output" FORCE)
 
 # 检测有效的颜色支持环境
 if(DISABLE_COLOR)
   set(_color_supported FALSE)
-elseif(CMAKE_COLOR_MAKEFILE OR NOT CMAKE_VERSION VERSION_LESS 3.24)
-  # 现代CMake版本或强制启用颜色
+elseif(CMAKE_COLOR_MAKEFILE OR NOT CMAKE_VERSION VERSION_LESS 3.24 OR CMAKE_TERMINAL_IS_COLOR_CAPABLE)
+  # 现代CMake版本、强制启用颜色或终端支持颜色
   set(_color_supported TRUE)
-elseif(CMAKE_TERMINAL_IS_COLOR_CAPABLE)
-  # 终端明确声明支持颜色
+elseif(UNIX AND NOT APPLE)
+  # Linux 系统默认支持 ANSI 颜色
+  set(_color_supported TRUE)
+elseif(APPLE)
+  # macOS 系统默认支持 ANSI 颜色
   set(_color_supported TRUE)
 elseif(WIN32 AND (CMAKE_GENERATOR MATCHES "Ninja" OR CMAKE_GENERATOR MATCHES "Visual Studio"))
   # Windows现代终端(PowerShell/新版CMD)
