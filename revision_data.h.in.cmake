@@ -1,18 +1,42 @@
-#ifndef __REVISION_DATA_H__
-#define __REVISION_DATA_H__
-#define _HASH                      "@rev_hash@"
-#define _DATE                      "@rev_date@"
-#define _BRANCH                    "@rev_branch@"
-#define _CMAKE_COMMAND             R"(@CMAKE_COMMAND@)"
-#define _CMAKE_VERSION             R"(@CMAKE_VERSION@)"
-#define _CMAKE_HOST_SYSTEM         R"(@CMAKE_HOST_SYSTEM_NAME@ @CMAKE_HOST_SYSTEM_VERSION@)"
-#define _SOURCE_DIRECTORY          R"(@CMAKE_SOURCE_DIR@)"
-#define _BUILD_DIRECTORY           R"(@BUILDDIR@)"
-#define _MYSQL_EXECUTABLE          R"(@MYSQL_EXECUTABLE@)"
+/* 
+ * 本文件属于 RenduCore 项目
+ *
+ */
+
+#ifndef RENDUCORE_REVISION_DATA_H
+#define RENDUCORE_REVISION_DATA_H
+
+// Git 提交信息
+#define RENDU_GIT_COMMIT_HASH      "@rev_hash@"
+#define RENDU_GIT_COMMIT_DATE      "@rev_date@"
+#define RENDU_GIT_COMMIT_BRANCH    R"(@rev_branch@)"
+
+// 构建主机信息
+#define RENDU_BUILD_HOST_SYSTEM            R"(@RENDU_BUILD_HOST_SYSTEM@)"
+#define RENDU_BUILD_HOST_SYSTEM_VERSION    R"(@RENDU_BUILD_HOST_SYSTEM_RELEASE@)"
+#cmakedefine RENDU_BUILD_HOST_DISTRO_NAME         R"(@RENDU_BUILD_HOST_DISTRO_NAME@)"
+#cmakedefine RENDU_BUILD_HOST_DISTRO_VERSION_ID   R"(@RENDU_BUILD_HOST_DISTRO_VERSION_ID@)"
+
+// 构建目标信息
+#define RENDU_BUILD_PROCESSOR              R"(@CMAKE_SYSTEM_PROCESSOR@)"
+
+// CMake 构建信息
+#define RENDU_BUILD_CMAKE_COMMAND          R"(@CMAKE_COMMAND@)"
+#define RENDU_BUILD_CMAKE_VERSION          R"(@CMAKE_VERSION@)"
+#define RENDU_BUILD_CMAKE_SOURCE_DIRECTORY R"(@CMAKE_SOURCE_DIR@)"
+#define RENDU_BUILD_CMAKE_BUILD_DIRECTORY  R"(@BUILDDIR@)"
+
+// 数据库更新器信息
+#define RENDU_DATABASE_MYSQL_EXECUTABLE    R"(@MYSQL_EXECUTABLE@)"
+#define RENDU_DATABASE_FULL_DATABASE       "TDB_full_world_1110.25031_2025_03_29.sql"
+#define RENDU_DATABASE_HOTFIXES_DATABASE   "TDB_full_hotfixes_1110.25031_2025_03_29.sql"
+
+// Windows 资源定义
 #define VER_COMPANYNAME_STR        "RenduCore Developers"
-#define VER_LEGALCOPYRIGHT_STR     "(c)2022-@rev_year@ RenduCore"
+#define VER_LEGALCOPYRIGHT_STR     "(c)2025-@rev_year@ RenduCore"
 #define VER_FILEVERSION            0,0,0
 #define VER_FILEVERSION_STR        "@rev_hash@ @rev_date@ (@rev_branch@ branch)"
 #define VER_PRODUCTVERSION         VER_FILEVERSION
 #define VER_PRODUCTVERSION_STR     VER_FILEVERSION_STR
-#endif // __REVISION_DATA_H__
+
+#endif // RENDUCORE_REVISION_DATA_H

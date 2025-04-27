@@ -61,7 +61,7 @@ rendu-cxx-template/
 - 开箱即用的CMake项目配置
 - 自动化依赖管理
 - 单元测试集成（需补充测试框架）
-- 跨平台支持（Linux/macOS/Windows）
+- 跨平台支持（Linux/MacOS/Windows）
 - 持续集成预配置（需补充CI配置）
 
 ## 🚀 快速开始
