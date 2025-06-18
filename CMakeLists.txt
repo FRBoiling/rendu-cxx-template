@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.24)
 
 # 项目基本信息
-project(rendu
+project(rendu-cxx-template
+   LANGUAGES CXX
    VERSION 1.2.3
    DESCRIPTION "RenduCore C++ Template"
    HOMEPAGE_URL "https://github.com/xxx/rendu"
-   LANGUAGES CXX
 )
 
 # 设置 CMake 宏脚本目录
@@ -18,8 +18,9 @@ include(CheckPlatform)
 rendu_add_subdirectories(
   DIR ${CMAKE_CURRENT_SOURCE_DIR}
   EXCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake
     ${CMAKE_CURRENT_SOURCE_DIR}/.git
+    ${CMAKE_CURRENT_SOURCE_DIR}/.vscode
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake
     ${CMAKE_CURRENT_SOURCE_DIR}/build
 )
 

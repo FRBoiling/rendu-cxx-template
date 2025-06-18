@@ -1,14 +1,18 @@
-# Rendu - A free and open-source MMORPG server emulator
+# Rendu - 一个免费开源的 MMORPG 服务器模拟器
 # =========================
 # 构建选项配置
 # =========================
 
-# 是否构建 worldserver 和 bnetserver
-option(RENDU_SERVERS "构建 worldserver 和 bnetserver" ON)
+# 是否构建 launcher 可执行文件
+option(RENDU_LAUCHER "构建 launcher" ON)
+# 工具链相关选项
+option(RENDU_TOOLS "构建工具" ON)
+# 测试相关选项
+option(BUILD_TESTING "构建测试套件" ON)
+set(RENDU_BUILD_TESTING ${BUILD_TESTING})
 
 # 脚本构建模式可选项
 set(RENDU_SCRIPTS_AVAILABLE_OPTIONS none static dynamic minimal-static minimal-dynamic)
-
 # 校验 RENDU_SCRIPTS 变量是否合法
 if(RENDU_SCRIPTS)
   list(FIND RENDU_SCRIPTS_AVAILABLE_OPTIONS "${RENDU_SCRIPTS}" RENDU_SCRIPTS_INDEX)
@@ -30,13 +34,12 @@ foreach(SCRIPT_MODULE ${RENDU_SCRIPT_MODULE_LIST})
   set_property(CACHE ${RENDU_SCRIPT_MODULE_VARIABLE} PROPERTY STRINGS default disabled static dynamic)
 endforeach()
 
-# 工具链相关选项
-option(RENDU_TOOLS "构建地图/vmap/mmap 提取与组装工具" ON)
+
 option(RENDU_USE_SCRIPTPCH "编译脚本时使用预编译头" ON)
-option(RENDU_USE_COREPCH "编译服务器时使用预编译头" ON)
-option(RENDU_WITH_DYNAMIC_LINKING "启用动态库链接" OFF)
+option(RENDU_USE_COREPCH "编译核心库时使用预编译头" ON)
 
 # 动态链接依赖判断
+option(RENDU_WITH_DYNAMIC_LINKING "启用动态库链接" OFF)
 rendu_is_dynamic_linking_required(RENDU_WITH_DYNAMIC_LINKING_FORCED)
 if(RENDU_WITH_DYNAMIC_LINKING AND RENDU_WITH_DYNAMIC_LINKING_FORCED)
   set(RENDU_WITH_DYNAMIC_LINKING_FORCED OFF)
@@ -63,10 +66,6 @@ set_property(CACHE RENDU_WITH_SOURCE_TREE PROPERTY STRINGS no flat hierarchical 
 
 # GIT 相关选项
 option(RENDU_WITHOUT_GIT "禁用 GIT 测试流程" OFF)
-
-# 测试相关选项
-option(BUILD_TESTING "构建测试套件" OFF)
-set(RENDU_BUILD_TESTING ${BUILD_TESTING})
 
 # UNIX 平台专用选项
 if(UNIX)

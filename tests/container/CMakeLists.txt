@@ -2,14 +2,15 @@
 #  Created by boil on 2023/02/19.
 #**********************************
 
-set(target_name container)
-rendu_add_test(
+get_filename_component(FOLDER_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+
+rendu_add_executable(
     DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
     PROJECT
     ${PROJECT_NAME}
     NAME
-    ${target_name}
+    ${FOLDER_NAME}
     SETTING
     rendu-core-interface
     DEPS

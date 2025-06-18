@@ -2,16 +2,39 @@
 #  Created by boil on 2022/8/14.
 #**********************************
 
-get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+get_filename_component(FOLDER_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+project(${FOLDER_NAME})
 
-rendu_add_subdirectories(
-    DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    EXCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/argparse
-    ${CMAKE_CURRENT_SOURCE_DIR}/date
-    ${CMAKE_CURRENT_SOURCE_DIR}/jsoncpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/magic_enum
-    ${CMAKE_CURRENT_SOURCE_DIR}/spdlog
-    ${CMAKE_CURRENT_SOURCE_DIR}/zlib
-)
+add_subdirectory(threads)
+
+if(SERVERS OR TOOLS)
+  add_subdirectory(boost)
+  add_subdirectory(zlib)
+  add_subdirectory(g3dlite)
+  add_subdirectory(recastnavigation)
+  add_subdirectory(fmt)
+  add_subdirectory(SFMT)
+  add_subdirectory(utf8cpp)
+  add_subdirectory(valgrind)
+  add_subdirectory(openssl)
+  add_subdirectory(jemalloc)
+  add_subdirectory(argon2)
+  add_subdirectory(short_alloc)
+endif()
+
+if(SERVERS)
+  add_subdirectory(mysql)
+  add_subdirectory(readline)
+  add_subdirectory(gsoap)
+  add_subdirectory(rapidjson)
+  add_subdirectory(efsw)
+  add_subdirectory(protobuf)
+endif()
+
+if(TOOLS)
+  add_subdirectory(CascLib)
+endif()
+
+if(BUILD_TESTING)
+  add_subdirectory(catch)
+endif()
