@@ -1,7 +1,7 @@
 
 # 源码组织与智能收集
-include(CollectDirectories)
-include(CollectFiles)
+include(RenduCollectDirectories)
+include(RenduCollectFiles)
 
 # =============================================
 # 函数: rendu_add_subdirectories
@@ -27,44 +27,43 @@ function(rendu_add_subdirectories)
     set(multiValueArgs EXCLUDE_DIRS)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    if(NOT ARG_DIR)
-        message(FATAL_ERROR "rendu_add_subdirectories: 必须指定 DIR")
-    endif()
-    if(NOT IS_DIRECTORY "${ARG_DIR}")
-        message(WARNING "rendu_add_subdirectories: 目录不存在: ${ARG_DIR}")
+    if (NOT ARG_DIR)
+        rendu_log_fatal("rendu_add_subdirectories: 必须指定 DIR")
+    endif ()
+    if (NOT IS_DIRECTORY "${ARG_DIR}")
+        rendu_log_warn("rendu_add_subdirectories: 目录不存在: ${ARG_DIR}")
         return()
-    endif()
+    endif ()
 
     # 规范化排除目录为绝对路径并去除末尾斜杠
     set(EXCLUDE_ABS_DIRS "")
-    foreach(excl IN LISTS ARG_EXCLUDE_DIRS)
-        if(IS_ABSOLUTE "${excl}")
+    foreach (excl IN LISTS ARG_EXCLUDE_DIRS)
+        if (IS_ABSOLUTE "${excl}")
             file(TO_CMAKE_PATH "${excl}" excl_norm)
-        else()
+        else ()
             get_filename_component(excl_norm "${ARG_DIR}/${excl}" ABSOLUTE)
-        endif()
+        endif ()
         string(REGEX REPLACE "/$" "" excl_norm "${excl_norm}")
         list(APPEND EXCLUDE_ABS_DIRS "${excl_norm}")
-    endforeach()
+    endforeach ()
 
     # 查找所有一级子目录
     file(GLOB children RELATIVE "${ARG_DIR}" "${ARG_DIR}/*")
-    foreach(child IN LISTS children)
+    foreach (child IN LISTS children)
         set(child_path "${ARG_DIR}/${child}")
-        if(IS_DIRECTORY "${child_path}")
+        if (IS_DIRECTORY "${child_path}")
             get_filename_component(child_abs "${child_path}" ABSOLUTE)
             string(REGEX REPLACE "/$" "" child_abs "${child_abs}")
             list(FIND EXCLUDE_ABS_DIRS "${child_abs}" found)
-            if(found EQUAL -1)
+            if (found EQUAL -1)
                 add_subdirectory("${child_path}")
-                if(ARG_RECURSIVE)
+                if (ARG_RECURSIVE)
                     rendu_add_subdirectories(DIR "${child_path}" EXCLUDE_DIRS ${ARG_EXCLUDE_DIRS} RECURSIVE)
-                endif()
-            endif()
-        endif()
-    endforeach()
+                endif ()
+            endif ()
+        endif ()
+    endforeach ()
 endfunction()
-
 
 
 # =============================================
@@ -101,47 +100,60 @@ function(rendu_add_executable)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     # 检查必需参数
-    if(NOT ARG_NAME)
-        message(FATAL_ERROR "rendu_add_executable: 必须指定 NAME")
-    endif()
-    if(NOT ARG_DIR)
-        message(FATAL_ERROR "rendu_add_executable: 必须指定 DIR")
-    endif()
+    if (NOT ARG_NAME)
+        rendu_log_fatal(" 必须指定 NAME")
+    endif ()
+    if (NOT ARG_DIR)
+        rendu_log_fatal(" 必须指定 DIR")
+    endif ()
 
     # 收集源文件
-    if(NOT ARG_SOURCES)
+    if (NOT ARG_SOURCES)
         rendu_collect_source_files(SRC_LIST "${ARG_DIR}")
-    else()
+    else ()
         set(SRC_LIST ${ARG_SOURCES})
-    endif()
+    endif ()
 
-    add_executable(${ARG_NAME} ${SRC_LIST})
+    set(target_name "${ARG_PROJECT}_${ARG_NAME}")
+    add_executable(${target_name} ${SRC_LIST})
+
+    # 自动收集 include 目录
+    rendu_collect_include_directories(INCLUDE_DIRS "${ARG_DIR}"
+            EXCLUDE_DIRS
+            "${ARG_DIR}/tests"
+            "${CMAKE_BINARY_DIR}"
+            EXCLUDE_REGEX ".*/private"
+    )
+
+    target_include_directories(${target_name} PUBLIC ${INCLUDE_DIRS})
 
     # 目标属性
-    if(ARG_PROJECT)
-        set_target_properties(${ARG_NAME} PROPERTIES PROJECT_LABEL "${ARG_PROJECT}")
-    endif()
+    if (ARG_PROJECT)
+        set_target_properties(${target_name} PROPERTIES PROJECT_LABEL "${ARG_PROJECT}")
+        set_target_properties(${target_name} PROPERTIES FOLDER "${ARG_PROJECT}/${ARG_NAME}")
+    endif ()
 
     # 链接接口库
-    if(ARG_LINKOPTS)
-        target_link_libraries(${ARG_NAME} PUBLIC ${ARG_LINKOPTS})
-    endif()
+    if (ARG_LINKOPTS)
+        target_link_libraries(${target_name} PUBLIC ${ARG_LINKOPTS})
+    endif ()
 
     # 链接依赖
-    if(ARG_DEPS)
-        target_link_libraries(${ARG_NAME} PRIVATE ${ARG_DEPS})
-    endif()
+    if (ARG_DEPS)
+        target_link_libraries(${target_name} PRIVATE ${ARG_DEPS})
+    endif ()
 
     # 添加预处理宏
-    if(ARG_DEFINES)
-        target_compile_definitions(${ARG_NAME} PRIVATE ${ARG_DEFINES})
-    endif()
+    if (ARG_DEFINES)
+        target_compile_definitions(${target_name} PRIVATE ${ARG_DEFINES})
+    endif ()
 
-      # 支持 ALIAS，命名规范为 project::name
-    if(ARG_ALIAS AND ARG_PROJECT)
+    # 支持 ALIAS，命名规范为 project::name
+    if (ARG_ALIAS AND ARG_PROJECT)
         set(alias_name "${ARG_PROJECT}::${ARG_NAME}")
-        add_executable(${alias_name} ALIAS ${ARG_NAME})
-    endif()
+        add_executable(${alias_name} ALIAS ${target_name})
+        rendu_log_debug(" ${alias_name} 作为 ALIAS 目标")
+    endif ()
 endfunction()
 
 
@@ -181,54 +193,73 @@ function(rendu_add_library)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     # 检查必需参数
-    if(NOT ARG_NAME)
-        message(FATAL_ERROR "rendu_add_library: 必须指定 NAME")
-    endif()
-    if(NOT ARG_DIR)
-        message(FATAL_ERROR "rendu_add_library: 必须指定 DIR")
-    endif()
+    if (NOT ARG_NAME)
+        rendu_log_fatal("必须指定 NAME")
+    endif ()
+    if (NOT ARG_DIR)
+        rendu_log_fatal("必须指定 DIR")
+    endif ()
 
     # 收集源文件
-    if(NOT ARG_SOURCES)
+    if (NOT ARG_SOURCES)
         # 自动收集源文件
-        rendu_collect_source_files(SRC_LIST
-            ${ARG_DIR}
-        EXTENSIONS  .c .cc .cpp .inl)
-    else()
+        rendu_collect_source_files(
+                SRC_LIST ${ARG_DIR}
+                EXTENSIONS .c .cc .cpp .inl)
+    else ()
         set(SRC_LIST ${ARG_SOURCES})
-    endif()
+    endif ()
+
+    # 自动收集 include 目录
+    rendu_collect_include_directories(INCLUDE_DIRS "${ARG_DIR}"
+            EXCLUDE_DIRS
+            "${ARG_DIR}/tests"
+            "${CMAKE_BINARY_DIR}"
+            EXCLUDE_REGEX ".*/private"
+    )
 
     # 创建库
+    set(target_name "${ARG_PROJECT}_${ARG_NAME}")
     # 自动判断是否为 header-only
-    if(SRC_LIST)
-        if(ARG_STATIC)
+    if (SRC_LIST)
+        if (ARG_STATIC)
             set(lib_type STATIC)
-        elseif(ARG_SHARED)
+        elseif (ARG_SHARED)
             set(lib_type SHARED)
-        elseif(ARG_INTERFACE)
+        elseif (ARG_INTERFACE)
             set(lib_type INTERFACE)
-        else()
+        else ()
             set(lib_type STATIC) # 默认静态库
-        endif()
-        add_library(${ARG_NAME} ${lib_type} ${SRC_LIST})
-    else()
+        endif ()
+        add_library(${target_name} ${lib_type} ${SRC_LIST})
+        rendu_log_debug("${target_name} ${lib_type} 库（无源文件）")
+    else ()
         set(lib_type INTERFACE)
-        add_library(${ARG_NAME} ${lib_type})
-        message(STATUS "rendu_add_library: ${ARG_NAME} 自动转为 header-only INTERFACE 库（无源文件）")
-    endif()
+        add_library(${target_name} ${lib_type})
+        rendu_log_debug("${target_name} 自动转为 header-only ${lib_type} 库（无源文件）")
+    endif ()
+    # 根据库类型确定包含目录可见性
+    if (lib_type STREQUAL "INTERFACE")
+        set(visibility INTERFACE)
+    else ()
+        set(visibility PUBLIC)
+    endif ()
+
+    target_include_directories(${target_name} ${visibility} ${INCLUDE_DIRS})
 
     # 目标属性
-    if(ARG_PROJECT)
-        set_target_properties(${ARG_NAME} PROPERTIES PROJECT_LABEL "${ARG_PROJECT}")
-    endif()
+    if (ARG_PROJECT)
+        set_target_properties(${target_name} PROPERTIES PROJECT_LABEL "${ARG_PROJECT}")
+        set_target_properties(${target_name} PROPERTIES FOLDER "${ARG_PROJECT}/${ARG_NAME}")
+    endif ()
 
     # 链接接口库
-    if(ARG_LINKOPTS)
+    if (ARG_LINKOPTS)
         # 如果是 INTERFACE 库，使用 INTERFACE 链接
         # 否则使用 PRIVATE 链接
-        if(lib_type STREQUAL "INTERFACE")
-            target_link_libraries(${ARG_NAME} INTERFACE ${ARG_LINKOPTS})
-        else()
+        if (lib_type STREQUAL "INTERFACE")
+            target_link_libraries(${target_name} INTERFACE ${ARG_LINKOPTS})
+        else ()
             # 对于非 INTERFACE 库，使用 PRIVATE 链接
             # 这样可以避免 INTERFACE 库的依赖被传播
             # 但仍然允许其他库链接到这个库
@@ -236,33 +267,33 @@ function(rendu_add_library)
             # 这对于静态库和共享库都适用
             # 但对于 INTERFACE 库，PUBLIC 链接是必须的
             # 因为 INTERFACE 库本身不包含源文件     
-            target_link_libraries(${ARG_NAME} PRIVATE ${ARG_LINKOPTS})
-        endif()                                                        
-    endif()
+            target_link_libraries(${target_name} PRIVATE ${ARG_LINKOPTS})
+        endif ()
+    endif ()
 
     # 链接依赖
-    if(ARG_DEPS)
+    if (ARG_DEPS)
         # 如果是 INTERFACE 库，使用 INTERFACE 链接 
         # 否则使用 PRIVATE 链接
-        if(lib_type STREQUAL "INTERFACE")
-            target_link_libraries(${ARG_NAME} INTERFACE ${ARG_DEPS})
-        else()
+        if (lib_type STREQUAL "INTERFACE")
+            target_link_libraries(${target_name} INTERFACE ${ARG_DEPS})
+        else ()
             # 对于非 INTERFACE 库，使用 PRIVATE 链接
             # 这样可以避免 INTERFACE 库的依赖被传播
             # 但仍然允许其他库链接到这个库
             # 并使用其依赖
             # 这对于静态库和共享库都适用                
-            target_link_libraries(${ARG_NAME} PRIVATE ${ARG_DEPS})
-        endif()
-    endif()
+            target_link_libraries(${target_name} PRIVATE ${ARG_DEPS})
+        endif ()
+    endif ()
 
     # 添加预处理宏
-    if(ARG_DEFINES)
+    if (ARG_DEFINES)
         # 对于 INTERFACE 库，使用 INTERFACE 定义
         # 否则使用 PRIVATE 定义
-        if(lib_type STREQUAL "INTERFACE")
-            target_compile_definitions(${ARG_NAME} INTERFACE ${ARG_DEFINES})
-        else()
+        if (lib_type STREQUAL "INTERFACE")
+            target_compile_definitions(${target_name} INTERFACE ${ARG_DEFINES})
+        else ()
             # 对于非 INTERFACE 库，使用 PRIVATE 定义
             # 这样可以避免 INTERFACE 库的定义被传播
             # 但仍然允许其他库链接到这个库
@@ -272,23 +303,22 @@ function(rendu_add_library)
             # 因为 INTERFACE 库本身不包含源文件
             # 并且需要在其他库中使用其定义
             # 这对于静态库和共享库都适用
-            target_compile_definitions(${ARG_NAME} PRIVATE ${ARG_DEFINES})
-        endif()
-    endif()
+            target_compile_definitions(${target_name} PRIVATE ${ARG_DEFINES})
+        endif ()
+    endif ()
 
     # 支持 ALIAS，命名规范为 project::name
-    if(ARG_ALIAS AND ARG_PROJECT)
+    if (ARG_ALIAS AND ARG_PROJECT)
         set(alias_name "${ARG_PROJECT}::${ARG_NAME}")
-        message(STATUS "rendu_add_library: ${alias_name} 作为 ALIAS 目标")
+        rendu_log_debug("${alias_name} 作为 ALIAS 目标")
         # 创建 ALIAS 目标
         # 这样可以在其他地方使用 project::name 来引用这个库
         # 例如在其他库或可执行文件中链接时
         # 可以使用 target_link_libraries(myexe PRIVATE project::name)
         # 这样可以避免直接引用库名，增强可移植性
-        add_library(${alias_name} ALIAS ${ARG_NAME})
-    endif()
+        add_library(${alias_name} ALIAS ${target_name})
+    endif ()
 endfunction()
-
 
 
 # =============================================
@@ -306,14 +336,14 @@ endfunction()
 macro(rendu_source_group GROUP_NAME)
     set(files ${ARGN})
     # 兼容 Windows 分组分隔符
-    if(WIN32)
+    if (WIN32)
         string(REPLACE "/" "\\" group "${GROUP_NAME}")
-    else()
+    else ()
         set(group "${GROUP_NAME}")
-    endif()
-    if(group STREQUAL "")
+    endif ()
+    if (group STREQUAL "")
         set(group "\\")
-    endif()
+    endif ()
     source_group("${group}" FILES ${files})
 endmacro()
 
@@ -364,102 +394,102 @@ macro(rendu_source_groups dir)
     cmake_parse_arguments(ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     # 参数校验和路径处理
-    if(NOT IS_ABSOLUTE "${dir}")
+    if (NOT IS_ABSOLUTE "${dir}")
         get_filename_component(dir "${dir}" ABSOLUTE)
-    endif()
-    
-    if(NOT EXISTS "${dir}")
-        message(WARNING "Directory does not exist: ${dir}")
+    endif ()
+
+    if (NOT EXISTS "${dir}")
+        rendu_log_warn("Directory does not exist: ${dir}")
         return()
-    endif()
+    endif ()
 
     # 检查分组模式(兼容新旧变量名)
-    if(DEFINED WITH_SOURCE_TREE AND NOT DEFINED RENDU_SOURCE_GROUPING_MODE)
+    if (DEFINED WITH_SOURCE_TREE AND NOT DEFINED RENDU_SOURCE_GROUPING_MODE)
         set(RENDU_SOURCE_GROUPING_MODE "${WITH_SOURCE_TREE}")
-    elseif(NOT DEFINED RENDU_SOURCE_GROUPING_MODE)
+    elseif (NOT DEFINED RENDU_SOURCE_GROUPING_MODE)
         set(RENDU_SOURCE_GROUPING_MODE "NONE")
-    endif()
+    endif ()
 
     string(TOUPPER "${RENDU_SOURCE_GROUPING_MODE}" grouping_mode)
 
     # 设置默认扩展名
-    if(NOT ARG_EXTENSIONS)
-        set(ARG_EXTENSIONS 
-            h hh hpp hxx 
-            c cc cpp cxx 
-            inl def)
-    endif()
+    if (NOT ARG_EXTENSIONS)
+        set(ARG_EXTENSIONS
+                h hh hpp hxx
+                c cc cpp cxx
+                inl def)
+    endif ()
 
     # 仅在有意义的分组模式下执行
-    if(NOT grouping_mode STREQUAL "NONE")
+    if (NOT grouping_mode STREQUAL "NONE")
         # 生成GLOB模式
         set(patterns "")
-        foreach(ext IN LISTS ARG_EXTENSIONS)
+        foreach (ext IN LISTS ARG_EXTENSIONS)
             list(APPEND patterns "${dir}/*.${ext}")
-        endforeach()
+        endforeach ()
 
         # 递归收集所有源文件
-        file(GLOB_RECURSE elements 
-            LIST_DIRECTORIES false
-            RELATIVE "${dir}"
-            ${patterns})
+        file(GLOB_RECURSE elements
+                LIST_DIRECTORIES false
+                RELATIVE "${dir}"
+                ${patterns})
 
         # 过滤排除目录
         set(filtered_elements "")
-        foreach(element IN LISTS elements)
+        foreach (element IN LISTS elements)
             set(include_file TRUE)
-            
+
             # 检查是否在排除目录中
             get_filename_component(element_dir "${element}" DIRECTORY)
-            foreach(excl_dir IN LISTS ARG_EXCLUDE_DIRS)
+            foreach (excl_dir IN LISTS ARG_EXCLUDE_DIRS)
                 string(FIND "${dir}/${element_dir}" "${excl_dir}" pos)
-                if(pos EQUAL 0)
+                if (pos EQUAL 0)
                     set(include_file FALSE)
                     break()
-                endif()
-            endforeach()
+                endif ()
+            endforeach ()
 
-            if(include_file)
+            if (include_file)
                 list(APPEND filtered_elements "${element}")
-            endif()
-        endforeach()
+            endif ()
+        endforeach ()
 
         # 启用VS文件夹视图(仅Windows)
-        if((grouping_mode STREQUAL "FOLDERS" OR grouping_mode STREQUAL "HIERARCHICAL_FOLDERS") AND WIN32)
+        if ((grouping_mode STREQUAL "FOLDERS" OR grouping_mode STREQUAL "HIERARCHICAL_FOLDERS") AND WIN32)
             set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-        endif()
+        endif ()
 
         # 分组处理
-        foreach(element IN LISTS filtered_elements)
+        foreach (element IN LISTS filtered_elements)
             get_filename_component(element_dir "${element}" DIRECTORY)
 
             # 确定分组名
-            if("${element_dir}" STREQUAL "")
+            if ("${element_dir}" STREQUAL "")
                 set(group_name "\\")  # 根分组
-            else()
-                if(grouping_mode MATCHES "^FLAT")
+            else ()
+                if (grouping_mode MATCHES "^FLAT")
                     # 扁平模式: 取首级目录
                     string(FIND "${element_dir}" "/" first_slash_pos)
-                    if(NOT first_slash_pos EQUAL -1)
+                    if (NOT first_slash_pos EQUAL -1)
                         string(SUBSTRING "${element_dir}" 0 ${first_slash_pos} group_name)
-                    else()
+                    else ()
                         set(group_name "${element_dir}")
-                    endif()
-                else()
+                    endif ()
+                else ()
                     # 分层模式: 完整路径转换
-                    if(WIN32 AND (grouping_mode STREQUAL "FOLDERS" OR grouping_mode STREQUAL "HIERARCHICAL_FOLDERS"))
+                    if (WIN32 AND (grouping_mode STREQUAL "FOLDERS" OR grouping_mode STREQUAL "HIERARCHICAL_FOLDERS"))
                         string(REPLACE "/" "\\" group_name "${element_dir}")
-                    else()
+                    else ()
                         set(group_name "${element_dir}")
-                    endif()
-                endif()
-            endif()
+                    endif ()
+                endif ()
+            endif ()
 
             # 应用分组(处理路径特殊字符)
             file(TO_NATIVE_PATH "${dir}/${element}" native_file_path)
             rendu_source_group("${group_name}" "${native_file_path}")
-        endforeach()
-    endif()
+        endforeach ()
+    endif ()
 endmacro()
 
 
@@ -490,19 +520,19 @@ function(rendu_install_targets)
     set(multiValueArgs TARGETS)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    if(NOT ARG_TARGETS)
-        message(FATAL_ERROR "rendu_install_targets: 必须指定 TARGETS")
-    endif()
+    if (NOT ARG_TARGETS)
+        rendu_log_fatal("rendu_install_targets: 必须指定 TARGETS")
+    endif ()
 
-    foreach(target IN LISTS ARG_TARGETS)
+    foreach (target IN LISTS ARG_TARGETS)
         install(TARGETS ${target}
-            RUNTIME DESTINATION ${ARG_RUNTIME}
-            LIBRARY DESTINATION ${ARG_LIBRARY}
-            ARCHIVE DESTINATION ${ARG_ARCHIVE}
-            INCLUDES DESTINATION ${ARG_INCLUDES}
-            COMPONENT ${ARG_COMPONENT}
+                RUNTIME DESTINATION ${ARG_RUNTIME}
+                LIBRARY DESTINATION ${ARG_LIBRARY}
+                ARCHIVE DESTINATION ${ARG_ARCHIVE}
+                INCLUDES DESTINATION ${ARG_INCLUDES}
+                COMPONENT ${ARG_COMPONENT}
         )
-    endforeach()
+    endforeach ()
 endfunction()
 
 # =============================================
@@ -513,18 +543,18 @@ endfunction()
 # rendu_add_uninstall_target()
 # =============================================
 function(rendu_add_uninstall_target)
-    if(NOT TARGET uninstall)
+    if (NOT TARGET uninstall)
         configure_file(
-            "${CMAKE_SOURCE_DIR}/cmake/platform/cmake_uninstall.in.cmake"
-            "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
-            @ONLY
+                "${CMAKE_SOURCE_DIR}/cmake/platform/cmake_uninstall.in.cmake"
+                "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+                @ONLY
         )
         add_custom_target(uninstall
-            COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
-            COMMENT "Uninstall all installed files"
+                COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+                COMMENT "Uninstall all installed files"
         )
-        message(STATUS "Uninstall target added")
-    endif()
+        rendu_log_info("Uninstall target added")
+    endif ()
 endfunction()
 
 # rendu_add_library(

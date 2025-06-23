@@ -7,9 +7,9 @@
 #define RENDUCORE_REVISION_DATA_H
 
 // Git 提交信息
-#define RENDU_GIT_COMMIT_HASH      "@rev_hash@"
-#define RENDU_GIT_COMMIT_DATE      "@rev_date@"
-#define RENDU_GIT_COMMIT_BRANCH    R"(@rev_branch@)"
+#define RENDU_GIT_COMMIT_HASH      "@RENDU_REV_HASH@"
+#define RENDU_GIT_COMMIT_DATE      "@RENDU_REV_DATE@"
+#define RENDU_GIT_COMMIT_BRANCH    R"(@RENDU_REV_BRANCH@)"
 
 // 构建主机信息
 #define RENDU_BUILD_HOST_SYSTEM            R"(@RENDU_BUILD_HOST_SYSTEM@)"
@@ -24,18 +24,13 @@
 #define RENDU_BUILD_CMAKE_COMMAND          R"(@CMAKE_COMMAND@)"
 #define RENDU_BUILD_CMAKE_VERSION          R"(@CMAKE_VERSION@)"
 #define RENDU_BUILD_CMAKE_SOURCE_DIRECTORY R"(@CMAKE_SOURCE_DIR@)"
-#define RENDU_BUILD_CMAKE_BUILD_DIRECTORY  R"(@BUILDDIR@)"
-
-// 数据库更新器信息
-#define RENDU_DATABASE_MYSQL_EXECUTABLE    R"(@MYSQL_EXECUTABLE@)"
-#define RENDU_DATABASE_FULL_DATABASE       "TDB_full_world_1110.25031_2025_03_29.sql"
-#define RENDU_DATABASE_HOTFIXES_DATABASE   "TDB_full_hotfixes_1110.25031_2025_03_29.sql"
+#define RENDU_BUILD_CMAKE_BUILD_DIRECTORY  R"(@RENDU_BUILDDIR@)"
 
 // Windows 资源定义
 #define VER_COMPANYNAME_STR        "RenduCore Developers"
-#define VER_LEGALCOPYRIGHT_STR     "(c)2025-@rev_year@ RenduCore"
+#define VER_LEGALCOPYRIGHT_STR     "(c)2025-@RENDU_REV_YEAR@ RenduCore"
 #define VER_FILEVERSION            0,0,0
-#define VER_FILEVERSION_STR        "@rev_hash@ @rev_date@ (@rev_branch@ branch)"
+#define VER_FILEVERSION_STR        "@RENDU_REV_HASH@ @RENDU_REV_DATE@ (@RENDU_REV_BRANCH@ branch)"
 #define VER_PRODUCTVERSION         VER_FILEVERSION
 #define VER_PRODUCTVERSION_STR     VER_FILEVERSION_STR
 
