@@ -3,7 +3,7 @@ if (RENDU_BUILD_TESTING)
     rendu_find_package(
             NAME Catch2
             GITHUB_REPOSITORY catchorg/Catch2
-            VERSION 3.6.0
+            GIT_TAG v3.11.0
     )
 
     get_filename_component(FOLDER_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
