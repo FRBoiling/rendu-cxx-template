@@ -8,8 +8,8 @@ rendu_add_library(
     DIR    ${CMAKE_CURRENT_SOURCE_DIR}
     PROJECT    ${PROJECT_NAME}
     NAME    ${FOLDER_NAME}
-    LINKOPTS    rendu-core-interface
-    DEPS
+    PRIVATE_LINK rendu-core-interface
+    PUBLIC_LINK 3rdparty::test
     DEFINES
     STATIC
     ALIAS     ON

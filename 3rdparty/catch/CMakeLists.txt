@@ -12,8 +12,8 @@ if (RENDU_BUILD_TESTING)
             DIR ${CMAKE_CURRENT_SOURCE_DIR}
             PROJECT ${PROJECT_NAME}
             NAME ${FOLDER_NAME}
-            LINKOPTS rendu-dependency-interface
-            DEPS Catch2::Catch2 Catch2::Catch2WithMain
+            PRIVATE_LINK rendu-dependency-interface
+            PUBLIC_LINK Catch2::Catch2 Catch2::Catch2WithMain
             DEFINES
             INTERFACE
             ALIAS ON

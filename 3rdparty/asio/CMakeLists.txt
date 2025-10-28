@@ -15,8 +15,8 @@ rendu_add_library(
         DIR     ${CMAKE_CURRENT_SOURCE_DIR}
         PROJECT    ${PROJECT_NAME}
         NAME    ${FOLDER_NAME}
-        LINKOPTS    rendu-dependency-interface
-        DEPS asio::asio
+        PRIVATE_LINK    rendu-dependency-interface
+        PUBLIC_LINK asio::asio
         DEFINES
         INTERFACE
         ALIAS     ON

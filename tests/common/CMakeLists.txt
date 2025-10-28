@@ -8,10 +8,9 @@ rendu_add_executable(
     DIR       ${CMAKE_CURRENT_SOURCE_DIR}
     PROJECT   ${PROJECT_NAME}
     NAME      ${FOLDER_NAME}
-    LINKOPTS  rendu-core-interface
-    DEPS      3rdparty::catch
+    PRIVATE_LINK  rendu-core-interface
+    PUBLIC_LINK      3rdparty::catch
     DEFINES   
-    ALIAS     ON
 )
 
 
