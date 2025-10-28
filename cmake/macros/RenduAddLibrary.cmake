@@ -100,8 +100,11 @@ function(rendu_add_library)
     else ()
         set(visibility PUBLIC)
     endif ()
+    # 先添加这行
+    include_directories(${RENDU_BUILDDIR})
     target_include_directories(${target_name}
             ${visibility}
+            ${RENDU_BUILDDIR}
             ${INCLUDE_DIRS}
     )
 
